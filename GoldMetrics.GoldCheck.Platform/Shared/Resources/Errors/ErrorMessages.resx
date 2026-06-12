@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="GenericError" xml:space="preserve">
+    <value>An error occurred.</value>
+  </data>
+  <data name="OperationCancelled" xml:space="preserve">
+    <value>The operation was cancelled.</value>
+  </data>
+
+  <data name="FleetOperationsError.VehicleNotFound" xml:space="preserve">
+    <value>Vehicle not found.</value>
+  </data>
+  <data name="FleetOperationsError.VehicleAlreadyAssigned" xml:space="preserve">
+    <value>The vehicle is already assigned to an operator.</value>
+  </data>
+  <data name="FleetOperationsError.HaulingCycleNotFound" xml:space="preserve">
+    <value>Hauling cycle not found.</value>
+  </data>
+  <data name="FleetOperationsError.InvalidPayload" xml:space="preserve">
+    <value>Invalid payload value. Payload must be greater than 0.</value>
+  </data>
+  <data name="FleetOperationsError.OperationCancelled" xml:space="preserve">
+    <value>Fleet operation was cancelled.</value>
+  </data>
+  <data name="FleetOperationsError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during fleet operation.</value>
+  </data>
+  <data name="FleetOperationsError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Fleet Operations.</value>
+  </data>
+
+  <data name="MaterialOperationsError.MaterialNotFound" xml:space="preserve">
+    <value>Material batch not found.</value>
+  </data>
+  <data name="MaterialOperationsError.InvalidMineralType" xml:space="preserve">
+    <value>Invalid mineral type. Allowed values: Gold, Silver, Copper.</value>
+  </data>
+  <data name="MaterialOperationsError.InvalidPayload" xml:space="preserve">
+    <value>Invalid payload value. Payload must be greater than 0.</value>
+  </data>
+  <data name="MaterialOperationsError.MaterialAlreadyClassified" xml:space="preserve">
+    <value>The material batch is already classified.</value>
+  </data>
+  <data name="MaterialOperationsError.OperationCancelled" xml:space="preserve">
+    <value>Material operation was cancelled.</value>
+  </data>
+  <data name="MaterialOperationsError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during material operation.</value>
+  </data>
+  <data name="MaterialOperationsError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Material Operations.</value>
+  </data>
+
+  <data name="JewelryInventoryError.MaterialNotFound" xml:space="preserve">
+    <value>Jewelry material not found.</value>
+  </data>
+  <data name="JewelryInventoryError.CertificateNotFound" xml:space="preserve">
+    <value>Certificate not found.</value>
+  </data>
+  <data name="JewelryInventoryError.InvalidQRCode" xml:space="preserve">
+    <value>Invalid QR code format. Must be 6–100 alphanumeric characters, hyphens, or underscores.</value>
+  </data>
+  <data name="JewelryInventoryError.MaterialAlreadyCertified" xml:space="preserve">
+    <value>The material is already certified or the certificate has already been signed.</value>
+  </data>
+  <data name="JewelryInventoryError.InvalidStatus" xml:space="preserve">
+    <value>Invalid material status. Allowed: NonCertified, Certified, Pending.</value>
+  </data>
+  <data name="JewelryInventoryError.OperationCancelled" xml:space="preserve">
+    <value>Jewelry inventory operation was cancelled.</value>
+  </data>
+  <data name="JewelryInventoryError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during jewelry inventory operation.</value>
+  </data>
+  <data name="JewelryInventoryError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Jewelry Inventory.</value>
+  </data>
+
+  <data name="ConsumerTraceabilityError.ProductNotFound" xml:space="preserve">
+    <value>Product not found for the given QR code.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.CertificateNotFound" xml:space="preserve">
+    <value>Certificate not found.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.AccessDenied" xml:space="preserve">
+    <value>Access to this resource is denied.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.InvalidQRCode" xml:space="preserve">
+    <value>Invalid QR code provided.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.LanguageNotSupported" xml:space="preserve">
+    <value>The requested language is not supported. Supported languages: en, es.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.OperationCancelled" xml:space="preserve">
+    <value>Consumer traceability operation was cancelled.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during consumer traceability operation.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Consumer Traceability.</value>
+  </data>
+  <data name="MonitoringTelemetryError.AssetNotFound" xml:space="preserve">
+    <value>Asset not found.</value>
+  </data>
+  <data name="MonitoringTelemetryError.TelemetryDataNotFound" xml:space="preserve">
+    <value>Telemetry data not found.</value>
+  </data>
+  <data name="MonitoringTelemetryError.TemperatureReadingNotFound" xml:space="preserve">
+    <value>Temperature reading not found for this asset.</value>
+  </data>
+  <data name="MonitoringTelemetryError.CommunicationChannelNotFound" xml:space="preserve">
+    <value>Communication channel record not found for this asset.</value>
+  </data>
+  <data name="MonitoringTelemetryError.GNSSStatusNotFound" xml:space="preserve">
+    <value>GNSS status record not found for this asset.</value>
+  </data>
+  <data name="MonitoringTelemetryError.SpeedReadingNotFound" xml:space="preserve">
+    <value>Speed reading not found for this asset.</value>
+  </data>
+  <data name="MonitoringTelemetryError.PressureReadingNotFound" xml:space="preserve">
+    <value>Pressure reading not found for this asset.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InvalidTemperature" xml:space="preserve">
+    <value>Invalid temperature value provided.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InvalidSpeed" xml:space="preserve">
+    <value>Invalid speed value provided.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InvalidPressure" xml:space="preserve">
+    <value>Invalid pressure value provided.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InvalidProtocol" xml:space="preserve">
+    <value>Invalid communication protocol provided.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InvalidAnomalyType" xml:space="preserve">
+    <value>Invalid anomaly type provided.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InvalidPressureType" xml:space="preserve">
+    <value>Invalid pressure type provided.</value>
+  </data>
+  <data name="MonitoringTelemetryError.OperationCancelled" xml:space="preserve">
+    <value>Monitoring telemetry operation was cancelled.</value>
+  </data>
+  <data name="MonitoringTelemetryError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during monitoring telemetry operation.</value>
+  </data>
+  <data name="MonitoringTelemetryError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Monitoring Telemetry.</value>
+  </data>
+  <data name="AnalyticsError.MaterialNotFound" xml:space="preserve">
+    <value>The material record was not found.</value>
+  </data>
+  <data name="AnalyticsError.RouteNotFound" xml:space="preserve">
+    <value>The route was not found.</value>
+  </data>
+  <data name="AnalyticsError.InvalidProductionPeriod" xml:space="preserve">
+    <value>Invalid production period: start must be earlier than end.</value>
+  </data>
+  <data name="AnalyticsError.InsufficientData" xml:space="preserve">
+    <value>Insufficient data to complete the analytics operation.</value>
+  </data>
+  <data name="AnalyticsError.ProductionDataValidationFailed" xml:space="preserve">
+    <value>Production data validation failed.</value>
+  </data>
+  <data name="AnalyticsError.OperationCancelled" xml:space="preserve">
+    <value>Analytics operation was cancelled.</value>
+  </data>
+  <data name="AnalyticsError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the analytics operation.</value>
+  </data>
+  <data name="AnalyticsError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Analytics.</value>
+  </data>
+  <data name="IncidentManagementError.IncidentNotFound" xml:space="preserve">
+    <value>The incident record was not found.</value>
+  </data>
+  <data name="IncidentManagementError.InvalidRiskLevel" xml:space="preserve">
+    <value>Invalid risk level. Allowed values: Low, Medium, High, Critical.</value>
+  </data>
+  <data name="IncidentManagementError.InvalidIncidentType" xml:space="preserve">
+    <value>Invalid incident type. Allowed values: Fatigue, Smoke, Accident.</value>
+  </data>
+  <data name="IncidentManagementError.IncidentAlreadyCommitted" xml:space="preserve">
+    <value>The incident has already been committed.</value>
+  </data>
+  <data name="IncidentManagementError.RiskLevelValidationFailed" xml:space="preserve">
+    <value>Risk level validation failed for this incident.</value>
+  </data>
+  <data name="IncidentManagementError.OperationCancelled" xml:space="preserve">
+    <value>Incident management operation was cancelled.</value>
+  </data>
+  <data name="IncidentManagementError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the incident management operation.</value>
+  </data>
+  <data name="IncidentManagementError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Incident Management.</value>
+  </data>
+  <data name="ReportingNotificationsError.ReportNotFound" xml:space="preserve">
+    <value>The report was not found.</value>
+  </data>
+  <data name="ReportingNotificationsError.NotificationNotFound" xml:space="preserve">
+    <value>The notification was not found.</value>
+  </data>
+  <data name="ReportingNotificationsError.InvalidReportFormat" xml:space="preserve">
+    <value>Invalid report format. Allowed values: PDF, Excel, CSV.</value>
+  </data>
+  <data name="ReportingNotificationsError.ReportAlreadyExported" xml:space="preserve">
+    <value>The report has already been exported.</value>
+  </data>
+  <data name="ReportingNotificationsError.AccidentValidationFailed" xml:space="preserve">
+    <value>Accident data validation failed.</value>
+  </data>
+  <data name="ReportingNotificationsError.ReportValidationFailed" xml:space="preserve">
+    <value>Report validation failed.</value>
+  </data>
+  <data name="ReportingNotificationsError.NotificationValidationFailed" xml:space="preserve">
+    <value>Notification validation failed.</value>
+  </data>
+  <data name="ReportingNotificationsError.OperationCancelled" xml:space="preserve">
+    <value>Reporting operation was cancelled.</value>
+  </data>
+  <data name="ReportingNotificationsError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the reporting operation.</value>
+  </data>
+  <data name="ReportingNotificationsError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Reporting and Notifications.</value>
+  </data>
+  <data name="AssetMaintenanceError.MachineryNotFound" xml:space="preserve">
+    <value>The machinery asset was not found.</value>
+  </data>
+  <data name="AssetMaintenanceError.ComponentNotFound" xml:space="preserve">
+    <value>The component was not found on this machinery.</value>
+  </data>
+  <data name="AssetMaintenanceError.MachineryAlreadyDischarged" xml:space="preserve">
+    <value>The machinery has already been discharged.</value>
+  </data>
+  <data name="AssetMaintenanceError.InvalidEngineHours" xml:space="preserve">
+    <value>Invalid engine hours value provided.</value>
+  </data>
+  <data name="AssetMaintenanceError.MaintenanceAlreadyScheduled" xml:space="preserve">
+    <value>Preventive maintenance is already scheduled for this machinery.</value>
+  </data>
+  <data name="AssetMaintenanceError.OperationCancelled" xml:space="preserve">
+    <value>Asset maintenance operation was cancelled.</value>
+  </data>
+  <data name="AssetMaintenanceError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the asset maintenance operation.</value>
+  </data>
+  <data name="AssetMaintenanceError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Asset and Maintenance Management.</value>
+  </data>
+  <data name="IamError.UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="IamError.InvalidCredentials" xml:space="preserve">
+    <value>Invalid username or password.</value>
+  </data>
+  <data name="IamError.UsernameAlreadyExists" xml:space="preserve">
+    <value>Username is already taken.</value>
+  </data>
+  <data name="IamError.EmailAlreadyRegistered" xml:space="preserve">
+    <value>Email is already registered.</value>
+  </data>
+  <data name="IamError.InvalidRole" xml:space="preserve">
+    <value>Invalid role. Allowed: Operator, Supervisor, Administrator, Jeweler, Consumer.</value>
+  </data>
+  <data name="IamError.OperationCancelled" xml:space="preserve">
+    <value>IAM operation was cancelled.</value>
+  </data>
+  <data name="IamError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the IAM operation.</value>
+  </data>
+  <data name="IamError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in IAM.</value>
+  </data>
+  <data name="SubscriptionsBillingError.UserSubscriptionNotFound" xml:space="preserve">
+    <value>User subscription not found.</value>
+  </data>
+  <data name="SubscriptionsBillingError.InvoiceNotFound" xml:space="preserve">
+    <value>Invoice not found.</value>
+  </data>
+  <data name="SubscriptionsBillingError.InvalidPlanType" xml:space="preserve">
+    <value>Invalid plan type. Allowed: Free, Basic, Professional, Enterprise.</value>
+  </data>
+  <data name="SubscriptionsBillingError.InvalidBillingCycle" xml:space="preserve">
+    <value>Invalid billing cycle. Allowed: Monthly, Annual.</value>
+  </data>
+  <data name="SubscriptionsBillingError.PaymentMethodValidationFailed" xml:space="preserve">
+    <value>Payment method validation failed.</value>
+  </data>
+  <data name="SubscriptionsBillingError.FeatureNotAvailableInPlan" xml:space="preserve">
+    <value>Feature not available in the current plan.</value>
+  </data>
+  <data name="SubscriptionsBillingError.DowngradeNotAllowed" xml:space="preserve">
+    <value>Downgrade is not allowed for this subscription.</value>
+  </data>
+  <data name="SubscriptionsBillingError.AccessDenied" xml:space="preserve">
+    <value>Access to this feature is denied.</value>
+  </data>
+  <data name="SubscriptionsBillingError.OperationCancelled" xml:space="preserve">
+    <value>Subscriptions and billing operation was cancelled.</value>
+  </data>
+  <data name="SubscriptionsBillingError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the subscriptions and billing operation.</value>
+  </data>
+  <data name="SubscriptionsBillingError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Subscriptions and Billing.</value>
+  </data>
+</root>
