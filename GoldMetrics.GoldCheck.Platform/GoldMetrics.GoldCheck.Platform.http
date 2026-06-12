@@ -1,0 +1,6 @@
+@GoldMetrics.GoldCheck.Platform_HostAddress = http://localhost:5225
+
+GET {{GoldMetrics.GoldCheck.Platform_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
