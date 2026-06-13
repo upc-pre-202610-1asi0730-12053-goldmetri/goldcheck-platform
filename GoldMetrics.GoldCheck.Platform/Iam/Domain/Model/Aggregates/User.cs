@@ -22,12 +22,4 @@ public partial class User
         Role = new UserRole(command.Role);
         Status = "UserRegistered";
     }
-
-    public void UpdateProfile(UpdateProfileCommand command)
-    {
-        Username = new Username(command.Username);
-        Email = new Email(command.Email);
-        Status = "ProfileUpdated";
-    }
 }
-
