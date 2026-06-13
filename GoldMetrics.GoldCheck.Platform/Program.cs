@@ -118,6 +118,13 @@ builder.Services.AddCortexMediator([typeof(Program)]);
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+}
+
+
 app.UseGlobalExceptionHandler();
 
 var supportedCultures = new[] { "en", "es" };
