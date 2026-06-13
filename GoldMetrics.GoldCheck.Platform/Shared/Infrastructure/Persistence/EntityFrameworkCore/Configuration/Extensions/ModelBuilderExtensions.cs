@@ -16,6 +16,7 @@ public static class ModelBuilderExtensions
 
             foreach (var key in entity.GetKeys())
             {
+                if (entity.IsOwned()) continue;
                 var keyName = key.GetName();
                 if (!string.IsNullOrEmpty(keyName)) key.SetName(keyName.ToSnakeCase());
             }
