@@ -23,4 +23,16 @@ public class AuthenticationController(IIamCommandService commandService, IamActi
         var result = await commandService.RegisterUserAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpPost("sign-in")]
+    [SwaggerOperation(Summary = "Authenticate user and get JWT token", OperationId = "AuthenticateUser")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AuthenticateUser([FromBody] AuthenticateUserResource resource, CancellationToken ct)
+    {
+        var command = new AuthenticateUserCommand(resource.Username, resource.Password);
+        var result = await commandService.AuthenticateUserAsync(command, ct);
+        return assembler.ToTokenActionResult(result, this);
+    }
 }
