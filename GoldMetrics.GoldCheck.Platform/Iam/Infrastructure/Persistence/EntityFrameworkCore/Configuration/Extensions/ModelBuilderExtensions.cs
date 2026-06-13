@@ -10,35 +10,26 @@ public static class ModelBuilderExtensions
         builder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
-
             entity.OwnsOne(u => u.Username, vo =>
             {
+                vo.WithOwner().HasForeignKey("Id");
                 vo.Property(v => v.Value).HasColumnName("username").IsRequired();
-                vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("Pk_Users_Username");
             });
-
             entity.OwnsOne(u => u.HashedPassword, vo =>
             {
+                vo.WithOwner().HasForeignKey("Id");
                 vo.Property(v => v.Value).HasColumnName("hashed_password").IsRequired();
-                vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("Pk_Users_HashedPassword");
             });
-
             entity.OwnsOne(u => u.Email, vo =>
             {
+                vo.WithOwner().HasForeignKey("Id");
                 vo.Property(v => v.Address).HasColumnName("email").IsRequired();
-                vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("Pk_Users_Email");
             });
-
             entity.OwnsOne(u => u.Role, vo =>
             {
+                vo.WithOwner().HasForeignKey("Id");
                 vo.Property(v => v.Value).HasColumnName("role").IsRequired();
-                vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("Pk_Users_Role");
             });
-
             entity.Property(u => u.Status).IsRequired();
         });
         return builder;
