@@ -12,6 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
 using ProblemDetailsFactory = GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -112,6 +117,11 @@ builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Domain.Repositorie
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.CommandServices.IIamCommandService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.CommandServices.IamCommandService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Rest.Transform.IamActionResultAssembler>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryServices.IIamQueryService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.QueryServices.IamQueryService>();
+
+// ReportingNotifications Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
