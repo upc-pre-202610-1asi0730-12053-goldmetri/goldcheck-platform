@@ -51,4 +51,12 @@ public class IamQueryService(
             return Result<IEnumerable<User>>.Failure(IamError.InternalServerError, localizer[nameof(IamError.InternalServerError)]);
         }
     }
+    
+    public async Task<Result<User>> GetUserByUsernameAsync(GetUserByUsernameQuery query, CancellationToken ct = default)
+    {
+        var user = await userRepository.FindByUsernameAsync(query.Username);
+        return user is null
+            ? Result<User>.Failure(IamError.UserNotFound, localizer[nameof(IamError.UserNotFound)])
+            : Result<User>.Success(user);
+    }
 }
