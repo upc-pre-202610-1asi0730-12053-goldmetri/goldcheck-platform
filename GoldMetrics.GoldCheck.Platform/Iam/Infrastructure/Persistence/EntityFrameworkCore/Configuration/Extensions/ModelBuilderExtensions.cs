@@ -15,28 +15,28 @@ public static class ModelBuilderExtensions
             {
                 vo.Property(v => v.Value).HasColumnName("username").IsRequired();
                 vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("PK_Users_Username");
+                vo.HasKey("UserId").HasName("Pk_Users_Username");
             });
 
             entity.OwnsOne(u => u.HashedPassword, vo =>
             {
                 vo.Property(v => v.Value).HasColumnName("hashed_password").IsRequired();
                 vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("PK_Users_HashedPassword");
+                vo.HasKey("UserId").HasName("Pk_Users_HashedPassword");
             });
 
             entity.OwnsOne(u => u.Email, vo =>
             {
                 vo.Property(v => v.Address).HasColumnName("email").IsRequired();
                 vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("PK_Users_Email");
+                vo.HasKey("UserId").HasName("Pk_Users_Email");
             });
 
             entity.OwnsOne(u => u.Role, vo =>
             {
                 vo.Property(v => v.Value).HasColumnName("role").IsRequired();
                 vo.WithOwner().HasForeignKey("UserId");
-                vo.HasKey("UserId").HasName("PK_Users_Role");
+                vo.HasKey("UserId").HasName("Pk_Users_Role");
             });
 
             entity.Property(u => u.Status).IsRequired();
