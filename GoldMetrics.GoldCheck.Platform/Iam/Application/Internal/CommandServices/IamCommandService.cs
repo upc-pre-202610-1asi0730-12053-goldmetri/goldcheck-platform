@@ -58,10 +58,24 @@ public class IamCommandService(
         catch (OperationCanceledException) { return Cancelled<string>(); }
         catch (Exception) { return ServerError<string>(); }
     }
-    
+
     public async Task<Result<User>> UpdateProfileAsync(UpdateProfileCommand command, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (!int.TryParse(command.UserId, out var userId))
+                return NotFound<User>();
+
+            var user = await userRepository.FindByIdAsync(userId);
+            if (user is null) return NotFound<User>();
+
+            user.UpdateProfile(command);
+            userRepository.Update(user);
+            await unitOfWork.CompleteAsync(ct);
+            return Result<User>.Success(user);
+        }
+        catch (OperationCanceledException) { return Cancelled<User>(); }
+        catch (Exception) { return ServerError<User>(); }
     }
 
     private string GenerateJwtToken(User user)
@@ -83,8 +97,13 @@ public class IamCommandService(
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    private Result<T> NotFound<T>() =>
+        Result<T>.Failure(IamError.UserNotFound, localizer[nameof(IamError.UserNotFound)]);
     private Result<T> Cancelled<T>() =>
         Result<T>.Failure(IamError.OperationCancelled, localizer[nameof(IamError.OperationCancelled)]);
+    private Result<T> DbError<T>() =>
+        Result<T>.Failure(IamError.DatabaseError, localizer[nameof(IamError.DatabaseError)]);
     private Result<T> ServerError<T>() =>
         Result<T>.Failure(IamError.InternalServerError, localizer[nameof(IamError.InternalServerError)]);
 }
+
