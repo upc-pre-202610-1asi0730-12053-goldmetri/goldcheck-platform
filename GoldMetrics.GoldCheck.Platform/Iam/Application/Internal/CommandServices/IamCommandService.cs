@@ -58,6 +58,11 @@ public class IamCommandService(
         catch (OperationCanceledException) { return Cancelled<string>(); }
         catch (Exception) { return ServerError<string>(); }
     }
+    
+    public async Task<Result<User>> UpdateProfileAsync(UpdateProfileCommand command, CancellationToken ct = default)
+    {
+        throw new NotImplementedException();
+    }
 
     private string GenerateJwtToken(User user)
     {
