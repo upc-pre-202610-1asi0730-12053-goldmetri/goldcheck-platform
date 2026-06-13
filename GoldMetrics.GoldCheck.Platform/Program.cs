@@ -111,6 +111,7 @@ builder.Services.AddSingleton<IStringLocalizer<GoldMetrics.GoldCheck.Platform.Ia
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Domain.Repositories.IUserRepository, GoldMetrics.GoldCheck.Platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories.UserRepository>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.CommandServices.IIamCommandService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.CommandServices.IamCommandService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Rest.Transform.IamActionResultAssembler>();
+builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryServices.IIamQueryService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.QueryServices.IamQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
