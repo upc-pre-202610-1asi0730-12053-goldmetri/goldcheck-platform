@@ -8,5 +8,5 @@ public interface IIamCommandService
 {
     Task<Result<User>> RegisterUserAsync(RegisterUserCommand command, CancellationToken ct = default);
     Task<Result<string>> AuthenticateUserAsync(AuthenticateUserCommand command, CancellationToken ct = default);
-
+    Task<Result<User>> UpdateProfileAsync(UpdateProfileCommand command, CancellationToken ct = default);
 }
