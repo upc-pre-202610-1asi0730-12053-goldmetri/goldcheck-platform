@@ -61,4 +61,16 @@ public class ReportsController(
             problemDetailsFactory,
             r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPut("{reportId:int}/generate")]
+    [SwaggerOperation("Generate Report", "Generate the accident report.", OperationId = "GenerateReport")]
+    [SwaggerResponse(200, "Report generated.", typeof(ReportResource))]
+    [SwaggerResponse(404, "Report not found.")]
+    public async Task<IActionResult> GenerateReport(int reportId, CancellationToken cancellationToken)
+    {
+        var result = await reportCommandService.Handle(new GenerateReportCommand(reportId), cancellationToken);
+        return ReportingNotificationsActionResultAssembler.ToActionResultFromReportResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
