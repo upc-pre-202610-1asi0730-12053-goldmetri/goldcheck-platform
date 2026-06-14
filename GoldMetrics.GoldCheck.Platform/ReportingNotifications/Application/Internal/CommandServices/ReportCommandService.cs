@@ -74,4 +74,24 @@ public class ReportCommandService(
         catch (DbUpdateException) { return DbError(); }
         catch (Exception) { return ServerError(); }
     }
+    
+    public async Task<Result<Report>> Handle(RequestReportExportationCommand command, CancellationToken cancellationToken)
+    {
+        var report = await FindReport(command.Id, cancellationToken);
+        if (report is null) return NotFound();
+        try
+        {
+            report.RequestReportExportation(command);
+            reportRepository.Update(report);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<Report>.Success(report);
+        }
+        catch (ArgumentException)
+        {
+            return Result<Report>.Failure(ReportingNotificationsError.InvalidReportFormat, localizer[nameof(ReportingNotificationsError.InvalidReportFormat)]);
+        }
+        catch (OperationCanceledException) { return Cancelled(); }
+        catch (DbUpdateException) { return DbError(); }
+        catch (Exception) { return ServerError(); }
+    }
 }
