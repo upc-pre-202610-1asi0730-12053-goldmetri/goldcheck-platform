@@ -2,7 +2,7 @@
 
 public record ReportStatus
 {
-    private static readonly string[] AllowedValues = ["Requested","DataLoaded"];
+    private static readonly string[] AllowedValues = ["Requested", "DataLoaded", "Generated"];
     public ReportStatus() => Value = string.Empty;
     public ReportStatus(string value)
     {
