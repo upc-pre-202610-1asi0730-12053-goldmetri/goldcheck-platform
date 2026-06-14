@@ -33,5 +33,10 @@ public partial class Report
         ReportStatus = new ReportStatus("DataLoaded");
         Status = "AccidentDataLoaded";
     }
+    public void GenerateReport(GenerateReportCommand command)
+    {
+        ReportStatus = new ReportStatus("Generated");
+        Status = "ReportGenerated";
+    }
 
 }
