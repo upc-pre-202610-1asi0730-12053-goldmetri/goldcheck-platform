@@ -4,6 +4,7 @@ public enum ReportingNotificationsError
 {
     None,
     ReportNotFound,
+    InvalidReportFormat,
     AccidentValidationFailed,
     OperationCancelled,
     DatabaseError,
