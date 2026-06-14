@@ -25,5 +25,13 @@ public partial class Report
     public SupervisorId SupervisorId { get; private set; }
     public string IncidentId { get; private set; }
     public ReportStatus ReportStatus { get; private set; }
+    public string? DownloadedByUserId { get; private set; }
     public string Status { get; private set; }
+
+    public void LoadAccidentData(LoadAccidentDataCommand command)
+    {
+        ReportStatus = new ReportStatus("DataLoaded");
+        Status = "AccidentDataLoaded";
+    }
+
 }

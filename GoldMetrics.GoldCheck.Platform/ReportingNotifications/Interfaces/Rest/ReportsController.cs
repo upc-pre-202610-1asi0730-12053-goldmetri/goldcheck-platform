@@ -24,12 +24,41 @@ public class ReportsController(
     [HttpPost]
     [SwaggerOperation("Request Accident Data", "Create a new accident report request.", OperationId = "RequestAccidentData")]
     [SwaggerResponse(201, "Accident data requested.", typeof(ReportResource))]
-    public async Task<IActionResult> RequestAccidentData([FromBody] RequestAccidentDataResource resource, CancellationToken cancellationToken)
+    public async Task<IActionResult> RequestAccidentData(
+        [FromBody] RequestAccidentDataResource resource,
+        CancellationToken cancellationToken)
     {
-        var command = new RequestAccidentDataCommand(resource.IncidentId, resource.SupervisorId);
+        var command = new RequestAccidentDataCommand(
+            resource.IncidentId,
+            resource.SupervisorId);
+
         var result = await reportCommandService.Handle(command, cancellationToken);
+
         return ReportingNotificationsActionResultAssembler.ToActionResultFromReportResult(
-            this, result, errorLocalizer, problemDetailsFactory,
+            this,
+            result,
+            errorLocalizer,
+            problemDetailsFactory,
             r => Created(string.Empty, ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
+
+    [HttpPut("{reportId:int}/load-data")]
+    [SwaggerOperation("Load Accident Data", "Load accident data into the report.", OperationId = "LoadAccidentData")]
+    [SwaggerResponse(200, "Accident data loaded.", typeof(ReportResource))]
+    [SwaggerResponse(404, "Report not found.")]
+    public async Task<IActionResult> LoadAccidentData(
+        int reportId,
+        CancellationToken cancellationToken)
+    {
+        var result = await reportCommandService.Handle(
+            new LoadAccidentDataCommand(reportId),
+            cancellationToken);
+
+        return ReportingNotificationsActionResultAssembler.ToActionResultFromReportResult(
+            this,
+            result,
+            errorLocalizer,
+            problemDetailsFactory,
+            r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
 }
