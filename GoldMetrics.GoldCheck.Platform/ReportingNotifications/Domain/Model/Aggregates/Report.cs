@@ -9,6 +9,7 @@ public partial class Report
     {
         SupervisorId = new SupervisorId();
         ReportStatus = new ReportStatus();
+        ReportFormat = new ReportFormat();
         IncidentId = string.Empty;
         Status = string.Empty;
     }
@@ -18,6 +19,7 @@ public partial class Report
         SupervisorId = new SupervisorId(command.SupervisorId);
         IncidentId = command.IncidentId;
         ReportStatus = new ReportStatus("Requested");
+        ReportFormat = new ReportFormat();
         Status = "AccidentDataRequested";
     }
 
@@ -25,6 +27,7 @@ public partial class Report
     public SupervisorId SupervisorId { get; private set; }
     public string IncidentId { get; private set; }
     public ReportStatus ReportStatus { get; private set; }
+    public ReportFormat ReportFormat { get; private set; }
     public string? DownloadedByUserId { get; private set; }
     public string Status { get; private set; }
 
@@ -33,10 +36,18 @@ public partial class Report
         ReportStatus = new ReportStatus("DataLoaded");
         Status = "AccidentDataLoaded";
     }
+    
     public void GenerateReport(GenerateReportCommand command)
     {
         ReportStatus = new ReportStatus("Generated");
         Status = "ReportGenerated";
+    }
+    
+    public void RequestReportExportation(RequestReportExportationCommand command)
+    {
+        ReportFormat = new ReportFormat(command.Format);
+        ReportStatus = new ReportStatus("ExportationRequested");
+        Status = "ReportExportationRequested";
     }
 
 }
