@@ -42,7 +42,7 @@ public class ConsumerController(
             product => CreatedAtAction(
                 nameof(GetProductByQR),
                 new { qrCode = product.QRCode.Value },
-                JewelryProductResourceFromEntityAssembler.ToResourceFromEntity(product));
+                JewelryProductResourceFromEntityAssembler.ToResourceFromEntity(product)));
     }
     // GET api/v1/consumer/products/{qrCode}
     [HttpGet("products/{qrCode}")]
