@@ -37,4 +37,7 @@
     <data name="ConsumerTraceabilityError.InternalServerError" xml:space="preserve">
     <value>Ocurrió un error interno inesperado en Trazabilidad al Consumidor.</value>
   </data>
+  <data name="ConsumerTraceabilityError.LanguageNotSupported" xml:space="preserve">
+  <value>El idioma solicitado no es compatible. Idiomas admitidos: en, es.</value>
+  </data>
 </root>
