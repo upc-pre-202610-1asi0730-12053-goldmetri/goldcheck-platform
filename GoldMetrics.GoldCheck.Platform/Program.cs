@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using ProblemDetailsFactory = GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Resources;
@@ -129,6 +131,7 @@ builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryS
 builder.Services.AddSingleton<IStringLocalizer<MaterialOperationsMessages>, StringLocalizer<MaterialOperationsMessages>>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories.IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IMaterialCommandService, MaterialCommandService>();
+builder.Services.AddScoped<IMaterialQueryService, MaterialQueryService>();
 
 // ReportingNotifications Bounded Context
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
