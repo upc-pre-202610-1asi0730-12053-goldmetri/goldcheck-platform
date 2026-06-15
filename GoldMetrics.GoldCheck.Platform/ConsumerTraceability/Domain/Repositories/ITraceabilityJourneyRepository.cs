@@ -5,4 +5,6 @@ namespace GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Repositorie
 
 public interface ITraceabilityJourneyRepository : IBaseRepository<TraceabilityJourney>
 {
+    Task<TraceabilityJourney?> FindLatestByQRCodeAsync(string qrCode,
+        CancellationToken cancellationToken = default);
 }
