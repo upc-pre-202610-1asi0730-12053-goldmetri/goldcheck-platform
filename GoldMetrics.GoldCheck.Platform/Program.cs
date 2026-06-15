@@ -137,6 +137,7 @@ builder.Services.AddScoped<ITraceabilityJourneyRepository, TraceabilityJourneyRe
 builder.Services.AddScoped<IJewelryProductCommandService, JewelryProductCommandService>();
 builder.Services.AddScoped<IJewelryProductQueryService, JewelryProductQueryService>();
 builder.Services.AddScoped<ITraceabilityJourneyCommandService, TraceabilityJourneyCommandService>();
+builder.Services.AddScoped<ITraceabilityJourneyQueryService, TraceabilityJourneyQueryService>();
 
 
 builder.Services.AddScoped<IJewelryProductQueryService, JewelryProductQueryService>();
