@@ -1,5 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -16,6 +18,7 @@ namespace GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Rest;
 [SwaggerTag("Available Material Endpoints.")]
 public class MaterialsController(
     IMaterialCommandService materialCommandService,
+    IMaterialQueryService materialQueryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -31,6 +34,22 @@ public class MaterialsController(
 
         return MaterialOperationsActionResultAssembler.ToActionResultFromMaterialResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            material => Created(string.Empty, MaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
+            material => CreatedAtAction(nameof(GetMaterialById),
+                new { batchId = material.BatchId.Value },
+                MaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
+    }
+
+    [HttpGet("{batchId}")]
+    [SwaggerOperation("Get Material by Id", "Get a material batch by its identifier.", OperationId = "GetMaterialById")]
+    [SwaggerResponse(200, "The material batch was found.", typeof(MaterialResource))]
+    [SwaggerResponse(404, "The material batch was not found.")]
+    public async Task<IActionResult> GetMaterialById(string batchId, CancellationToken cancellationToken)
+    {
+        var query = new GetMaterialByIdQuery(batchId);
+        var material = await materialQueryService.Handle(query, cancellationToken);
+
+        return MaterialOperationsActionResultAssembler.ToActionResultFromGetMaterialResult(
+            this, material, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
 }
