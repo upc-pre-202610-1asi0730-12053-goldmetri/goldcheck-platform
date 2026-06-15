@@ -9,4 +9,6 @@ public class ReportQueryService(IReportRepository reportRepository) : IReportQue
 {
     public async Task<Report?> Handle(GetReportByIdQuery query, CancellationToken cancellationToken)
         => await reportRepository.FindByIdAsync(query.Id, cancellationToken);
+    public async Task<IEnumerable<Report>> Handle(GetAllReportsQuery query, CancellationToken cancellationToken)
+        => await reportRepository.ListAsync(cancellationToken);
 }
