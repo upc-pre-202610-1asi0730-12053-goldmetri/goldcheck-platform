@@ -125,6 +125,8 @@ builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, 
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
 builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationCommandService, NotificationCommandService>();
 
 
 // Mediator Configuration
