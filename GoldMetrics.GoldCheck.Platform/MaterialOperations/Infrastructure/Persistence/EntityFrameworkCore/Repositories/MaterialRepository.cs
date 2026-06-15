@@ -11,4 +11,9 @@ public class MaterialRepository(AppDbContext context) : BaseRepository<Material>
     public async Task<Material?> FindByBatchIdAsync(string batchId, CancellationToken cancellationToken = default)
         => await Context.Set<Material>()
             .FirstOrDefaultAsync(m => m.BatchId.Value == batchId, cancellationToken);
+
+    public async Task<IEnumerable<Material>> FindByMineralTypeAsync(string mineralType, CancellationToken cancellationToken = default)
+        => await Context.Set<Material>()
+            .Where(m => m.MineralType.Value == mineralType)
+            .ToListAsync(cancellationToken);
 }
