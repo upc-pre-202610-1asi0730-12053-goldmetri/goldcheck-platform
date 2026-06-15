@@ -8,4 +8,9 @@ public interface ITraceabilityJourneyCommandService
 {
     Task<Result<TraceabilityJourney>> Handle(RequestJourneyCommand command,
         CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Validates and acknowledges a detected language. No persistence — used for flow control only.
+    /// </summary>
+    Task<Result<string>> Handle(DetectLanguageCommand command,
+        CancellationToken cancellationToken = default);
 }
