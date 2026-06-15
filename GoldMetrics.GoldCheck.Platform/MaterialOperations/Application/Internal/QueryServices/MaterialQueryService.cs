@@ -12,4 +12,7 @@ public class MaterialQueryService(IMaterialRepository materialRepository) : IMat
 
     public async Task<IEnumerable<Material>> Handle(GetAllMaterialsQuery query, CancellationToken cancellationToken)
         => await materialRepository.ListAsync(cancellationToken);
+
+    public async Task<IEnumerable<Material>> Handle(GetMaterialsByTypeQuery query, CancellationToken cancellationToken)
+        => await materialRepository.FindByMineralTypeAsync(query.MineralType, cancellationToken);
 }
