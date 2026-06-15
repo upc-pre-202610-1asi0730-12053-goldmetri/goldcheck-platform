@@ -5,4 +5,6 @@ namespace GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Repositor
 
 public interface INotificationRepository : IBaseRepository<Notification>
 {
+    Task<IEnumerable<Notification>> FindByRecipientIdAsync(string recipientId, CancellationToken cancellationToken = default);
+
 }
