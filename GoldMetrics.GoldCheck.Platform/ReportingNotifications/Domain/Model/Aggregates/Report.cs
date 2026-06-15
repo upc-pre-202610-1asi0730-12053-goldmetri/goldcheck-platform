@@ -49,5 +49,11 @@ public partial class Report
         ReportStatus = new ReportStatus("ExportationRequested");
         Status = "ReportExportationRequested";
     }
+    
+    public void ExportReport(ExportReportCommand command)
+    {
+        ReportStatus = new ReportStatus("Exported");
+        Status = "ReportExported";
+    }
 
 }
