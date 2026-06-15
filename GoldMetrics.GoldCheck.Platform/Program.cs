@@ -14,6 +14,8 @@ using Microsoft.OpenApi.Models;
 using ProblemDetailsFactory = GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Resources;
@@ -122,6 +124,8 @@ builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryS
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
+builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
+
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
