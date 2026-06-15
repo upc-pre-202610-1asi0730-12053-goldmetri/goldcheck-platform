@@ -55,5 +55,11 @@ public partial class Report
         ReportStatus = new ReportStatus("Exported");
         Status = "ReportExported";
     }
-
+    
+    public void DownloadReport(DownloadReportCommand command)
+    {
+        DownloadedByUserId = command.UserId;
+        ReportStatus = new ReportStatus("Downloaded");
+        Status = "ReportDownloaded";
+    }
 }
