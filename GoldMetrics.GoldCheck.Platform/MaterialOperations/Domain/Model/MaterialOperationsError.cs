@@ -6,6 +6,7 @@ public enum MaterialOperationsError
     MaterialNotFound,
     InvalidMineralType,
     InvalidPayload,
+    MaterialAlreadyClassified,
     OperationCancelled,
     DatabaseError,
     InternalServerError
