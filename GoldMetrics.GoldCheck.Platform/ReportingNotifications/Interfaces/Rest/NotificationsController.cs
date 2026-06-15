@@ -33,4 +33,16 @@ using System.Net.Mime;
                 this, result, errorLocalizer, problemDetailsFactory,
                 n => Created(string.Empty, NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
         }
+        
+        [HttpPut("{notificationId:int}/send")]
+        [SwaggerOperation("Send Notification", "Send a requested notification.", OperationId = "SendNotification")]
+        [SwaggerResponse(200, "Notification sent.", typeof(NotificationResource))]
+        [SwaggerResponse(404, "Notification not found.")]
+        public async Task<IActionResult> SendNotification(int notificationId, CancellationToken cancellationToken)
+        {
+            var result = await notificationCommandService.Handle(new SendNotificationCommand(notificationId), cancellationToken);
+            return ReportingNotificationsActionResultAssembler.ToActionResultFromNotificationResult(
+                this, result, errorLocalizer, problemDetailsFactory,
+                n => Ok(NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
+        }
     }
