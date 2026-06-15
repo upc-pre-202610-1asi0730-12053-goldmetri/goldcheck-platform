@@ -98,4 +98,16 @@ public class ReportsController(
             this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpGet("{reportId:int}/download")]
+    [SwaggerOperation("Download Report", "Download a generated and exported report.", OperationId = "DownloadReport")]
+    [SwaggerResponse(200, "Report downloaded.", typeof(ReportResource))]
+    [SwaggerResponse(404, "Report not found.")]
+    public async Task<IActionResult> DownloadReport(int reportId, [FromQuery] string userId, CancellationToken cancellationToken)
+    {
+        var result = await reportCommandService.Handle(new DownloadReportCommand(reportId, userId), cancellationToken);
+        return ReportingNotificationsActionResultAssembler.ToActionResultFromReportResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
