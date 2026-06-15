@@ -6,4 +6,5 @@ public record ReportResource(
     string IncidentId,
     string ReportStatus,
     string ReportFormat,
+    string? DownloadedByUserId,
     string Status);
