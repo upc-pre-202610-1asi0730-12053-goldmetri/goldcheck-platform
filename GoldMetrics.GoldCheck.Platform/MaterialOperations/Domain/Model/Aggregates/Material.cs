@@ -27,6 +27,7 @@ public partial class Material
     public Payload Payload { get; private set; }
     public string Status { get; private set; }
     public string? Classification { get; private set; }
+    public string? DumpingPointName { get; private set; }
 
     public void Classify(ClassifyMaterialCommand command)
     {
@@ -34,5 +35,12 @@ public partial class Material
             throw new ArgumentException("Classification cannot be empty.", nameof(command));
         Classification = command.Classification;
         Status = "Classified";
+    }
+
+    public void Download(DownloadMaterialCommand command)
+    {
+        var dumpingPoint = new DumpingPoint(command.DumpingPoint);
+        DumpingPointName = dumpingPoint.Name;
+        Status = "Downloaded";
     }
 }
