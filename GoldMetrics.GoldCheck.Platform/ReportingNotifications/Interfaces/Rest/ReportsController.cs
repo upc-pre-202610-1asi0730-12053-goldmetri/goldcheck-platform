@@ -126,4 +126,13 @@ public class ReportsController(
             this, report, errorLocalizer, problemDetailsFactory,
             r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpGet]
+    [SwaggerOperation("Get All Reports", "Get all accident reports.", OperationId = "GetAllReports")]
+    [SwaggerResponse(200, "Reports found.", typeof(IEnumerable<ReportResource>))]
+    public async Task<IActionResult> GetAllReports(CancellationToken cancellationToken)
+    {
+        var reports = await reportQueryService.Handle(new GetAllReportsQuery(), cancellationToken);
+        return Ok(reports.Select(ReportResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }
