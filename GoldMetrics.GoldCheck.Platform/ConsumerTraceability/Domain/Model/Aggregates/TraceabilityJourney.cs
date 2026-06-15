@@ -21,7 +21,16 @@ public partial class TraceabilityJourney
         JourneySummary = $"Initial scan of product {command.QRCode} by consumer {command.ConsumerId}.";
         Status = "Initiated";
     }
-
+    
+    /// <summary>Created when a consumer explicitly requests the full journey.</summary>
+    public TraceabilityJourney(RequestJourneyCommand command)
+    {
+        ProductQRCode = new ProductQRCode(command.QRCode);
+        ConsumerId = new ConsumerId(command.ConsumerId);
+        JourneySummary = $"Full traceability journey requested for product {command.QRCode} by consumer {command.ConsumerId}.";
+        Status = "Requested";
+    }
+    
     public int Id { get; }
     public ProductQRCode ProductQRCode { get; private set; }
     public ConsumerId ConsumerId { get; private set; }
