@@ -24,4 +24,28 @@
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConsumerTraceabilityMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConsumerTraceabilityMessages.es.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConsumerTraceabilityMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.es.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConsumerTraceabilityMessages.es.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
