@@ -29,4 +29,10 @@ public partial class Notification
     public NotificationStatus NotificationStatus { get; private set; }
     public string Message { get; private set; }
     public string Status { get; private set; }
+    
+    public void SendNotification(SendNotificationCommand command)
+    {
+        NotificationStatus = new NotificationStatus("Sent");
+        Status = "NotificationSent";
+    }
 }
