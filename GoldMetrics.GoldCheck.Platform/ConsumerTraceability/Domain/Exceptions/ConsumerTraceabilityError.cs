@@ -7,5 +7,6 @@ public enum ConsumerTraceabilityError
     InvalidQRCode,
     OperationCancelled,
     DatabaseError,
-    InternalServerError
+    InternalServerError,
+    LanguageNotSupported
 }

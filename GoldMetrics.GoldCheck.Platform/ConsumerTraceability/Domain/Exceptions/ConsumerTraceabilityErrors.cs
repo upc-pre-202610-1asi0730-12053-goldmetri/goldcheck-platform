@@ -8,4 +8,5 @@ public static class ConsumerTraceabilityErrors
     public static ConsumerTraceabilityError OperationCancelled => ConsumerTraceabilityError.OperationCancelled;
     public static ConsumerTraceabilityError DatabaseError => ConsumerTraceabilityError.DatabaseError;
     public static ConsumerTraceabilityError InternalServerError => ConsumerTraceabilityError.InternalServerError;
+    public static ConsumerTraceabilityError LanguageNotSupported => ConsumerTraceabilityError.LanguageNotSupported;
 }
