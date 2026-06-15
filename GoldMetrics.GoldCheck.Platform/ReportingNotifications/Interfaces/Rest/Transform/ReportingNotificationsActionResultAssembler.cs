@@ -30,4 +30,15 @@ public static class ReportingNotificationsActionResultAssembler
         if (result.IsSuccess) return onSuccess(result.Value!);
         return factory.CreateProblemDetails(controller, ToStatusCode((ReportingNotificationsError)result.Error!), result.Error, result.Message);
     }
+    
+    public static IActionResult ToActionResultFromGetReportResult(
+        ControllerBase controller, Report? report,
+        IStringLocalizer<ErrorMessages> localizer, ProblemDetailsFactory factory,
+        Func<Report, IActionResult> onSuccess)
+    {
+        if (report is null)
+            return factory.CreateProblemDetails(controller, ToStatusCode(ReportingNotificationsError.ReportNotFound),
+                ReportingNotificationsError.ReportNotFound, localizer[nameof(ReportingNotificationsError.ReportNotFound)]);
+        return onSuccess(report);
+    }
 }
