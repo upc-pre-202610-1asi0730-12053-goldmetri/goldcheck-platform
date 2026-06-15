@@ -86,4 +86,16 @@ public class ReportsController(
             this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPut("{reportId:int}/export")]
+    [SwaggerOperation("Export Report", "Export the report.", OperationId = "ExportReport")]
+    [SwaggerResponse(200, "Report exported.", typeof(ReportResource))]
+    [SwaggerResponse(404, "Report not found.")]
+    public async Task<IActionResult> ExportReport(int reportId, CancellationToken cancellationToken)
+    {
+        var result = await reportCommandService.Handle(new ExportReportCommand(reportId), cancellationToken);
+        return ReportingNotificationsActionResultAssembler.ToActionResultFromReportResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
