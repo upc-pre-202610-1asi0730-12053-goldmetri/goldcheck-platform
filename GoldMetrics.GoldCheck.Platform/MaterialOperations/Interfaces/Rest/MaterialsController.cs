@@ -55,6 +55,20 @@ public class MaterialsController(
             m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
 
+    [HttpPut("{batchId}/download")]
+    [SwaggerOperation("Download Material", "Download a material batch to a dumping point.", OperationId = "DownloadMaterial")]
+    [SwaggerResponse(200, "Material downloaded successfully.", typeof(MaterialResource))]
+    [SwaggerResponse(404, "The material batch was not found.")]
+    public async Task<IActionResult> DownloadMaterial(string batchId, [FromBody] DownloadMaterialResource resource, CancellationToken cancellationToken)
+    {
+        var command = new DownloadMaterialCommand(batchId, resource.DumpingPoint);
+        var result = await materialCommandService.Handle(command, cancellationToken);
+
+        return MaterialOperationsActionResultAssembler.ToActionResultFromMaterialResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
+
     [HttpGet]
     [SwaggerOperation("Get All Materials", "Get all material batches.", OperationId = "GetAllMaterials")]
     [SwaggerResponse(200, "The material batches were found.", typeof(IEnumerable<MaterialResource>))]
