@@ -5,4 +5,5 @@ public record ReportResource(
     string SupervisorId,
     string IncidentId,
     string ReportStatus,
+    string ReportFormat,
     string Status);

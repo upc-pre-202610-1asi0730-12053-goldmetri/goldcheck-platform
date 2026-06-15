@@ -7,5 +7,5 @@ public static class ReportResourceFromEntityAssembler
 {
     public static ReportResource ToResourceFromEntity(Report entity) =>
         new(entity.Id, entity.SupervisorId.Value, entity.IncidentId,
-            entity.ReportStatus.Value, entity.Status);
+            entity.ReportStatus.Value, entity.ReportFormat.Value, entity.Status);
 }
