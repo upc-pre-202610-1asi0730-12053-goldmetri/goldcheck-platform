@@ -15,6 +15,7 @@ public static class MaterialOperationsActionResultAssembler
         MaterialOperationsError.MaterialNotFound => StatusCodes.Status404NotFound,
         MaterialOperationsError.InvalidMineralType => StatusCodes.Status400BadRequest,
         MaterialOperationsError.InvalidPayload => StatusCodes.Status400BadRequest,
+        MaterialOperationsError.MaterialAlreadyClassified => StatusCodes.Status409Conflict,
         MaterialOperationsError.OperationCancelled => StatusCodes.Status409Conflict,
         MaterialOperationsError.DatabaseError => StatusCodes.Status500InternalServerError,
         MaterialOperationsError.InternalServerError => StatusCodes.Status500InternalServerError,
