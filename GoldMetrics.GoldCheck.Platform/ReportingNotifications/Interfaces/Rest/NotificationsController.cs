@@ -1,6 +1,8 @@
 using System.Net.Mime;
     using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandServices;
+    using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.QueryServices;
     using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Model.Commands;
+    using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Model.Queries;
     using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Interfaces.Rest.Resources;
     using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Interfaces.Rest.Transform;
     using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -17,6 +19,7 @@ using System.Net.Mime;
     [SwaggerTag("Available Notification Endpoints.")]
     public class NotificationsController(
         INotificationCommandService notificationCommandService,
+        INotificationQueryService notificationQueryService,
         IStringLocalizer<ErrorMessages> errorLocalizer,
         ProblemDetailsFactory problemDetailsFactory)
         : ControllerBase
@@ -31,7 +34,8 @@ using System.Net.Mime;
             var result = await notificationCommandService.Handle(command, cancellationToken);
             return ReportingNotificationsActionResultAssembler.ToActionResultFromNotificationResult(
                 this, result, errorLocalizer, problemDetailsFactory,
-                n => Created(string.Empty, NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
+                n => CreatedAtAction(nameof(GetNotificationById), new { notificationId = n.Id },
+                    NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
         }
         
         [HttpPut("{notificationId:int}/send")]
@@ -43,6 +47,19 @@ using System.Net.Mime;
             var result = await notificationCommandService.Handle(new SendNotificationCommand(notificationId), cancellationToken);
             return ReportingNotificationsActionResultAssembler.ToActionResultFromNotificationResult(
                 this, result, errorLocalizer, problemDetailsFactory,
+                n => Ok(NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
+        }
+        
+        [HttpGet("{notificationId:int}")]
+        [SwaggerOperation("Get Notification By Id", "Get a notification by its identifier.", OperationId = "GetNotificationById")]
+        [SwaggerResponse(200, "Notification found.", typeof(NotificationResource))]
+        [SwaggerResponse(404, "Notification not found.")]
+        
+        public async Task<IActionResult> GetNotificationById(int notificationId, CancellationToken cancellationToken)
+        {
+            var notification = await notificationQueryService.Handle(new GetNotificationByIdQuery(notificationId), cancellationToken);
+            return ReportingNotificationsActionResultAssembler.ToActionResultFromGetNotificationResult(
+                this, notification, errorLocalizer, problemDetailsFactory,
                 n => Ok(NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
         }
     }
