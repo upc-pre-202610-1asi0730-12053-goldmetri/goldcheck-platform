@@ -22,6 +22,8 @@ using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.C
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Resources;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,6 +135,10 @@ builder.Services.AddSingleton<IStringLocalizer<ConsumerTraceabilityMessages>, St
 builder.Services.AddScoped<IJewelryProductRepository, JewelryProductRepository>();
 builder.Services.AddScoped<ITraceabilityJourneyRepository, TraceabilityJourneyRepository>();
 builder.Services.AddScoped<IJewelryProductCommandService, JewelryProductCommandService>();
+builder.Services.AddScoped<IJewelryProductQueryService, JewelryProductQueryService>();
+
+
+builder.Services.AddScoped<IJewelryProductQueryService, JewelryProductQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
