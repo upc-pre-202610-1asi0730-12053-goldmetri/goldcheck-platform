@@ -7,4 +7,5 @@ public interface IMaterialQueryService
 {
     Task<Material?> Handle(GetMaterialByIdQuery query, CancellationToken cancellationToken);
     Task<IEnumerable<Material>> Handle(GetAllMaterialsQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Material>> Handle(GetMaterialsByTypeQuery query, CancellationToken cancellationToken);
 }
