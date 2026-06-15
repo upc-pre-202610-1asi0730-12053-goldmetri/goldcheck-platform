@@ -127,6 +127,7 @@ builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
 builder.Services.AddScoped<IReportQueryService, ReportQueryService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationCommandService, NotificationCommandService>();
+builder.Services.AddScoped<INotificationQueryService, NotificationQueryService>();
 
 
 // Mediator Configuration
