@@ -17,6 +17,11 @@ using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Resources;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,6 +127,12 @@ builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryS
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportCommandService, ReportCommandService>();
+
+// ConsumerTraceability Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<ConsumerTraceabilityMessages>, StringLocalizer<ConsumerTraceabilityMessages>>();
+builder.Services.AddScoped<IJewelryProductRepository, JewelryProductRepository>();
+builder.Services.AddScoped<ITraceabilityJourneyRepository, TraceabilityJourneyRepository>();
+builder.Services.AddScoped<IJewelryProductCommandService, JewelryProductCommandService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
