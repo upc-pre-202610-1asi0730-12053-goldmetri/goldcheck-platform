@@ -21,7 +21,8 @@ public class ConsumerController(
     IJewelryProductCommandService productCommandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory,
-    IJewelryProductQueryService productQueryService
+    IJewelryProductQueryService productQueryService,
+    ITraceabilityJourneyQueryService journeyQueryService
     )
     : ControllerBase
 {
@@ -58,5 +59,21 @@ public class ConsumerController(
         var product = await productQueryService.Handle(query, cancellationToken);
         if (product is null) return NotFound();
         return Ok(JewelryProductResourceFromEntityAssembler.ToResourceFromEntity(product));
+    }
+    
+    // GET api/v1/consumer/products/{qrCode}/journey
+    [HttpGet("products/{qrCode}/journey")]
+    [SwaggerOperation("GetTraceabilityJourney",
+        "Returns the latest traceability journey for a product QR code.")]
+    [ProducesResponseType(typeof(TraceabilityJourneyResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetTraceabilityJourney(
+        string qrCode,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetTraceabilityJourneyQuery(qrCode);
+        var journey = await journeyQueryService.Handle(query, cancellationToken);
+        if (journey is null) return NotFound();
+        return Ok(TraceabilityJourneyResourceFromEntityAssembler.ToResourceFromEntity(journey));
     }
 }
