@@ -10,5 +10,5 @@ public interface IReportCommandService
     Task<Result<Report>> Handle(LoadAccidentDataCommand command, CancellationToken cancellationToken);
     Task<Result<Report>> Handle(GenerateReportCommand command, CancellationToken cancellationToken);
     Task<Result<Report>> Handle(RequestReportExportationCommand command, CancellationToken cancellationToken);
-
+    Task<Result<Report>> Handle(ExportReportCommand command, CancellationToken cancellationToken);
 }
