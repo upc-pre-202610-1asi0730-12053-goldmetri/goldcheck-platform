@@ -26,6 +26,7 @@ public static class ModelBuilderExtensions
             rf.WithOwner().HasForeignKey("Id");
             rf.Property(x => x.Value).HasColumnName("ReportFormat").IsRequired().HasMaxLength(20);
         });
+        builder.Entity<Report>().Property(r => r.DownloadedByUserId).HasMaxLength(100);
         builder.Entity<Report>().Property(r => r.Status).IsRequired().HasMaxLength(50);
     }
 }
