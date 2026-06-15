@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.CommandS
 public interface IMaterialCommandService
 {
     Task<Result<Material>> Handle(IdentifyMineralTypeCommand command, CancellationToken cancellationToken);
+    Task<Result<Material>> Handle(ClassifyMaterialCommand command, CancellationToken cancellationToken);
 }

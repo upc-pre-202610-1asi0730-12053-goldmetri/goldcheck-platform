@@ -8,4 +8,7 @@
   <data name="MineralTypeIdentified" xml:space="preserve">
     <value>Mineral type identified successfully.</value>
   </data>
+  <data name="MaterialClassified" xml:space="preserve">
+    <value>Material classified successfully.</value>
+  </data>
 </root>

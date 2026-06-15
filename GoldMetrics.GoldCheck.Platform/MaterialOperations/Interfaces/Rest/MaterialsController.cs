@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Rest.Transform;
@@ -37,6 +38,21 @@ public class MaterialsController(
             material => CreatedAtAction(nameof(GetMaterialById),
                 new { batchId = material.BatchId.Value },
                 MaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
+    }
+
+    [HttpPut("{batchId}/classify")]
+    [SwaggerOperation("Classify Material", "Classify a material batch.", OperationId = "ClassifyMaterial")]
+    [SwaggerResponse(200, "Material classified successfully.", typeof(MaterialResource))]
+    [SwaggerResponse(404, "The material batch was not found.")]
+    [SwaggerResponse(409, "The material batch is already classified.")]
+    public async Task<IActionResult> ClassifyMaterial(string batchId, [FromBody] ClassifyMaterialResource resource, CancellationToken cancellationToken)
+    {
+        var command = new ClassifyMaterialCommand(batchId, resource.Classification);
+        var result = await materialCommandService.Handle(command, cancellationToken);
+
+        return MaterialOperationsActionResultAssembler.ToActionResultFromMaterialResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
 
     [HttpGet]

@@ -5,4 +5,5 @@ public record MaterialResource(
     string BatchId,
     string MineralType,
     decimal PayloadTons,
+    string? Classification,
     string Status);

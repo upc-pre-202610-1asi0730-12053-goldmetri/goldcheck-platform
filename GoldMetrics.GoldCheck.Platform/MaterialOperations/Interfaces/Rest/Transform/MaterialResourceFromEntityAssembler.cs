@@ -11,5 +11,6 @@ public static class MaterialResourceFromEntityAssembler
             entity.BatchId.Value,
             entity.MineralType.Value,
             entity.Payload.Tons,
+            entity.Classification,
             entity.Status);
 }
