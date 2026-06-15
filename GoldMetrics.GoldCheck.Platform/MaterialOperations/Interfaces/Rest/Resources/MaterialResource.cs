@@ -6,4 +6,5 @@ public record MaterialResource(
     string MineralType,
     decimal PayloadTons,
     string? Classification,
+    string? DumpingPoint,
     string Status);
