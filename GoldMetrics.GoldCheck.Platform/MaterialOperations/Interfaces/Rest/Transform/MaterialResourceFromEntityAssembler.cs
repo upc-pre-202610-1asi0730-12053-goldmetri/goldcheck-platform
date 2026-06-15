@@ -13,5 +13,6 @@ public static class MaterialResourceFromEntityAssembler
             entity.Payload.Tons,
             entity.Classification,
             entity.DumpingPointName,
+            entity.CurrentLocation,
             entity.Status);
 }

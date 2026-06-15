@@ -7,4 +7,5 @@ public record MaterialResource(
     decimal PayloadTons,
     string? Classification,
     string? DumpingPoint,
+    string? CurrentLocation,
     string Status);

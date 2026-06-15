@@ -69,6 +69,20 @@ public class MaterialsController(
             m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
 
+    [HttpPut("{batchId}/track")]
+    [SwaggerOperation("Track Material Movement", "Track the current location of a material batch.", OperationId = "TrackMaterialMovement")]
+    [SwaggerResponse(200, "Material movement tracked.", typeof(MaterialResource))]
+    [SwaggerResponse(404, "The material batch was not found.")]
+    public async Task<IActionResult> TrackMaterialMovement(string batchId, [FromBody] TrackMaterialMovementResource resource, CancellationToken cancellationToken)
+    {
+        var command = new TrackMaterialMovementCommand(batchId, resource.CurrentLocation);
+        var result = await materialCommandService.Handle(command, cancellationToken);
+
+        return MaterialOperationsActionResultAssembler.ToActionResultFromMaterialResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
+
     [HttpGet]
     [SwaggerOperation("Get All Materials", "Get all material batches.", OperationId = "GetAllMaterials")]
     [SwaggerResponse(200, "The material batches were found.", typeof(IEnumerable<MaterialResource>))]

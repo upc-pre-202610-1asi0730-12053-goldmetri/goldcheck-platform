@@ -28,6 +28,7 @@ public partial class Material
     public string Status { get; private set; }
     public string? Classification { get; private set; }
     public string? DumpingPointName { get; private set; }
+    public string? CurrentLocation { get; private set; }
 
     public void Classify(ClassifyMaterialCommand command)
     {
@@ -42,5 +43,13 @@ public partial class Material
         var dumpingPoint = new DumpingPoint(command.DumpingPoint);
         DumpingPointName = dumpingPoint.Name;
         Status = "Downloaded";
+    }
+
+    public void TrackMovement(TrackMaterialMovementCommand command)
+    {
+        if (string.IsNullOrWhiteSpace(command.CurrentLocation))
+            throw new ArgumentException("CurrentLocation cannot be empty.", nameof(command));
+        CurrentLocation = command.CurrentLocation;
+        Status = "MovementTracked";
     }
 }

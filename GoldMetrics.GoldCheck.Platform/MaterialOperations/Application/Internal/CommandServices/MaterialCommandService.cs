@@ -126,4 +126,39 @@ public class MaterialCommandService(
                 localizer[nameof(MaterialOperationsError.InternalServerError)]);
         }
     }
+
+    public async Task<Result<Material>> Handle(TrackMaterialMovementCommand command, CancellationToken cancellationToken)
+    {
+        var material = await materialRepository.FindByBatchIdAsync(command.BatchId, cancellationToken);
+        if (material is null)
+            return Result<Material>.Failure(
+                MaterialOperationsError.MaterialNotFound,
+                localizer[nameof(MaterialOperationsError.MaterialNotFound)]);
+
+        try
+        {
+            material.TrackMovement(command);
+            materialRepository.Update(material);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<Material>.Success(material);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<Material>.Failure(
+                MaterialOperationsError.OperationCancelled,
+                localizer[nameof(MaterialOperationsError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Material>.Failure(
+                MaterialOperationsError.DatabaseError,
+                localizer[nameof(MaterialOperationsError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<Material>.Failure(
+                MaterialOperationsError.InternalServerError,
+                localizer[nameof(MaterialOperationsError.InternalServerError)]);
+        }
+    }
 }
