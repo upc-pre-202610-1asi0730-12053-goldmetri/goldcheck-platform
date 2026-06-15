@@ -13,9 +13,11 @@ public static class ReportingNotificationsActionResultAssembler
     private static int ToStatusCode(ReportingNotificationsError error) => error switch
     {
         ReportingNotificationsError.ReportNotFound => StatusCodes.Status404NotFound,
+        ReportingNotificationsError.NotificationNotFound => StatusCodes.Status404NotFound,
         ReportingNotificationsError.InvalidReportFormat => StatusCodes.Status400BadRequest,
         ReportingNotificationsError.ReportAlreadyExported => StatusCodes.Status409Conflict,
         ReportingNotificationsError.AccidentValidationFailed => StatusCodes.Status422UnprocessableEntity,
+        ReportingNotificationsError.NotificationValidationFailed => StatusCodes.Status422UnprocessableEntity,
         ReportingNotificationsError.OperationCancelled => StatusCodes.Status409Conflict,
         ReportingNotificationsError.DatabaseError => StatusCodes.Status500InternalServerError,
         ReportingNotificationsError.InternalServerError => StatusCodes.Status500InternalServerError,
@@ -40,5 +42,13 @@ public static class ReportingNotificationsActionResultAssembler
             return factory.CreateProblemDetails(controller, ToStatusCode(ReportingNotificationsError.ReportNotFound),
                 ReportingNotificationsError.ReportNotFound, localizer[nameof(ReportingNotificationsError.ReportNotFound)]);
         return onSuccess(report);
+    }
+    public static IActionResult ToActionResultFromNotificationResult(
+        ControllerBase controller, Result<Notification> result,
+        IStringLocalizer<ErrorMessages> localizer, ProblemDetailsFactory factory,
+        Func<Notification, IActionResult> onSuccess)
+    {
+        if (result.IsSuccess) return onSuccess(result.Value!);
+        return factory.CreateProblemDetails(controller, ToStatusCode((ReportingNotificationsError)result.Error!), result.Error, result.Message);
     }
 }
