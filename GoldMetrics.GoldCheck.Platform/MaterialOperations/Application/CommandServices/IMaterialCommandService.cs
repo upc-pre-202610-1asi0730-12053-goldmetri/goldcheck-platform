@@ -9,4 +9,5 @@ public interface IMaterialCommandService
     Task<Result<Material>> Handle(IdentifyMineralTypeCommand command, CancellationToken cancellationToken);
     Task<Result<Material>> Handle(ClassifyMaterialCommand command, CancellationToken cancellationToken);
     Task<Result<Material>> Handle(DownloadMaterialCommand command, CancellationToken cancellationToken);
+    Task<Result<Material>> Handle(TrackMaterialMovementCommand command, CancellationToken cancellationToken);
 }
