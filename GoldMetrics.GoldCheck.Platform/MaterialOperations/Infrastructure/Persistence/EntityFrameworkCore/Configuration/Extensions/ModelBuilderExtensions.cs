@@ -33,5 +33,7 @@ public static class ModelBuilderExtensions
         builder.Entity<Material>().Property(m => m.Classification).HasColumnName("Classification").HasMaxLength(200);
 
         builder.Entity<Material>().Property(m => m.DumpingPointName).HasColumnName("DumpingPointName").HasMaxLength(200);
+
+        builder.Entity<Material>().Property(m => m.CurrentLocation).HasColumnName("CurrentLocation").HasMaxLength(300);
     }
 }
