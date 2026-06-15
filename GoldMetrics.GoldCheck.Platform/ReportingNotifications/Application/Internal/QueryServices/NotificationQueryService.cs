@@ -9,4 +9,6 @@ public class NotificationQueryService(INotificationRepository notificationReposi
 {
     public async Task<Notification?> Handle(GetNotificationByIdQuery query, CancellationToken cancellationToken)
         => await notificationRepository.FindByIdAsync(query.Id, cancellationToken);
+    public async Task<IEnumerable<Notification>> Handle(GetNotificationsByUserQuery query, CancellationToken cancellationToken)
+        => await notificationRepository.FindByRecipientIdAsync(query.UserId, cancellationToken);
 }
