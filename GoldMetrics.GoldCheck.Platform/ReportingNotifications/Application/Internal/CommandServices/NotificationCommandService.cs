@@ -43,4 +43,20 @@ using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandS
             catch (DbUpdateException) { return DbError(); }
             catch (Exception) { return ServerError(); }
         }
+        
+        public async Task<Result<Notification>> Handle(SendNotificationCommand command, CancellationToken cancellationToken)
+        {
+            var notification = await notificationRepository.FindByIdAsync(command.Id, cancellationToken);
+            if (notification is null) return NotFound();
+            try
+            {
+                notification.SendNotification(command);
+                notificationRepository.Update(notification);
+                await unitOfWork.CompleteAsync(cancellationToken);
+                return Result<Notification>.Success(notification);
+            }
+            catch (OperationCanceledException) { return Cancelled(); }
+            catch (DbUpdateException) { return DbError(); }
+            catch (Exception) { return ServerError(); }
+        }
     }
