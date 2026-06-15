@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Comm
 public interface INotificationCommandService
 {
     Task<Result<Notification>> Handle(RequestNotificationCommand command, CancellationToken cancellationToken);
+    Task<Result<Notification>> Handle(SendNotificationCommand command, CancellationToken cancellationToken);
 }
