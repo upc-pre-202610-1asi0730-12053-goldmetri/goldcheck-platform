@@ -32,4 +32,20 @@ public static class MaterialOperationsActionResultAssembler
         var statusCode = ToStatusCode((MaterialOperationsError)result.Error!);
         return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);
     }
+
+    public static IActionResult ToActionResultFromGetMaterialResult(
+        ControllerBase controller,
+        Material? material,
+        IStringLocalizer<ErrorMessages> localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<Material, IActionResult> onSuccess)
+    {
+        if (material is null)
+            return problemDetailsFactory.CreateProblemDetails(
+                controller,
+                ToStatusCode(MaterialOperationsError.MaterialNotFound),
+                MaterialOperationsError.MaterialNotFound,
+                localizer[nameof(MaterialOperationsError.MaterialNotFound)]);
+        return onSuccess(material);
+    }
 }
