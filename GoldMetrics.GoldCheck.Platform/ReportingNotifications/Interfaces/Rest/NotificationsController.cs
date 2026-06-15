@@ -62,4 +62,13 @@ using System.Net.Mime;
                 this, notification, errorLocalizer, problemDetailsFactory,
                 n => Ok(NotificationResourceFromEntityAssembler.ToResourceFromEntity(n)));
         }
+        
+        [HttpGet("user/{userId}")]
+        [SwaggerOperation("Get Notifications By User", "Get all notifications for a specific user.", OperationId = "GetNotificationsByUser")]
+        [SwaggerResponse(200, "Notifications found.", typeof(IEnumerable<NotificationResource>))]
+        public async Task<IActionResult> GetNotificationsByUser(string userId, CancellationToken cancellationToken)
+        {
+            var notifications = await notificationQueryService.Handle(new GetNotificationsByUserQuery(userId), cancellationToken);
+            return Ok(notifications.Select(NotificationResourceFromEntityAssembler.ToResourceFromEntity));
+        }
     }
