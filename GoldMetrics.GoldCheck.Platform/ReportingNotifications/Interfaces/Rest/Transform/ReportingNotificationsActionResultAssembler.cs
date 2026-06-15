@@ -13,6 +13,7 @@ public static class ReportingNotificationsActionResultAssembler
     private static int ToStatusCode(ReportingNotificationsError error) => error switch
     {
         ReportingNotificationsError.ReportNotFound => StatusCodes.Status404NotFound,
+        ReportingNotificationsError.InvalidReportFormat => StatusCodes.Status400BadRequest,
         ReportingNotificationsError.AccidentValidationFailed => StatusCodes.Status422UnprocessableEntity,
         ReportingNotificationsError.OperationCancelled => StatusCodes.Status409Conflict,
         ReportingNotificationsError.DatabaseError => StatusCodes.Status500InternalServerError,
