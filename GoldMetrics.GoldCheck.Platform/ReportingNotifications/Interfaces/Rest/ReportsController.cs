@@ -1,6 +1,8 @@
 ﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Model.Commands;
+using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -17,6 +19,7 @@ namespace GoldMetrics.GoldCheck.Platform.ReportingNotifications.Interfaces.Rest;
 [SwaggerTag("Available Report Endpoints.")]
 public class ReportsController(
     IReportCommandService reportCommandService,
+    IReportQueryService reportQueryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -39,7 +42,8 @@ public class ReportsController(
             result,
             errorLocalizer,
             problemDetailsFactory,
-            r => Created(string.Empty, ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
+            r => CreatedAtAction(nameof(GetReportById), new { reportId = r.Id },
+                ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
 
     [HttpPut("{reportId:int}/load-data")]
@@ -108,6 +112,18 @@ public class ReportsController(
         var result = await reportCommandService.Handle(new DownloadReportCommand(reportId, userId), cancellationToken);
         return ReportingNotificationsActionResultAssembler.ToActionResultFromReportResult(
             this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
+    
+    [HttpGet("{reportId:int}")]
+    [SwaggerOperation("Get Report By Id", "Get a report by its identifier.", OperationId = "GetReportById")]
+    [SwaggerResponse(200, "Report found.", typeof(ReportResource))]
+    [SwaggerResponse(404, "Report not found.")]
+    public async Task<IActionResult> GetReportById(int reportId, CancellationToken cancellationToken)
+    {
+        var report = await reportQueryService.Handle(new GetReportByIdQuery(reportId), cancellationToken);
+        return ReportingNotificationsActionResultAssembler.ToActionResultFromGetReportResult(
+            this, report, errorLocalizer, problemDetailsFactory,
             r => Ok(ReportResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
 }
