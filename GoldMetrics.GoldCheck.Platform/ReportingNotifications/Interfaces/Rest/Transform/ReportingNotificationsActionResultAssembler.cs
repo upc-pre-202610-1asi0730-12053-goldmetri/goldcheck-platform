@@ -14,6 +14,7 @@ public static class ReportingNotificationsActionResultAssembler
     {
         ReportingNotificationsError.ReportNotFound => StatusCodes.Status404NotFound,
         ReportingNotificationsError.InvalidReportFormat => StatusCodes.Status400BadRequest,
+        ReportingNotificationsError.ReportAlreadyExported => StatusCodes.Status409Conflict,
         ReportingNotificationsError.AccidentValidationFailed => StatusCodes.Status422UnprocessableEntity,
         ReportingNotificationsError.OperationCancelled => StatusCodes.Status409Conflict,
         ReportingNotificationsError.DatabaseError => StatusCodes.Status500InternalServerError,
