@@ -12,6 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
 using ProblemDetailsFactory = GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Resources;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal.CommandServices;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal.QueryServices;
@@ -119,6 +124,11 @@ builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Domain.Repositorie
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.CommandServices.IIamCommandService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.CommandServices.IamCommandService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Rest.Transform.IamActionResultAssembler>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryServices.IIamQueryService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.QueryServices.IamQueryService>();
+
+// MaterialOperations Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<MaterialOperationsMessages>, StringLocalizer<MaterialOperationsMessages>>();
+builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories.IMaterialRepository, MaterialRepository>();
+builder.Services.AddScoped<IMaterialCommandService, MaterialCommandService>();
 
 // ReportingNotifications Bounded Context
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
