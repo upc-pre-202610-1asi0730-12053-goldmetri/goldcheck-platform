@@ -12,5 +12,6 @@ public static class MaterialResourceFromEntityAssembler
             entity.MineralType.Value,
             entity.Payload.Tons,
             entity.Classification,
+            entity.DumpingPointName,
             entity.Status);
 }
