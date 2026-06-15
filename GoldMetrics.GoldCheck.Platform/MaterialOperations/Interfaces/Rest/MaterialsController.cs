@@ -39,6 +39,16 @@ public class MaterialsController(
                 MaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
     }
 
+    [HttpGet]
+    [SwaggerOperation("Get All Materials", "Get all material batches.", OperationId = "GetAllMaterials")]
+    [SwaggerResponse(200, "The material batches were found.", typeof(IEnumerable<MaterialResource>))]
+    public async Task<IActionResult> GetAllMaterials(CancellationToken cancellationToken)
+    {
+        var query = new GetAllMaterialsQuery();
+        var materials = await materialQueryService.Handle(query, cancellationToken);
+        return Ok(materials.Select(MaterialResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpGet("{batchId}")]
     [SwaggerOperation("Get Material by Id", "Get a material batch by its identifier.", OperationId = "GetMaterialById")]
     [SwaggerResponse(200, "The material batch was found.", typeof(MaterialResource))]

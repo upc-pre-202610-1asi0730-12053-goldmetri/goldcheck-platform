@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.QuerySer
 public interface IMaterialQueryService
 {
     Task<Material?> Handle(GetMaterialByIdQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Material>> Handle(GetAllMaterialsQuery query, CancellationToken cancellationToken);
 }

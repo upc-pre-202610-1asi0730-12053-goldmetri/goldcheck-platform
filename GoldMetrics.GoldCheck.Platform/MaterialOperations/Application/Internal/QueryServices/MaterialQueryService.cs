@@ -9,4 +9,7 @@ public class MaterialQueryService(IMaterialRepository materialRepository) : IMat
 {
     public async Task<Material?> Handle(GetMaterialByIdQuery query, CancellationToken cancellationToken)
         => await materialRepository.FindByBatchIdAsync(query.BatchId, cancellationToken);
+
+    public async Task<IEnumerable<Material>> Handle(GetAllMaterialsQuery query, CancellationToken cancellationToken)
+        => await materialRepository.ListAsync(cancellationToken);
 }
