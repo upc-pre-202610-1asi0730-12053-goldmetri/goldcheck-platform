@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Quer
 public interface INotificationQueryService
 {
     Task<Notification?> Handle(GetNotificationByIdQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Notification>> Handle(GetNotificationsByUserQuery query, CancellationToken cancellationToken);
 }
