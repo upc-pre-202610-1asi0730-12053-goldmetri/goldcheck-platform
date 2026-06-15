@@ -4,9 +4,11 @@ public enum ConsumerTraceabilityError
 {
     None,
     ProductNotFound,
-    InvalidQRCode,
+    InvalidQrCode,
     OperationCancelled,
     DatabaseError,
     InternalServerError,
-    LanguageNotSupported
+    LanguageNotSupported,
+    CertificateNotFound,
+    AccessDenied
 }

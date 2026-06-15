@@ -9,4 +9,6 @@ public static class ConsumerTraceabilityErrors
     public static ConsumerTraceabilityError DatabaseError => ConsumerTraceabilityError.DatabaseError;
     public static ConsumerTraceabilityError InternalServerError => ConsumerTraceabilityError.InternalServerError;
     public static ConsumerTraceabilityError LanguageNotSupported => ConsumerTraceabilityError.LanguageNotSupported;
+    public static ConsumerTraceabilityError CertificateNotFound => ConsumerTraceabilityError.CertificateNotFound;
+    public static ConsumerTraceabilityError AccessDenied => ConsumerTraceabilityError.AccessDenied;
 }
