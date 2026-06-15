@@ -26,4 +26,13 @@ public partial class Material
     public MineralType MineralType { get; private set; }
     public Payload Payload { get; private set; }
     public string Status { get; private set; }
+    public string? Classification { get; private set; }
+
+    public void Classify(ClassifyMaterialCommand command)
+    {
+        if (string.IsNullOrWhiteSpace(command.Classification))
+            throw new ArgumentException("Classification cannot be empty.", nameof(command));
+        Classification = command.Classification;
+        Status = "Classified";
+    }
 }
