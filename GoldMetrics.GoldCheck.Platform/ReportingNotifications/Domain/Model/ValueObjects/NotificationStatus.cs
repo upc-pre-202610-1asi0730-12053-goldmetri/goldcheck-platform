@@ -2,7 +2,7 @@ namespace GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Model.Val
 
 public record NotificationStatus
 {
-    private static readonly string[] AllowedValues = ["Requested"];
+    private static readonly string[] AllowedValues = ["Requested", "Validated", "Sent"];
     public NotificationStatus() => Value = string.Empty;
     public NotificationStatus(string value)
     {
