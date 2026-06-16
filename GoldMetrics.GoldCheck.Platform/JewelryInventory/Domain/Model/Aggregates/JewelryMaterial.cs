@@ -23,4 +23,13 @@ public partial class JewelryMaterial
     public MaterialId MaterialId { get; private set; }
     public JewelerId JewelerId { get; private set; }
     public MaterialStatus Status { get; private set; }
+
+    public string? QRCodeValue { get; private set; }
+
+    public void ScanQR(ScanQRMaterialCommand command)
+    {
+        var qr = new QRCode(command.QRCode);
+        QRCodeValue = qr.Value;
+        Status = new MaterialStatus("Pending");
+    }
 }
