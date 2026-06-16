@@ -16,6 +16,8 @@ public static class JewelryInventoryActionResultAssembler
     {
         JewelryInventoryError.MaterialNotFound         => StatusCodes.Status404NotFound,
         JewelryInventoryError.MaterialAlreadyCertified => StatusCodes.Status409Conflict,
+        JewelryInventoryError.InvalidQRCode            => StatusCodes.Status400BadRequest,
+        JewelryInventoryError.InvalidStatus            => StatusCodes.Status400BadRequest,
         JewelryInventoryError.OperationCancelled       => StatusCodes.Status409Conflict,
         JewelryInventoryError.DatabaseError            => StatusCodes.Status500InternalServerError,
         _                                              => StatusCodes.Status500InternalServerError
