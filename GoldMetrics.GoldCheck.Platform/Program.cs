@@ -34,8 +34,6 @@ using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Resources;
 using JewelryCommandService = GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.CommandServices.JewelryCommandService;
-using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.QueryServices;
-using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
