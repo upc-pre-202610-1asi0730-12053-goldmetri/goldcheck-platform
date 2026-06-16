@@ -15,6 +15,7 @@ public static class JewelryInventoryActionResultAssembler
     private static int ToStatusCode(JewelryInventoryError error) => error switch
     {
         JewelryInventoryError.MaterialNotFound         => StatusCodes.Status404NotFound,
+        JewelryInventoryError.CertificateNotFound      => StatusCodes.Status404NotFound,
         JewelryInventoryError.MaterialAlreadyCertified => StatusCodes.Status409Conflict,
         JewelryInventoryError.InvalidQRCode            => StatusCodes.Status400BadRequest,
         JewelryInventoryError.InvalidStatus            => StatusCodes.Status400BadRequest,
@@ -29,6 +30,20 @@ public static class JewelryInventoryActionResultAssembler
         IStringLocalizer<ErrorMessages> localizer,
         ProblemDetailsFactory problemDetailsFactory,
         Func<JewelryMaterial, IActionResult> onSuccess)
+    {
+        if (result.IsSuccess) return onSuccess(result.Value!);
+
+        var statusCode = ToStatusCode((JewelryInventoryError)result.Error!);
+        return problemDetailsFactory.CreateProblemDetails(
+            controller, statusCode, result.Error, result.Message);
+    }
+
+    public static IActionResult ToActionResultFromJewelryResult(
+        ControllerBase controller,
+        Result<Jewelry> result,
+        IStringLocalizer<ErrorMessages> localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<Jewelry, IActionResult> onSuccess)
     {
         if (result.IsSuccess) return onSuccess(result.Value!);
 
