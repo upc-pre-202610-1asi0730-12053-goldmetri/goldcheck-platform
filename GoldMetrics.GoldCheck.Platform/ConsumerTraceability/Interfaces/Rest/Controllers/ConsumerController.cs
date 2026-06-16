@@ -76,4 +76,23 @@ public class ConsumerController(
         if (journey is null) return NotFound();
         return Ok(TraceabilityJourneyResourceFromEntityAssembler.ToResourceFromEntity(journey));
     }
+    
+    // POST api/v1/consumer/certificates/{certificateId}/download
+    [HttpPost("certificates/{certificateId}/download")]
+    [SwaggerOperation("DownloadCertificate",
+        "Records a certificate download event for a consumer.")]
+    [ProducesResponseType(typeof(JewelryProductResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DownloadCertificate(
+        string certificateId,
+        [FromBody] DownloadCertificateResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = DownloadCertificateCommandFromResourceAssembler
+            .ToCommandFromResource(certificateId, resource);
+        var result = await productCommandService.Handle(command, cancellationToken);
+        return ConsumerTraceabilityActionResultAssembler.ToActionResultFromProductResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            product => Ok(JewelryProductResourceFromEntityAssembler.ToResourceFromEntity(product)));
+    }
 }
