@@ -17,4 +17,7 @@
   <data name="CertificateGenerated" xml:space="preserve">
     <value>Certificate generated successfully.</value>
   </data>
+  <data name="CertificateSigned" xml:space="preserve">
+    <value>Certificate signed and saved successfully.</value>
+  </data>
 </root>
