@@ -33,5 +33,8 @@ public static class ModelBuilderExtensions
             s.Property(v => v.Value)
                 .HasColumnName("Status").IsRequired().HasMaxLength(50);
         });
+
+        builder.Entity<JewelryMaterial>().Property(m => m.QRCodeValue)
+            .HasColumnName("QRCode").HasMaxLength(200);
     }
 }
