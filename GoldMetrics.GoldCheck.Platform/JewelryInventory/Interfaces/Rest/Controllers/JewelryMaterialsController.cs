@@ -1,5 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -17,6 +19,7 @@ namespace GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Contro
 [SwaggerTag("Available Jewelry Material Endpoints.")]
 public class JewelryMaterialsController(
     IJewelryMaterialCommandService materialCommandService,
+    IJewelryMaterialQueryService materialQueryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -36,7 +39,26 @@ public class JewelryMaterialsController(
         var result = await materialCommandService.Handle(command, cancellationToken);
         return JewelryInventoryActionResultAssembler.ToActionResultFromMaterialResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            material => Created(string.Empty,
+            material => CreatedAtAction(
+                nameof(GetMaterialById),
+                new { materialId = material.MaterialId.Value },
                 JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
+    }
+
+    // GET api/v1/jewelry-materials/{materialId}
+    [HttpGet("{materialId}")]
+    [SwaggerOperation("GetMaterialById",
+        "Returns a jewelry material by its material identifier.")]
+    [ProducesResponseType(typeof(JewelryMaterialResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetMaterialById(
+        string materialId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetMaterialByIdQuery(materialId);
+        var material = await materialQueryService.Handle(query, cancellationToken);
+        if (material is null)
+            return NotFound();
+        return Ok(JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material));
     }
 }
