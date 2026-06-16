@@ -28,6 +28,8 @@ using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persi
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Resources;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Resources;
@@ -142,6 +144,7 @@ builder.Services.AddScoped<IMaterialQueryService, MaterialQueryService>();
 builder.Services.AddSingleton<IStringLocalizer<JewelryInventoryMessages>, StringLocalizer<JewelryInventoryMessages>>();
 builder.Services.AddScoped<IJewelryMaterialRepository, JewelryMaterialRepository>();
 builder.Services.AddScoped<IJewelryMaterialCommandService, JewelryMaterialCommandService>();
+builder.Services.AddScoped<IJewelryMaterialQueryService, JewelryMaterialQueryService>();
 
 // ReportingNotifications Bounded Context
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
