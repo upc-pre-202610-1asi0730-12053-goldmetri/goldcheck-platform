@@ -3,7 +3,7 @@ namespace GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Model.ValueObje
 public record MaterialStatus
 {
     private static readonly HashSet<string> AllowedStatuses =
-        new(StringComparer.OrdinalIgnoreCase) { "NonCertified", "Pending" };
+        new(StringComparer.OrdinalIgnoreCase) { "NonCertified", "Certified", "Pending" };
 
     public MaterialStatus() => Value = string.Empty;
 
