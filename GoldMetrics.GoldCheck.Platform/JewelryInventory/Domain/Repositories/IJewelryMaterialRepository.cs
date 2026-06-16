@@ -7,4 +7,7 @@ public interface IJewelryMaterialRepository : IBaseRepository<JewelryMaterial>
 {
     Task<JewelryMaterial?> FindByMaterialIdAsync(string materialId,
         CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<JewelryMaterial>> FindAllAsync(
+        CancellationToken cancellationToken = default);
 }

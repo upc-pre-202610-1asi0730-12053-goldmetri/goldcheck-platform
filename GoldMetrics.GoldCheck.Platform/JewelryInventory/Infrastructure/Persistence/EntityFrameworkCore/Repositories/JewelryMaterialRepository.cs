@@ -14,4 +14,8 @@ public class JewelryMaterialRepository(AppDbContext context)
         CancellationToken cancellationToken = default)
         => await Context.Set<JewelryMaterial>()
             .FirstOrDefaultAsync(m => m.MaterialId.Value == materialId, cancellationToken);
+
+    public async Task<IEnumerable<JewelryMaterial>> FindAllAsync(
+        CancellationToken cancellationToken = default)
+        => await Context.Set<JewelryMaterial>().ToListAsync(cancellationToken);
 }
