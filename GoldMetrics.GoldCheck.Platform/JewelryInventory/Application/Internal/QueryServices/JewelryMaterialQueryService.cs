@@ -12,4 +12,9 @@ public class JewelryMaterialQueryService(IJewelryMaterialRepository materialRepo
         GetMaterialByIdQuery query,
         CancellationToken cancellationToken = default)
         => await materialRepository.FindByMaterialIdAsync(query.MaterialId, cancellationToken);
+
+    public async Task<IEnumerable<JewelryMaterial>> Handle(
+        GetAllMaterialsQuery query,
+        CancellationToken cancellationToken = default)
+        => await materialRepository.FindAllAsync(cancellationToken);
 }
