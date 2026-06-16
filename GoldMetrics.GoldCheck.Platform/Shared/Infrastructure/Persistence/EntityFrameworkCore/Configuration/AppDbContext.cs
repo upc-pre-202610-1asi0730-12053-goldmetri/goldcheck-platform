@@ -1,4 +1,5 @@
 using GoldMetrics.GoldCheck.Platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -26,6 +27,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // MaterialOperations Context
         builder.ApplyMaterialOperationsConfiguration();
+
+        // JewelryInventory Context
+        builder.ApplyJewelryInventoryConfiguration();
         builder.UseSnakeCaseNamingConvention();
     }
 }

@@ -26,6 +26,11 @@ using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.QuerySer
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Resources;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -132,6 +137,11 @@ builder.Services.AddSingleton<IStringLocalizer<MaterialOperationsMessages>, Stri
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories.IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IMaterialCommandService, MaterialCommandService>();
 builder.Services.AddScoped<IMaterialQueryService, MaterialQueryService>();
+
+// JewelryInventory Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<JewelryInventoryMessages>, StringLocalizer<JewelryInventoryMessages>>();
+builder.Services.AddScoped<IJewelryMaterialRepository, JewelryMaterialRepository>();
+builder.Services.AddScoped<IJewelryMaterialCommandService, JewelryMaterialCommandService>();
 
 // ReportingNotifications Bounded Context
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
