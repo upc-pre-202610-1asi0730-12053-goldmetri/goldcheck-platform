@@ -11,4 +11,8 @@ public interface IJewelryProductCommandService
     
     Task<Result<JewelryProduct>> Handle(DownloadCertificateCommand command,
         CancellationToken cancellationToken = default);
+    
+    
+    
+    
 }

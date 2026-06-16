@@ -74,4 +74,57 @@ public class JewelryProductCommandService(
                 localizer[nameof(ConsumerTraceabilityError.InternalServerError)]);
         }
     }
+    
+    // ── DownloadCertificate ───────────────────────────────────────────────────
+
+    public async Task<Result<JewelryProduct>> Handle(
+        DownloadCertificateCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var existing = await productRepository.FindByCertificateIdAsync(
+                command.CertificateId, cancellationToken);
+
+            JewelryProduct product;
+            if (existing is null)
+            {
+                // No product yet associated with this certificate — create one
+                product = new JewelryProduct(command);
+                await productRepository.AddAsync(product, cancellationToken);
+            }
+            else
+            {
+                existing.DownloadCertificate(command);
+                product = existing;
+            }
+
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<JewelryProduct>.Success(product);
+        }
+        catch (ArgumentException)
+        {
+            return Result<JewelryProduct>.Failure(
+                ConsumerTraceabilityError.InvalidQRCode,
+                localizer[nameof(ConsumerTraceabilityError.InvalidQRCode)]);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<JewelryProduct>.Failure(
+                ConsumerTraceabilityError.OperationCancelled,
+                localizer[nameof(ConsumerTraceabilityError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<JewelryProduct>.Failure(
+                ConsumerTraceabilityError.DatabaseError,
+                localizer[nameof(ConsumerTraceabilityError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<JewelryProduct>.Failure(
+                ConsumerTraceabilityError.InternalServerError,
+                localizer[nameof(ConsumerTraceabilityError.InternalServerError)]);
+        }
+    }
 }
