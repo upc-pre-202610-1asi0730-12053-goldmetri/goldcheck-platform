@@ -11,4 +11,7 @@ public interface IJewelryMaterialCommandService
 
     Task<Result<JewelryMaterial>> Handle(ScanQRMaterialCommand command,
         CancellationToken cancellationToken = default);
+
+    Task<Result<JewelryMaterial>> Handle(RegisterMaterialInInventoryCommand command,
+        CancellationToken cancellationToken = default);
 }
