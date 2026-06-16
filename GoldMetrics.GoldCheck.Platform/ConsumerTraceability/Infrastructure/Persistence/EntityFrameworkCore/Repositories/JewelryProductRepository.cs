@@ -14,4 +14,10 @@ public class JewelryProductRepository(AppDbContext context)
         CancellationToken cancellationToken = default)
         => await Context.Set<JewelryProduct>()
             .FirstOrDefaultAsync(p => p.QRCode.Value == qrCode, cancellationToken);
+    
+    public async Task<JewelryProduct?> FindByCertificateIdAsync(
+        string certificateId,
+        CancellationToken cancellationToken = default)
+        => await Context.Set<JewelryProduct>()
+            .FirstOrDefaultAsync(p => p.CertificateIdRef == certificateId, cancellationToken);
 }
