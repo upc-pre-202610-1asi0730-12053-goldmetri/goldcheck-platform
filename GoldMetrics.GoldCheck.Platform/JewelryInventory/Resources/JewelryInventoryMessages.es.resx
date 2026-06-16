@@ -8,4 +8,7 @@
   <data name="MaterialRegistered" xml:space="preserve">
     <value>Material no certificado registrado exitosamente.</value>
   </data>
+  <data name="MaterialScanned" xml:space="preserve">
+    <value>Código QR del material escaneado exitosamente.</value>
+  </data>
 </root>

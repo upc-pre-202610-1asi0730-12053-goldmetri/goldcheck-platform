@@ -5,6 +5,8 @@ public enum JewelryInventoryError
     None,
     MaterialNotFound,
     MaterialAlreadyCertified,
+    InvalidQRCode,
+    InvalidStatus,
     OperationCancelled,
     DatabaseError,
     InternalServerError

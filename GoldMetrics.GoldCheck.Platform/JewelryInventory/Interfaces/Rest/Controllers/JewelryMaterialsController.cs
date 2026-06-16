@@ -45,6 +45,26 @@ public class JewelryMaterialsController(
                 JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
     }
 
+    // PUT api/v1/jewelry-materials/{materialId}/scan
+    [HttpPut("{materialId}/scan")]
+    [SwaggerOperation("ScanQRMaterial",
+        "Scans the QR code for a jewelry material and updates its status to Pending.")]
+    [ProducesResponseType(typeof(JewelryMaterialResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ScanQR(
+        string materialId,
+        [FromBody] ScanQRResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = ScanQRMaterialCommandFromResourceAssembler
+            .ToCommandFromResource(materialId, resource);
+        var result = await materialCommandService.Handle(command, cancellationToken);
+        return JewelryInventoryActionResultAssembler.ToActionResultFromMaterialResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            material => Ok(JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
+    }
+
     // GET api/v1/jewelry-materials
     [HttpGet]
     [SwaggerOperation("GetAllMaterials",

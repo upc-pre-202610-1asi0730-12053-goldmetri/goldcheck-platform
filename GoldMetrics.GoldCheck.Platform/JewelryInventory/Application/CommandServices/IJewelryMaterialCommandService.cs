@@ -8,4 +8,7 @@ public interface IJewelryMaterialCommandService
 {
     Task<Result<JewelryMaterial>> Handle(RegisterNonCertifiedMaterialCommand command,
         CancellationToken cancellationToken = default);
+
+    Task<Result<JewelryMaterial>> Handle(ScanQRMaterialCommand command,
+        CancellationToken cancellationToken = default);
 }
