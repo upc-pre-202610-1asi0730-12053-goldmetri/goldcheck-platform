@@ -4,6 +4,7 @@ public enum JewelryInventoryError
 {
     None,
     MaterialNotFound,
+    CertificateNotFound,
     MaterialAlreadyCertified,
     InvalidQRCode,
     InvalidStatus,
