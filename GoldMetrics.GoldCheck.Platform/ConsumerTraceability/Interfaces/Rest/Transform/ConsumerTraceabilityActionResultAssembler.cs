@@ -18,7 +18,8 @@ public static class ConsumerTraceabilityActionResultAssembler
         ConsumerTraceabilityError.InvalidQRCode      => StatusCodes.Status400BadRequest,
         ConsumerTraceabilityError.OperationCancelled => StatusCodes.Status409Conflict,
         ConsumerTraceabilityError.DatabaseError      => StatusCodes.Status500InternalServerError,
-        _                                            => StatusCodes.Status500InternalServerError
+        ConsumerTraceabilityError.CertificateNotFound => StatusCodes.Status404NotFound,
+        ConsumerTraceabilityError.AccessDenied        => StatusCodes.Status403Forbidden
     };
 
     public static IActionResult ToActionResultFromProductResult(
