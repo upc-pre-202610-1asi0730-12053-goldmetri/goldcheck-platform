@@ -5,4 +5,5 @@ public record JewelryMaterialResource(
     string MaterialId,
     string JewelerId,
     string Status,
-    string? QRCode);
+    string? QRCode,
+    string? CertificateId);

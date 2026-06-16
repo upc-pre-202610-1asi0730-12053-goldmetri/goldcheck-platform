@@ -11,5 +11,6 @@ public static class JewelryMaterialResourceFromEntityAssembler
             entity.MaterialId.Value,
             entity.JewelerId.Value,
             entity.Status.Value,
-            entity.QRCodeValue);
+            entity.QRCodeValue,
+            entity.CertificateIdRef);
 }
