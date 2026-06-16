@@ -32,4 +32,11 @@ public partial class JewelryMaterial
         QRCodeValue = qr.Value;
         Status = new MaterialStatus("Pending");
     }
+
+    public void RegisterInInventory(RegisterMaterialInInventoryCommand command)
+    {
+        var qr = new QRCode(command.QRCode);
+        QRCodeValue = qr.Value;
+        Status = new MaterialStatus("Pending");
+    }
 }

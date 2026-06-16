@@ -11,4 +11,7 @@
   <data name="MaterialScanned" xml:space="preserve">
     <value>Material QR code scanned successfully.</value>
   </data>
+  <data name="MaterialRegisteredInInventory" xml:space="preserve">
+    <value>Material registered in inventory successfully.</value>
+  </data>
 </root>
