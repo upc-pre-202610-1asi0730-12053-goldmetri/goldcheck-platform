@@ -8,4 +8,7 @@ public interface IJewelryProductCommandService
 {
     Task<Result<JewelryProduct>> Handle(ScanProductQRCommand command,
         CancellationToken cancellationToken = default);
+    
+    Task<Result<JewelryProduct>> Handle(DownloadCertificateCommand command,
+        CancellationToken cancellationToken = default);
 }
