@@ -25,6 +25,7 @@ public partial class JewelryMaterial
     public MaterialStatus Status { get; private set; }
 
     public string? QRCodeValue { get; private set; }
+    public string? CertificateIdRef { get; private set; }
 
     public void ScanQR(ScanQRMaterialCommand command)
     {
@@ -38,5 +39,12 @@ public partial class JewelryMaterial
         var qr = new QRCode(command.QRCode);
         QRCodeValue = qr.Value;
         Status = new MaterialStatus("Pending");
+    }
+
+    public void GenerateCertificate(GenerateCertificateCommand command)
+    {
+        var cert = new CertificateId(Guid.NewGuid().ToString());
+        CertificateIdRef = cert.Value;
+        Status = new MaterialStatus("Certified");
     }
 }
