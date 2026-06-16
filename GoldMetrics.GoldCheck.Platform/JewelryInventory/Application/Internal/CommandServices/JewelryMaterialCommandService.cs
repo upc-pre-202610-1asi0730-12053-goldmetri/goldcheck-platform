@@ -149,4 +149,49 @@ public class JewelryMaterialCommandService(
                 localizer[nameof(JewelryInventoryError.InternalServerError)]);
         }
     }
+
+    // ── GenerateCertificate ───────────────────────────────────────────────────
+
+    public async Task<Result<JewelryMaterial>> Handle(
+        GenerateCertificateCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        var material = await materialRepository.FindByMaterialIdAsync(
+            command.MaterialId, cancellationToken);
+
+        if (material is null)
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.MaterialNotFound,
+                localizer[nameof(JewelryInventoryError.MaterialNotFound)]);
+
+        if (material.CertificateIdRef is not null)
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.MaterialAlreadyCertified,
+                localizer[nameof(JewelryInventoryError.MaterialAlreadyCertified)]);
+
+        try
+        {
+            material.GenerateCertificate(command);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<JewelryMaterial>.Success(material);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.OperationCancelled,
+                localizer[nameof(JewelryInventoryError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.DatabaseError,
+                localizer[nameof(JewelryInventoryError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.InternalServerError,
+                localizer[nameof(JewelryInventoryError.InternalServerError)]);
+        }
+    }
 }
