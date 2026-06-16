@@ -95,4 +95,20 @@ public class ConsumerController(
             this, result, errorLocalizer, problemDetailsFactory,
             product => Ok(JewelryProductResourceFromEntityAssembler.ToResourceFromEntity(product)));
     }
+    
+    // GET api/v1/consumer/certificates/{certificateId}
+    [HttpGet("certificates/{certificateId}")]
+    [SwaggerOperation("GetCertificate",
+        "Returns the product associated with a certificate identifier.")]
+    [ProducesResponseType(typeof(JewelryProductResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCertificate(
+        string certificateId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetCertificateByIdQuery(certificateId);
+        var product = await productQueryService.Handle(query, cancellationToken);
+        if (product is null) return NotFound();
+        return Ok(JewelryProductResourceFromEntityAssembler.ToResourceFromEntity(product));
+    }
 }
