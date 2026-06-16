@@ -1,5 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -18,6 +20,7 @@ namespace GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Contro
 public class CertificatesController(
     IJewelryMaterialCommandService materialCommandService,
     IJewelryCommandService jewelryCommandService,
+    IJewelryQueryService jewelryQueryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -38,7 +41,9 @@ public class CertificatesController(
         var result = await materialCommandService.Handle(command, cancellationToken);
         return JewelryInventoryActionResultAssembler.ToActionResultFromMaterialResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            material => Created(string.Empty,
+            material => CreatedAtAction(
+                nameof(GetCertificateById),
+                new { certificateId = material.CertificateIdRef },
                 JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
     }
 
@@ -60,5 +65,22 @@ public class CertificatesController(
         return JewelryInventoryActionResultAssembler.ToActionResultFromJewelryResult(
             this, result, errorLocalizer, problemDetailsFactory,
             jewelry => Ok(CertificateResourceFromEntityAssembler.ToResourceFromEntity(jewelry)));
+    }
+
+    // GET api/v1/certificates/{certificateId}
+    [HttpGet("{certificateId}")]
+    [SwaggerOperation("GetCertificateById",
+        "Returns a signed certificate by its certificate identifier.")]
+    [ProducesResponseType(typeof(CertificateResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCertificateById(
+        string certificateId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetCertificateByIdQuery(certificateId);
+        var jewelry = await jewelryQueryService.Handle(query, cancellationToken);
+        if (jewelry is null)
+            return NotFound();
+        return Ok(CertificateResourceFromEntityAssembler.ToResourceFromEntity(jewelry));
     }
 }
