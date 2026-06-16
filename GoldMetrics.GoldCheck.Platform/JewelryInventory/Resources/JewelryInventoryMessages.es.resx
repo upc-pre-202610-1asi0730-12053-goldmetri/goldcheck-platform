@@ -14,4 +14,7 @@
   <data name="MaterialRegisteredInInventory" xml:space="preserve">
     <value>Material registrado en inventario exitosamente.</value>
   </data>
+  <data name="CertificateGenerated" xml:space="preserve">
+    <value>Certificado generado exitosamente.</value>
+  </data>
 </root>
