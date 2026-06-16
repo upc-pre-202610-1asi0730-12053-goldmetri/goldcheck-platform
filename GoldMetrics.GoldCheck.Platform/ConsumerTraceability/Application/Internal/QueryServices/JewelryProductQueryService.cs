@@ -12,4 +12,9 @@ public class JewelryProductQueryService(IJewelryProductRepository productReposit
         GetProductByQRQuery query,
         CancellationToken cancellationToken = default)
         => await productRepository.FindByQRCodeAsync(query.QRCode, cancellationToken);
+    
+    public async Task<JewelryProduct?> Handle(
+        GetCertificateByIdQuery query,
+        CancellationToken cancellationToken = default)
+        => await productRepository.FindByCertificateIdAsync(query.CertificateId, cancellationToken);
 }
