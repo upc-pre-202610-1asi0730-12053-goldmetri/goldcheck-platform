@@ -17,6 +17,7 @@ namespace GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Rest.Contro
 [SwaggerTag("Available Certificate Endpoints.")]
 public class CertificatesController(
     IJewelryMaterialCommandService materialCommandService,
+    IJewelryCommandService jewelryCommandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -39,5 +40,25 @@ public class CertificatesController(
             this, result, errorLocalizer, problemDetailsFactory,
             material => Created(string.Empty,
                 JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
+    }
+
+    // PUT api/v1/certificates/{certificateId}/sign
+    [HttpPut("{certificateId}/sign")]
+    [SwaggerOperation("SignCertificate",
+        "Signs and saves a certificate for a jewelry piece.")]
+    [ProducesResponseType(typeof(CertificateResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> SignCertificate(
+        string certificateId,
+        [FromBody] SignCertificateResource resource,
+        CancellationToken cancellationToken)
+    {
+        var command = SignCertificateCommandFromResourceAssembler
+            .ToCommandFromResource(certificateId, resource);
+        var result = await jewelryCommandService.Handle(command, cancellationToken);
+        return JewelryInventoryActionResultAssembler.ToActionResultFromJewelryResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            jewelry => Ok(CertificateResourceFromEntityAssembler.ToResourceFromEntity(jewelry)));
     }
 }
