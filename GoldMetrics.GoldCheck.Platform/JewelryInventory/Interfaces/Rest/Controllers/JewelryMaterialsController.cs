@@ -45,6 +45,20 @@ public class JewelryMaterialsController(
                 JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity(material)));
     }
 
+    // GET api/v1/jewelry-materials
+    [HttpGet]
+    [SwaggerOperation("GetAllMaterials",
+        "Returns all jewelry materials registered in the inventory.")]
+    [ProducesResponseType(typeof(IEnumerable<JewelryMaterialResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllMaterials(CancellationToken cancellationToken)
+    {
+        var query = new GetAllMaterialsQuery();
+        var materials = await materialQueryService.Handle(query, cancellationToken);
+        var resources = materials
+            .Select(JewelryMaterialResourceFromEntityAssembler.ToResourceFromEntity);
+        return Ok(resources);
+    }
+
     // GET api/v1/jewelry-materials/{materialId}
     [HttpGet("{materialId}")]
     [SwaggerOperation("GetMaterialById",
