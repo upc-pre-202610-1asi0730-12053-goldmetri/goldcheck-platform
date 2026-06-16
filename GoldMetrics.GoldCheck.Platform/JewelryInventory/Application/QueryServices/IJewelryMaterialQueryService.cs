@@ -7,4 +7,7 @@ public interface IJewelryMaterialQueryService
 {
     Task<JewelryMaterial?> Handle(GetMaterialByIdQuery query,
         CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<JewelryMaterial>> Handle(GetAllMaterialsQuery query,
+        CancellationToken cancellationToken = default);
 }
