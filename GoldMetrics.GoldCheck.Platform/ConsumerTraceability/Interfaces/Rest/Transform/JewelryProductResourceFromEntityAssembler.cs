@@ -10,6 +10,7 @@ public static class JewelryProductResourceFromEntityAssembler
             entity.Id,
             entity.QRCode.Value,
             entity.ConsumerId.Value,
+            entity.CertificateIdRef,
             entity.Status,
             entity.ScanCount);
 }
