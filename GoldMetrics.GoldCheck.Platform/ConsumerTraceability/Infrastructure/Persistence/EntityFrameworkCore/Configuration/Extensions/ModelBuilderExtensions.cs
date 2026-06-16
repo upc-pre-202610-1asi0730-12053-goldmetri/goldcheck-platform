@@ -33,6 +33,9 @@ public static class ModelBuilderExtensions
         builder.Entity<JewelryProduct>().Property(p => p.ScanCount)
             .HasColumnName("ScanCount").IsRequired();
 
+        builder.Entity<JewelryProduct>().Property(p => p.CertificateIdRef)
+            .HasColumnName("CertificateId").HasMaxLength(100);
+        
         // ── TraceabilityJourney ───────────────────────────────────────────────
 
         builder.Entity<TraceabilityJourney>().HasKey(j => j.Id);
