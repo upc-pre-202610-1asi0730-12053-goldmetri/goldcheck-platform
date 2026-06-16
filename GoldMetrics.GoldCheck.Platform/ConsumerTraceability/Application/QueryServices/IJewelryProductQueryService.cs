@@ -7,4 +7,7 @@ public interface IJewelryProductQueryService
 {
     Task<JewelryProduct?> Handle(GetProductByQRQuery query,
         CancellationToken cancellationToken = default);
+    
+    Task<JewelryProduct?> Handle(GetCertificateByIdQuery query,
+        CancellationToken cancellationToken = default);
 }
