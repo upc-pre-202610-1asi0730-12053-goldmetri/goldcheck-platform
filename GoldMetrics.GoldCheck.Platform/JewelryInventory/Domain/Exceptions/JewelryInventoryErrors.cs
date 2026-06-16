@@ -4,6 +4,7 @@ public static class JewelryInventoryErrors
 {
     public static JewelryInventoryError None => JewelryInventoryError.None;
     public static JewelryInventoryError MaterialNotFound => JewelryInventoryError.MaterialNotFound;
+    public static JewelryInventoryError CertificateNotFound => JewelryInventoryError.CertificateNotFound;
     public static JewelryInventoryError MaterialAlreadyCertified => JewelryInventoryError.MaterialAlreadyCertified;
     public static JewelryInventoryError InvalidQRCode => JewelryInventoryError.InvalidQRCode;
     public static JewelryInventoryError InvalidStatus => JewelryInventoryError.InvalidStatus;
