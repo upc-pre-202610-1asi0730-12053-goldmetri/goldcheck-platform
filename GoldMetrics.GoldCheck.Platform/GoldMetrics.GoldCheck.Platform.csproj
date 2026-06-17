@@ -24,4 +24,28 @@
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Analytics\Resources\AnalyticsMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AnalyticsMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Analytics\Resources\AnalyticsMessages.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AnalyticsMessages.es.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Analytics\Resources\AnalyticsMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AnalyticsMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Analytics\Resources\AnalyticsMessages.es.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AnalyticsMessages.es.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
