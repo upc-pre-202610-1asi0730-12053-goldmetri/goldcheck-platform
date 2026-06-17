@@ -1,0 +1,9 @@
+﻿namespace GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Errors;
+
+public static class AnalyticsErrors
+{
+    public static AnalyticsError None => AnalyticsError.None;
+    public static AnalyticsError OperationCancelled => AnalyticsError.OperationCancelled;
+    public static AnalyticsError DatabaseError => AnalyticsError.DatabaseError;
+    public static AnalyticsError InternalServerError => AnalyticsError.InternalServerError;
+}
