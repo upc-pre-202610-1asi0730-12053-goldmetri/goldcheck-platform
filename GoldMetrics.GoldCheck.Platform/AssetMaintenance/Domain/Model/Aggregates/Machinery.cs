@@ -25,6 +25,12 @@ public partial class Machinery
         Status = "MachineryRegistered";
     }
 
+    public void UpdateMachineryData(UpdateMachineryDataCommand command)
+    {
+        EngineHours = new EngineHours(command.CurrentEngineHours);
+        Status = "MachineryDataUpdated";
+    }
+    
     public int Id { get; }
     public MachineryId MachineryId { get; private set; }
     public string Model { get; private set; }
