@@ -54,16 +54,6 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>AnalyticsMessages.es.resx</DependentUpon>
       </Compile>
-      <Compile Update="AssetMaintenance\Resources\AssetMaintenanceMessages.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>AssetMaintenanceMessages.resx</DependentUpon>
-      </Compile>
-      <Compile Update="AssetMaintenance\Resources\AssetMaintenanceMessages.es.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>AssetMaintenanceMessages.es.resx</DependentUpon>
-      </Compile>
     </ItemGroup>
 
 </Project>

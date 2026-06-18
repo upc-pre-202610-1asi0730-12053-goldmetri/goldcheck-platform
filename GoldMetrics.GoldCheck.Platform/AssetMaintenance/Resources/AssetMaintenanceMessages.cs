@@ -1,5 +1,5 @@
 ﻿namespace GoldMetrics.GoldCheck.Platform.AssetMaintenance.Resources;
 
-public class AssetMaintenanceMessages
+public class AssetMaintenanceMessage
 {
 }
