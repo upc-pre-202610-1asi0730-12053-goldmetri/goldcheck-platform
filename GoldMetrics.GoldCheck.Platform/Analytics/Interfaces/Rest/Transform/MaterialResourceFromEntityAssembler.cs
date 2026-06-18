@@ -13,5 +13,7 @@ public static class MaterialResourceFromEntityAssembler
             entity.RouteStatus.Value,
             entity.SupervisorId.Value,
             entity.UserId.Value,
+            entity.ProductionStart, 
+            entity.ProductionEnd,
             entity.Status);
 }

@@ -7,4 +7,6 @@ public record MaterialResource(
     string RouteStatus,
     string SupervisorId,
     string UserId,
+    DateTimeOffset? ProductionStart, 
+    DateTimeOffset? ProductionEnd,
     string Status);
