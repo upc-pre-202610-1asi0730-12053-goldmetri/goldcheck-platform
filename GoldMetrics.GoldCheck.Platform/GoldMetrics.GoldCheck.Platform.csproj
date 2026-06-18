@@ -33,6 +33,14 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AnalyticsMessages.es.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="AssetMaintenance\Resources\AssetMaintenanceMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AssetMaintenanceMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="AssetMaintenance\Resources\AssetMaintenanceMessages.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>AssetMaintenanceMessages.es.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -45,6 +53,16 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AnalyticsMessages.es.resx</DependentUpon>
+      </Compile>
+      <Compile Update="AssetMaintenance\Resources\AssetMaintenanceMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AssetMaintenanceMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="AssetMaintenance\Resources\AssetMaintenanceMessages.es.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AssetMaintenanceMessages.es.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
