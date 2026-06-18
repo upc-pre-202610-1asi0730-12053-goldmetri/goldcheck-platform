@@ -32,4 +32,9 @@ public partial class Material
     public SupervisorId SupervisorId { get; private set; }
     public UserId UserId { get; private set; }
     public string Status { get; private set; }
+    public void ViewProductionDashboard(ViewProductionDashboardCommand command)
+    {
+        SupervisorId = new SupervisorId(command.SupervisorId);
+        Status = "DashboardViewed";
+    }
 }
