@@ -329,4 +329,10 @@
   <data name="AssetMaintenanceError.InternalServerError" xml:space="preserve">
       <value>An unexpected internal error occurred in Asset and Maintenance Management.</value>
     </data>
+  <data name="AssetMaintenanceError.MachineryNotFound" xml:space="preserve">
+     <value>The machinery asset was not found.</value>
+   </data>
+  <data name="AssetMaintenanceError.MachineryNotFound" xml:space="preserve">
+     <value>No se encontró el activo de maquinaria.</value>
+   </data>
 </root>
