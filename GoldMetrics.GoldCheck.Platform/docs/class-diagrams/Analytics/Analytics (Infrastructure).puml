@@ -1,0 +1,34 @@
+﻿@startuml
+title GoldMetrics — Analytics (Infrastructure)
+
+package "GoldMetrics" {
+  package "Analytics" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class MaterialRepository {
+          -context: AppDbContext
+          +FindByRouteIdAsync(routeId: string): Material?
+          +FindBySupervisorIdAsync(supervisorId: string): IEnumerable<Material>
+          +FindByMaterialIdAsync(materialId: string): Material?
+          +FindByProductionPeriodAsync(start: DateTimeOffset, end: DateTimeOffset): IEnumerable<Material>
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyAnalyticsConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IMaterialRepository
+    }
+  }
+}
+
+MaterialRepository ..|> IMaterialRepository
+
+@enduml
