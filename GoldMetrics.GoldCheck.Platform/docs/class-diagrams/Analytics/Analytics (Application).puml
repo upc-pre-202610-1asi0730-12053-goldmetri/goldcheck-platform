@@ -1,0 +1,69 @@
+﻿@startuml
+title GoldMetrics — Analytics (Application)
+
+package "GoldMetrics" {
+  package "Analytics" {
+    package "Application" {
+
+      package "CommandServices" {
+@startuml
+title GoldMetrics — Analytics (Application)
+
+package "GoldMetrics" {
+  package "Analytics" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IAnalyticsCommandService {
+          +Handle(command: ViewRouteProgressCommand): Result<Material>
+          +Handle(command: ViewProductionDashboardCommand): Result<Material>
+          +Handle(command: RequestProductionDataCommand): Result<Material>
+          +Handle(command: LoadProductionDataCommand): Result<Material>
+        }
+      }
+
+      package "QueryServices" {
+        interface IAnalyticsQueryService {
+          +Handle(query: GetRouteProgressByIdQuery): Material?
+          +Handle(query: GetAllRoutesQuery): IEnumerable<Material>
+          +Handle(query: GetProductionDataByPeriodQuery): IEnumerable<Material>
+          +Handle(query: GetProductionDashboardQuery): IEnumerable<Material>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class AnalyticsCommandService {
+          -materialRepository: IMaterialRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: ViewRouteProgressCommand): Result<Material>
+          +Handle(command: ViewProductionDashboardCommand): Result<Material>
+          +Handle(command: RequestProductionDataCommand): Result<Material>
+          +Handle(command: LoadProductionDataCommand): Result<Material>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class AnalyticsQueryService {
+          -materialRepository: IMaterialRepository
+          +Handle(query: GetRouteProgressByIdQuery): Material?
+          +Handle(query: GetAllRoutesQuery): IEnumerable<Material>
+          +Handle(query: GetProductionDataByPeriodQuery): IEnumerable<Material>
+          +Handle(query: GetProductionDashboardQuery): IEnumerable<Material>
+        }
+      }
+
+      AnalyticsCommandService ..|> IAnalyticsCommandService
+      AnalyticsQueryService ..|> IAnalyticsQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IMaterialRepository
+    }
+  }
+}
+
+AnalyticsCommandService ..> IMaterialRepository : uses
+AnalyticsQueryService ..> IMaterialRepository : uses
+
+@enduml
