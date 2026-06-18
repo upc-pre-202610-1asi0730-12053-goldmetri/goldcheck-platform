@@ -34,6 +34,11 @@ using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Resources;
 using JewelryCommandService = GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.CommandServices.JewelryCommandService;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.Analytics.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -159,6 +164,12 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationCommandService, NotificationCommandService>();
 builder.Services.AddScoped<INotificationQueryService, NotificationQueryService>();
 
+// Analytics Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<AnalyticsMessages>, StringLocalizer<AnalyticsMessages>>();
+builder.Services.AddScoped<
+    GoldMetrics.GoldCheck.Platform.Analytics.Domain.Repositories.IMaterialRepository,
+    GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository>();
+builder.Services.AddScoped<IAnalyticsCommandService, AnalyticsCommandService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
