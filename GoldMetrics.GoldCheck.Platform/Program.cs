@@ -41,7 +41,12 @@ using GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.Entity
 using GoldMetrics.GoldCheck.Platform.Analytics.Resources;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.QueryServices;
-
+using MaterialRepository = GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Resources;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -173,6 +178,11 @@ builder.Services.AddScoped<
     GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository>();
 builder.Services.AddScoped<IAnalyticsCommandService, AnalyticsCommandService>();
 builder.Services.AddScoped<IAnalyticsQueryService, AnalyticsQueryService>();
+
+// AssetMaintenance Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<AssetMaintenanceMessages>, StringLocalizer<AssetMaintenanceMessages>>();
+builder.Services.AddScoped<IMachineryRepository, MachineryRepository>();
+builder.Services.AddScoped<IAssetMaintenanceCommandService, AssetMaintenanceCommandService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
