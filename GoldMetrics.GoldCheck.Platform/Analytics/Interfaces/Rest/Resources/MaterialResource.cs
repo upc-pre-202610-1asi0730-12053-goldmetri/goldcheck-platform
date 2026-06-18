@@ -9,4 +9,5 @@ public record MaterialResource(
     string UserId,
     DateTimeOffset? ProductionStart, 
     DateTimeOffset? ProductionEnd,
+    decimal? ProductionTons,
     string Status);
