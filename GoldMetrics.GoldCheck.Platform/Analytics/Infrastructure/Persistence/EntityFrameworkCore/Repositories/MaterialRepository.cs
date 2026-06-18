@@ -10,4 +10,6 @@ public class MaterialRepository(AppDbContext context) : BaseRepository<Material>
 {
     public async Task<Material?> FindByRouteIdAsync(string routeId, CancellationToken cancellationToken = default)
         => await Context.Set<Material>().FirstOrDefaultAsync(m => m.RouteId.Value == routeId, cancellationToken);
+    public async Task<IEnumerable<Material>> FindBySupervisorIdAsync(string supervisorId, CancellationToken cancellationToken = default)
+        => await Context.Set<Material>().Where(m => m.SupervisorId.Value == supervisorId).ToListAsync(cancellationToken);
 }
