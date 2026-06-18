@@ -8,5 +8,6 @@ public interface IAnalyticsQueryService
     Task<Material?> Handle(GetRouteProgressByIdQuery query, CancellationToken cancellationToken);
     Task<IEnumerable<Material>> Handle(GetAllRoutesQuery query, CancellationToken cancellationToken);
     Task<IEnumerable<Material>> Handle(GetProductionDataByPeriodQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Material>> Handle(GetProductionDashboardQuery query, CancellationToken cancellationToken);
 
 }
