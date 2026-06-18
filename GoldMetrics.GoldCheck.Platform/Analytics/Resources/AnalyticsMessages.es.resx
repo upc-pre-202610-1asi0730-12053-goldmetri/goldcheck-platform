@@ -19,5 +19,6 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="RouteDataLoaded" xml:space="preserve"><value>Datos de ruta cargados exitosamente.</value></data>
+    <data name="ProductionDashboardViewed" xml:space="preserve"><value>Panel de producción visualizado exitosamente.</value></data>
 
 </root>

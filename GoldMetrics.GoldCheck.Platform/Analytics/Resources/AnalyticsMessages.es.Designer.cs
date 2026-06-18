@@ -60,6 +60,15 @@ namespace GoldMetrics.GoldCheck.Platform.Analytics.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Panel de producción visualizado exitosamente..
+        /// </summary>
+        internal static string ProductionDashboardViewed {
+            get {
+                return ResourceManager.GetString("ProductionDashboardViewed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Datos de ruta cargados exitosamente..
         /// </summary>
         internal static string RouteDataLoaded {
