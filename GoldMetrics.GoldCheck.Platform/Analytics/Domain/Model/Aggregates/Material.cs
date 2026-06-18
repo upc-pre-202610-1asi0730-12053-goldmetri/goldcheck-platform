@@ -32,9 +32,21 @@ public partial class Material
     public SupervisorId SupervisorId { get; private set; }
     public UserId UserId { get; private set; }
     public string Status { get; private set; }
+    public DateTimeOffset? ProductionStart { get; private set; }
+    public DateTimeOffset? ProductionEnd { get; private set; }
+    
     public void ViewProductionDashboard(ViewProductionDashboardCommand command)
     {
         SupervisorId = new SupervisorId(command.SupervisorId);
         Status = "DashboardViewed";
+    }
+    
+    public void RequestProductionData(RequestProductionDataCommand command)
+    {
+        var period = new ProductionPeriod(command.Start, command.End);
+        SupervisorId = new SupervisorId(command.SupervisorId);
+        ProductionStart = period.Start;
+        ProductionEnd = period.End;
+        Status = "ProductionDataRequested";
     }
 }
