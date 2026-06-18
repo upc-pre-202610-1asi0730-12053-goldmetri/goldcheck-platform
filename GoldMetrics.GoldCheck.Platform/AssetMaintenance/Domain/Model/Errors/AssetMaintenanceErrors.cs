@@ -9,4 +9,5 @@ public static class AssetMaintenanceErrors
     public static AssetMaintenanceError MachineryNotFound => AssetMaintenanceError.MachineryNotFound;
     public static AssetMaintenanceError InvalidEngineHours => AssetMaintenanceError.InvalidEngineHours;
     public static AssetMaintenanceError MaintenanceAlreadyScheduled => AssetMaintenanceError.MaintenanceAlreadyScheduled;
+    public static AssetMaintenanceError MachineryAlreadyDischarged => AssetMaintenanceError.MachineryAlreadyDischarged;
 }
