@@ -5,5 +5,7 @@ public enum AnalyticsError
     None,
     OperationCancelled,
     DatabaseError,
-    InternalServerError
+    InternalServerError,
+    MaterialNotFound,
+    RouteNotFound
 }
