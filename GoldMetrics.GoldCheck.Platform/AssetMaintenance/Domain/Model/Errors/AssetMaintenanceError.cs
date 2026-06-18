@@ -6,5 +6,6 @@ public enum AssetMaintenanceError
     OperationCancelled,
     DatabaseError,
     InternalServerError,
-    MachineryNotFound
+    MachineryNotFound,
+    InvalidEngineHours
 }

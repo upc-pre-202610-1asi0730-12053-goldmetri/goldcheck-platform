@@ -15,6 +15,7 @@ public static class AssetMaintenanceActionResultAssembler
         AssetMaintenanceError.MachineryNotFound => StatusCodes.Status404NotFound,
         AssetMaintenanceError.OperationCancelled => StatusCodes.Status409Conflict,
         AssetMaintenanceError.DatabaseError => StatusCodes.Status500InternalServerError,
+        AssetMaintenanceError.InvalidEngineHours => StatusCodes.Status400BadRequest,
         AssetMaintenanceError.InternalServerError => StatusCodes.Status500InternalServerError,
         _ => StatusCodes.Status400BadRequest
     };

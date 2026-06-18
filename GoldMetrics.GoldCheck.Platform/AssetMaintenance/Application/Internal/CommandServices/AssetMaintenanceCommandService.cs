@@ -42,4 +42,24 @@
             catch (DbUpdateException) { return DbError(); }
             catch (Exception) { return ServerError(); }
         }
+        
+        public async Task<Result<Machinery>> Handle(UpdateMachineryDataCommand command, CancellationToken cancellationToken)
+        {
+            var machinery = await FindMachinery(command.MachineryId, cancellationToken);
+            if (machinery is null) return NotFound();
+            try
+            {
+                machinery.UpdateMachineryData(command);
+                machineryRepository.Update(machinery);
+                await unitOfWork.CompleteAsync(cancellationToken);
+                return Result<Machinery>.Success(machinery);
+            }
+            catch (ArgumentException)
+            {
+                return Result<Machinery>.Failure(AssetMaintenanceError.InvalidEngineHours, localizer[nameof(AssetMaintenanceError.InvalidEngineHours)]);
+            }
+            catch (OperationCanceledException) { return Cancelled(); }
+            catch (DbUpdateException) { return DbError(); }
+            catch (Exception) { return ServerError(); }
+        }
     }

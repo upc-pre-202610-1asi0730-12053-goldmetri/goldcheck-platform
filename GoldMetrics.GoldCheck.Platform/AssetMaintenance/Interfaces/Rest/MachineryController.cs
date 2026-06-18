@@ -58,4 +58,17 @@ public class MachineryController(
         var machinery = await queryService.Handle(new GetAllMachineryQuery(), cancellationToken);
         return Ok(machinery.Select(MachineryResourceFromEntityAssembler.ToResourceFromEntity));
     }
+    [HttpPut("{machineryId}")]
+    [SwaggerOperation("Update Machinery Data", "Update current engine hours for a machinery asset.", OperationId = "UpdateMachineryData")]
+    [SwaggerResponse(200, "Machinery data updated.", typeof(MachineryResource))]
+    [SwaggerResponse(400, "Invalid engine hours.")]
+    [SwaggerResponse(404, "Machinery not found.")]
+    public async Task<IActionResult> UpdateMachineryData(string machineryId, [FromBody] UpdateMachineryDataResource resource, CancellationToken cancellationToken)
+    {
+        var command = new UpdateMachineryDataCommand(machineryId, resource.CurrentEngineHours);
+        var result = await commandService.Handle(command, cancellationToken);
+        return AssetMaintenanceActionResultAssembler.ToActionResultFromMachineryResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
 }

@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.CommandSer
 public interface IAssetMaintenanceCommandService
 {
     Task<Result<Machinery>> Handle(RegisterMachineryCommand command, CancellationToken cancellationToken);
+    Task<Result<Machinery>> Handle(UpdateMachineryDataCommand command, CancellationToken cancellationToken);
 }
