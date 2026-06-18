@@ -1,0 +1,39 @@
+﻿@startuml
+title GoldMetrics — JewelryInventory (Infrastructure)
+
+package "GoldMetrics" {
+  package "JewelryInventory" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class JewelryMaterialRepository {
+          -context: AppDbContext
+          +FindByMaterialIdAsync(materialId: string): JewelryMaterial?
+          +FindAllAsync(): IEnumerable<JewelryMaterial>
+          +FindByCertificateIdAsync(certificateId: string): JewelryMaterial?
+        }
+        class JewelryRepository {
+          -context: AppDbContext
+          +FindByCertificateIdAsync(certificateId: string): Jewelry?
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyJewelryInventoryConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IJewelryMaterialRepository
+      interface IJewelryRepository
+    }
+  }
+}
+
+JewelryMaterialRepository ..|> IJewelryMaterialRepository
+JewelryRepository ..|> IJewelryRepository
+
+@enduml
