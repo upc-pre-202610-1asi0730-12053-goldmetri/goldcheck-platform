@@ -51,4 +51,14 @@ public class AnalyticsController(
             this, material, errorLocalizer, problemDetailsFactory,
             m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
+    
+    [HttpGet("routes")]
+    [SwaggerOperation("Get All Routes", "Get all route progress records.", OperationId = "GetAllRoutes")]
+    [SwaggerResponse(200, "Routes found.", typeof(IEnumerable<MaterialResource>))]
+    public async Task<IActionResult> GetAllRoutes(CancellationToken cancellationToken)
+    {
+        var query = new GetAllRoutesQuery();
+        var materials = await analyticsQueryService.Handle(query, cancellationToken);
+        return Ok(materials.Select(MaterialResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }
