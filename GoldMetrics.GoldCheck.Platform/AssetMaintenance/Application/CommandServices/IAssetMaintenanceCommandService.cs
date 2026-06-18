@@ -1,0 +1,10 @@
+﻿using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Model.Aggregates;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Model.Commands;
+using GoldMetrics.GoldCheck.Platform.Shared.Application.Model;
+
+namespace GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.CommandServices;
+
+public interface IAssetMaintenanceCommandService
+{
+    Task<Result<Machinery>> Handle(RegisterMachineryCommand command, CancellationToken cancellationToken);
+}
