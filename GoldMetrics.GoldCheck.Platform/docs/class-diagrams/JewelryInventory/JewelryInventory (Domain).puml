@@ -1,0 +1,153 @@
+﻿@startuml
+title GoldMetrics — JewelryInventory (Domain)
+
+package "GoldMetrics" {
+  package "JewelryInventory" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class JewelryMaterial {
+          +Id: int
+          +MaterialId: MaterialId
+          +JewelerId: JewelerId
+          +Status: MaterialStatus
+          +QRCodeValue: string?
+          +CertificateIdRef: string?
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +JewelryMaterial(command: RegisterNonCertifiedMaterialCommand)
+          +ScanQR(command: ScanQRMaterialCommand): void
+          +RegisterInInventory(command: RegisterMaterialInInventoryCommand): void
+          +GenerateCertificate(command: GenerateCertificateCommand): void
+        }
+
+        class Jewelry {
+          +Id: int
+          +CertificateId: CertificateId
+          +JewelerId: JewelerId
+          +MaterialIdRef: string
+          +IsSigned: bool
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +Jewelry(command: SignCertificateCommand, materialIdRef: string)
+        }
+      }
+
+      package "ValueObjects" {
+        class MaterialId <<record>> {
+          +Value: string
+        }
+        class JewelerId <<record>> {
+          +Value: string
+        }
+        class MaterialStatus <<record>> {
+          +Value: string
+        }
+        class QRCode <<record>> {
+          +Value: string
+        }
+        class CertificateId <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Commands" {
+        class RegisterNonCertifiedMaterialCommand <<record>> {
+          +MaterialId: string
+          +JewelerId: string
+        }
+        class ScanQRMaterialCommand <<record>> {
+          +MaterialId: string
+          +QRCode: string
+        }
+        class RegisterMaterialInInventoryCommand <<record>> {
+          +MaterialId: string
+          +QRCode: string
+        }
+        class GenerateCertificateCommand <<record>> {
+          +MaterialId: string
+        }
+        class SignCertificateCommand <<record>> {
+          +CertificateId: string
+          +JewelerId: string
+        }
+      }
+
+      package "Queries" {
+        class GetMaterialByIdQuery <<record>> {
+          +MaterialId: string
+        }
+        class GetAllMaterialsQuery <<record>> {
+        }
+        class GetCertificateByIdQuery <<record>> {
+          +CertificateId: string
+        }
+      }
+
+      package "Events" {
+        class NonCertifiedMaterialRegisteredEvent <<record>> {
+          +MaterialId: string
+          +JewelerId: string
+        }
+        class MaterialDataScannedEvent <<record>> {
+          +MaterialId: string
+          +QRCode: string
+        }
+        class MaterialStatusUpdatedEvent <<record>> {
+          +MaterialId: string
+          +NewStatus: string
+        }
+        class CertificateGeneratedEvent <<record>> {
+          +MaterialId: string
+          +CertificateId: string
+        }
+        class CertificateSavedEvent <<record>> {
+          +CertificateId: string
+          +JewelerId: string
+        }
+      }
+
+      package "Repositories" {
+        interface IJewelryMaterialRepository {
+          +FindByMaterialIdAsync(materialId: string): JewelryMaterial?
+          +FindAllAsync(): IEnumerable<JewelryMaterial>
+          +FindByCertificateIdAsync(certificateId: string): JewelryMaterial?
+        }
+        interface IJewelryRepository {
+          +FindByCertificateIdAsync(certificateId: string): Jewelry?
+        }
+      }
+
+      package "Exceptions" {
+        enum JewelryInventoryError {
+          None
+          MaterialNotFound
+          CertificateNotFound
+          MaterialAlreadyCertified
+          InvalidQRCode
+          InvalidStatus
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      JewelryMaterial *-- MaterialId
+      JewelryMaterial *-- JewelerId
+      JewelryMaterial *-- MaterialStatus
+      Jewelry *-- CertificateId
+      Jewelry *-- JewelerId
+      JewelryMaterial ..> ScanQRMaterialCommand : uses
+      JewelryMaterial ..> QRCode : uses
+      JewelryMaterial ..> RegisterNonCertifiedMaterialCommand : uses
+      JewelryMaterial ..> RegisterMaterialInInventoryCommand : uses
+      JewelryMaterial ..> GenerateCertificateCommand : uses
+      Jewelry ..> SignCertificateCommand : uses
+      JewelryMaterial ..> NonCertifiedMaterialRegisteredEvent : fires
+      JewelryMaterial ..> MaterialDataScannedEvent : fires
+      JewelryMaterial ..> CertificateGeneratedEvent : fires
+      Jewelry ..> CertificateSavedEvent : fires
+    }
+  }
+}
+@enduml
