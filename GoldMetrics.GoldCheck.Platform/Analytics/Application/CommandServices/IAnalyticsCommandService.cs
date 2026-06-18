@@ -9,5 +9,6 @@ public interface IAnalyticsCommandService
     Task<Result<Material>> Handle(ViewRouteProgressCommand command, CancellationToken cancellationToken);
     Task<Result<Material>> Handle(ViewProductionDashboardCommand command, CancellationToken cancellationToken);
     Task<Result<Material>> Handle(RequestProductionDataCommand command, CancellationToken cancellationToken);
+    Task<Result<Material>> Handle(LoadProductionDataCommand command, CancellationToken cancellationToken);
 
 }
