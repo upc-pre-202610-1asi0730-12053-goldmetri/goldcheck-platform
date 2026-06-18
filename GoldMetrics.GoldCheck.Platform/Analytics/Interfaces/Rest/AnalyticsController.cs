@@ -88,4 +88,14 @@ public class AnalyticsController(
             this, result, errorLocalizer, problemDetailsFactory,
             m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
+    
+    [HttpGet("production")]
+    [SwaggerOperation("Get Production Data By Period", "Get production data filtered by period.", OperationId = "GetProductionDataByPeriod")]
+    [SwaggerResponse(200, "Production data found.", typeof(IEnumerable<MaterialResource>))]
+    public async Task<IActionResult> GetProductionDataByPeriod([FromQuery] DateTimeOffset start, [FromQuery] DateTimeOffset end, CancellationToken cancellationToken)
+    {
+        var query = new GetProductionDataByPeriodQuery(start, end);
+        var materials = await analyticsQueryService.Handle(query, cancellationToken);
+        return Ok(materials.Select(MaterialResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }
