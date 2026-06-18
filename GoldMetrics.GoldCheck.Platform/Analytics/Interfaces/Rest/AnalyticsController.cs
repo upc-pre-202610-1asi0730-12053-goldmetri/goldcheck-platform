@@ -1,6 +1,8 @@
 ﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Commands;
+using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.Analytics.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.Analytics.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -18,6 +20,7 @@ namespace GoldMetrics.GoldCheck.Platform.Analytics.Interfaces.Rest;
 public class AnalyticsController(
     IAnalyticsCommandService analyticsCommandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
+    IAnalyticsQueryService analyticsQueryService,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
@@ -31,6 +34,21 @@ public class AnalyticsController(
         var result = await analyticsCommandService.Handle(command, cancellationToken);
         return AnalyticsActionResultAssembler.ToActionResultFromMaterialResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            m => Created(string.Empty, MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
+            m => CreatedAtAction(nameof(GetRouteProgressById),
+                new { routeId = m.RouteId.Value },
+                MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
+    
+    [HttpGet("routes/{routeId}")]
+    [SwaggerOperation("Get Route Progress By Id", "Get route progress data by route identifier.", OperationId = "GetRouteProgressById")]
+    [SwaggerResponse(200, "Route data found.", typeof(MaterialResource))]
+    [SwaggerResponse(404, "Route not found.")]
+    public async Task<IActionResult> GetRouteProgressById(string routeId, CancellationToken cancellationToken)
+    {
+        var query = new GetRouteProgressByIdQuery(routeId);
+        var material = await analyticsQueryService.Handle(query, cancellationToken);
+        return AnalyticsActionResultAssembler.ToActionResultFromGetMaterialResult(
+            this, material, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
 }
