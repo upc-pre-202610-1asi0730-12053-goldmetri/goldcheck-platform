@@ -1,0 +1,79 @@
+﻿@startuml
+title GoldMetrics — MaterialOperations (Interfaces)
+
+package "GoldMetrics" {
+  package "MaterialOperations" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class MaterialsController {
+          -materialCommandService: IMaterialCommandService
+          -materialQueryService: IMaterialQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +IdentifyMineralType(resource: CreateMaterialResource): IActionResult
+          +GetMaterialById(batchId: string): IActionResult
+          +GetAllMaterials(): IActionResult
+          +ClassifyMaterial(batchId: string, resource: ClassifyMaterialResource): IActionResult
+          +DownloadMaterial(batchId: string, resource: DownloadMaterialResource): IActionResult
+          +TrackMaterialMovement(batchId: string, resource: TrackMaterialMovementResource): IActionResult
+        }
+
+        package "Resources" {
+          class CreateMaterialResource <<record>> {
+            +BatchId: string
+            +MineralType: string
+            +PayloadTons: decimal
+          }
+          class ClassifyMaterialResource <<record>> {
+            +Classification: string
+          }
+          class DownloadMaterialResource <<record>> {
+            +DumpingPoint: string
+          }
+          class TrackMaterialMovementResource <<record>> {
+            +CurrentLocation: string
+          }
+          class MaterialResource <<record>> {
+            +Id: int
+            +BatchId: string
+            +MineralType: string
+            +PayloadTons: decimal
+            +Classification: string?
+            +DumpingPoint: string?
+            +CurrentLocation: string?
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class IdentifyMineralTypeCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(resource: CreateMaterialResource): IdentifyMineralTypeCommand
+          }
+          class MaterialResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Material): MaterialResource
+          }
+          class MaterialOperationsActionResultAssembler <<static>> {
+            +ToActionResultFromMaterialResult(...): IActionResult
+            +ToActionResultFromGetMaterialResult(...): IActionResult
+          }
+        }
+
+        MaterialsController ..> IdentifyMineralTypeCommandFromResourceAssembler : uses
+        MaterialsController ..> MaterialResourceFromEntityAssembler : uses
+        MaterialsController ..> MaterialOperationsActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IMaterialCommandService
+      interface IMaterialQueryService
+    }
+  }
+}
+
+MaterialsController ..> IMaterialCommandService : uses
+MaterialsController ..> IMaterialQueryService : uses
+
+@enduml
