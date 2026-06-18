@@ -74,4 +74,18 @@ public class AnalyticsController(
             this, result, errorLocalizer, problemDetailsFactory,
             m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
+    
+    [HttpPost("production/request")]
+    [SwaggerOperation("Request Production Data", "Request production data for a given period.", OperationId = "RequestProductionData")]
+    [SwaggerResponse(200, "Production data requested.", typeof(MaterialResource))]
+    [SwaggerResponse(400, "Invalid production period.")]
+    [SwaggerResponse(404, "Material not found.")]
+    public async Task<IActionResult> RequestProductionData([FromBody] RequestProductionDataResource resource, CancellationToken cancellationToken)
+    {
+        var command = new RequestProductionDataCommand(resource.SupervisorId, resource.Start, resource.End);
+        var result = await analyticsCommandService.Handle(command, cancellationToken);
+        return AnalyticsActionResultAssembler.ToActionResultFromMaterialResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
 }
