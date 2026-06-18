@@ -34,6 +34,8 @@ public partial class Material
     public string Status { get; private set; }
     public DateTimeOffset? ProductionStart { get; private set; }
     public DateTimeOffset? ProductionEnd { get; private set; }
+    public decimal? ProductionTons { get; private set; }
+
     
     public void ViewProductionDashboard(ViewProductionDashboardCommand command)
     {
