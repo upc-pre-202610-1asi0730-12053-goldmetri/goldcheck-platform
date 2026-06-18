@@ -22,4 +22,6 @@
   <data name="InternalServerError" xml:space="preserve">
     <value>Error Interno del Servidor</value>
   </data>
+  <data name="AnalyticsError.MaterialNotFound" xml:space="preserve"><value>No se encontró el registro de material.</value></data>
+  <data name="AnalyticsError.RouteNotFound" xml:space="preserve"><value>No se encontró la ruta.</value></data>
 </root>
