@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.QueryServi
 public interface IAssetMaintenanceQueryService
 {
     Task<Machinery?> Handle(GetMachineryByIdQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Machinery>> Handle(GetAllMachineryQuery query, CancellationToken cancellationToken);
 }
