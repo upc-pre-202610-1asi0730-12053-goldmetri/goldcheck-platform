@@ -11,6 +11,8 @@ public static class ModelBuilderExtensions
         builder.Entity<Material>().Property(m => m.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Material>().Property(m => m.ProductionStart).HasColumnName("ProductionStart");
         builder.Entity<Material>().Property(m => m.ProductionEnd).HasColumnName("ProductionEnd");
+        builder.Entity<Material>().Property(m => m.ProductionTons).HasColumnName("ProductionTons");
+
         builder.Entity<Material>().OwnsOne(m => m.MaterialId, mid =>
         {
             mid.WithOwner().HasForeignKey("Id");
@@ -37,5 +39,7 @@ public static class ModelBuilderExtensions
             uid.Property(x => x.Value).HasColumnName("UserId").IsRequired().HasMaxLength(100);
         });
         builder.Entity<Material>().Property(m => m.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Material>().Property(m => m.ProductionTons).HasColumnName("ProductionTons");
+
     }
 }
