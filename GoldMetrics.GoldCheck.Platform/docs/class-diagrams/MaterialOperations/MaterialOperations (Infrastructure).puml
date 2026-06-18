@@ -1,0 +1,58 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+enum TimeUnit {
+DAYS
+HOURS
+MINUTES
+}
+
+@enduml@startuml
+       title GoldMetrics — MaterialOperations (Infrastructure)
+       
+       package "GoldMetrics" {
+         package "MaterialOperations" {
+           package "Infrastructure" {
+       
+             package "Persistence.EntityFrameworkCore.Repositories" {
+               class MaterialRepository {
+                 -context: AppDbContext
+                 +FindByBatchIdAsync(batchId: string): Material?
+                 +FindByMineralTypeAsync(mineralType: string): IEnumerable<Material>
+               }
+             }
+       
+             package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+               class ModelBuilderExtensions <<static>> {
+                 +ApplyMaterialOperationsConfiguration(builder: ModelBuilder): void
+               }
+             }
+       
+           }
+       
+           package "Domain [stubs]" {
+             interface IMaterialRepository
+           }
+         }
+       }
+       
+       MaterialRepository ..|> IMaterialRepository
+       
+       @enduml
