@@ -31,5 +31,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         // JewelryInventory Context
         builder.ApplyJewelryInventoryConfiguration();
         builder.UseSnakeCaseNamingConvention();
+        
+        // Analytics Context
+        builder.ApplyAnalyticsConfiguration();
     }
 }
