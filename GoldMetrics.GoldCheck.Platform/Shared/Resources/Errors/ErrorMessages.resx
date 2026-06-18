@@ -338,4 +338,7 @@
   <data name="AssetMaintenanceError.InvalidEngineHours" xml:space="preserve">
      <value>Invalid engine hours value provided.</value>
    </data>
+  <data name="AssetMaintenanceError.MaintenanceAlreadyScheduled" xml:space="preserve">
+     <value>Preventive maintenance is already scheduled for this machinery.</value>
+   </data>
 </root>

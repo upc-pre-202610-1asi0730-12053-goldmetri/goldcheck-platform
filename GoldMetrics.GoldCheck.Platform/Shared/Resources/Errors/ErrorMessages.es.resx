@@ -332,4 +332,7 @@
   <data name="AssetMaintenanceError.InvalidEngineHours" xml:space="preserve">
      <value>Valor de horas de motor inválido.</value>
    </data>
+  <data name="AssetMaintenanceError.MaintenanceAlreadyScheduled" xml:space="preserve">
+     <value>El mantenimiento preventivo ya está programado para esta maquinaria.</value>
+   </data>
 </root>

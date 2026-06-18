@@ -7,4 +7,5 @@ public record MachineryResource(
     string OEM,
     decimal EngineHours,
     string MaintenanceStatus,
+    decimal? MaintenanceScheduledAtHours,
     string Status);

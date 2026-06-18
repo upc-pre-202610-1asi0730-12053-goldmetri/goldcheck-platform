@@ -71,4 +71,18 @@ public class MachineryController(
             this, result, errorLocalizer, problemDetailsFactory,
             m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
+    
+    [HttpPut("{machineryId}/schedule-maintenance")]
+    [SwaggerOperation("Schedule Maintenance", "Schedule preventive maintenance for a machinery asset.", OperationId = "ScheduleMaintenance")]
+    [SwaggerResponse(200, "Preventive maintenance scheduled.", typeof(MachineryResource))]
+    [SwaggerResponse(400, "Invalid engine hours.")]
+    [SwaggerResponse(404, "Machinery not found.")]
+    public async Task<IActionResult> ScheduleMaintenance(string machineryId, [FromBody] ScheduleMaintenanceResource resource, CancellationToken cancellationToken)
+    {
+        var command = new SchedulePreventiveMaintenanceCommand(machineryId, resource.EngineHours);
+        var result = await commandService.Handle(command, cancellationToken);
+        return AssetMaintenanceActionResultAssembler.ToActionResultFromMachineryResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
 }
