@@ -15,5 +15,7 @@ public static class MaterialResourceFromEntityAssembler
             entity.UserId.Value,
             entity.ProductionStart, 
             entity.ProductionEnd,
-            entity.Status);
+            entity.ProductionTons.Value,
+            entity.Status
+            );
 }
