@@ -1,0 +1,86 @@
+﻿@startuml
+title GoldMetrics — ConsumerTraceability (Interfaces)
+
+package "GoldMetrics" {
+  package "ConsumerTraceability" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class ConsumerController {
+          -productCommandService: IJewelryProductCommandService
+          -journeyQueryService: ITraceabilityJourneyQueryService
+          -productQueryService: IJewelryProductQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +ScanProductQR(resource: ScanProductQRResource): IActionResult
+          +GetProductByQR(qrCode: string): IActionResult
+          +GetTraceabilityJourney(qrCode: string): IActionResult
+          +DownloadCertificate(certificateId: string, resource: DownloadCertificateResource): IActionResult
+          +GetCertificate(certificateId: string): IActionResult
+        }
+
+        package "Resources" {
+          class ScanProductQRResource <<record>> {
+            +QRCode: string
+            +ConsumerId: string
+          }
+          class DownloadCertificateResource <<record>> {
+            +ConsumerId: string
+          }
+          class JewelryProductResource <<record>> {
+            +Id: int
+            +QRCode: string
+            +ConsumerId: string
+            +CertificateId: string?
+            +Status: string
+            +ScanCount: int
+          }
+          class TraceabilityJourneyResource <<record>> {
+            +Id: int
+            +ProductQRCode: string
+            +ConsumerId: string
+            +JourneySummary: string
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class ScanProductQRCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(resource: ScanProductQRResource): ScanProductQRCommand
+          }
+          class DownloadCertificateCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(certificateId: string, resource: DownloadCertificateResource): DownloadCertificateCommand
+          }
+          class JewelryProductResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: JewelryProduct): JewelryProductResource
+          }
+          class TraceabilityJourneyResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: TraceabilityJourney): TraceabilityJourneyResource
+          }
+          class ConsumerTraceabilityActionResultAssembler <<static>> {
+            +ToActionResultFromProductResult(...): IActionResult
+          }
+        }
+
+        ConsumerController ..> ScanProductQRCommandFromResourceAssembler : uses
+        ConsumerController ..> DownloadCertificateCommandFromResourceAssembler : uses
+        ConsumerController ..> JewelryProductResourceFromEntityAssembler : uses
+        ConsumerController ..> TraceabilityJourneyResourceFromEntityAssembler : uses
+        ConsumerController ..> ConsumerTraceabilityActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IJewelryProductCommandService
+      interface IJewelryProductQueryService
+      interface ITraceabilityJourneyQueryService
+    }
+  }
+}
+
+ConsumerController ..> IJewelryProductCommandService : uses
+ConsumerController ..> IJewelryProductQueryService : uses
+ConsumerController ..> ITraceabilityJourneyQueryService : uses
+
+@enduml
