@@ -17,7 +17,9 @@ public static class AnalyticsActionResultAssembler
         AnalyticsError.OperationCancelled => StatusCodes.Status409Conflict,
         AnalyticsError.DatabaseError => StatusCodes.Status500InternalServerError,
         AnalyticsError.InternalServerError => StatusCodes.Status500InternalServerError,
+        AnalyticsError.InvalidProductionPeriod => StatusCodes.Status400BadRequest,
         _ => StatusCodes.Status400BadRequest
+        
     };
 
     public static IActionResult ToActionResultFromMaterialResult(
