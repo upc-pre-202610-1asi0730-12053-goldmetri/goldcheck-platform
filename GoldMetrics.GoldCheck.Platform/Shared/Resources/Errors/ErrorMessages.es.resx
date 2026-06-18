@@ -335,4 +335,7 @@
   <data name="AssetMaintenanceError.MaintenanceAlreadyScheduled" xml:space="preserve">
      <value>El mantenimiento preventivo ya está programado para esta maquinaria.</value>
    </data>
+  <data name="AssetMaintenanceError.MachineryAlreadyDischarged" xml:space="preserve">
+     <value>La maquinaria ya fue dada de baja.</value>
+   </data>
 </root>

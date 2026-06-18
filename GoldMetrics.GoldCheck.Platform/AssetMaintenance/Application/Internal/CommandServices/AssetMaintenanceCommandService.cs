@@ -81,4 +81,21 @@
             catch (DbUpdateException) { return DbError(); }
             catch (Exception) { return ServerError(); }
         }
+        public async Task<Result<Machinery>> Handle(DischargeMachineryCommand command, CancellationToken cancellationToken)
+        {
+            var machinery = await FindMachinery(command.MachineryId, cancellationToken);
+            if (machinery is null) return NotFound();
+            if (machinery.MaintenanceStatus.Value == "Discharged")
+                return Result<Machinery>.Failure(AssetMaintenanceError.MachineryAlreadyDischarged, localizer[nameof(AssetMaintenanceError.MachineryAlreadyDischarged)]);
+            try
+            {
+                machinery.DischargeMachinery(command);
+                machineryRepository.Update(machinery);
+                await unitOfWork.CompleteAsync(cancellationToken);
+                return Result<Machinery>.Success(machinery);
+            }
+            catch (OperationCanceledException) { return Cancelled(); }
+            catch (DbUpdateException) { return DbError(); }
+            catch (Exception) { return ServerError(); }
+        }
     }

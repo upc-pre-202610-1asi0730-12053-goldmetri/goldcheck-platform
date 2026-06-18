@@ -40,6 +40,15 @@ public partial class Machinery
         MaintenanceStatus = new MaintenanceStatus("UnderMaintenance");
         Status = "PreventiveMaintenanceScheduled";
     }
+    
+    public string? DischargeReason { get; private set; }
+
+    public void DischargeMachinery(DischargeMachineryCommand command)
+    {
+        DischargeReason = command.Reason;
+        MaintenanceStatus = new MaintenanceStatus("Discharged");
+        Status = "MachineryDischarged";
+    }
     public int Id { get; }
     public MachineryId MachineryId { get; private set; }
     public string Model { get; private set; }
