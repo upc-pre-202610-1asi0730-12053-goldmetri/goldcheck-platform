@@ -1,0 +1,12 @@
+  develop[m
+  feature/analytics-view-route-progress[m
+  feature/consumertraceability-detect-language[m
+  feature/consumertraceability-download-certificate[m
+  feature/consumertraceability-get-certificate-by-id[m
+  feature/consumertraceability-get-product-by-qr[m
+  feature/consumertraceability-get-traceability-journey[m
+  feature/consumertraceability-request-journey[m
+  feature/consumertraceability-scan-product-qr[m
+* [32mfeature/docs[m
+  feature/reportingnotifications-request-accident-data[m
+  main[m
