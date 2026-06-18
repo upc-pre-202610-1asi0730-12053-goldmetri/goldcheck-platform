@@ -12,6 +12,8 @@ public static class AnalyticsActionResultAssembler
 {
     private static int ToStatusCode(AnalyticsError error) => error switch
     {
+        AnalyticsError.MaterialNotFound => StatusCodes.Status404NotFound,
+        AnalyticsError.RouteNotFound => StatusCodes.Status404NotFound,
         AnalyticsError.OperationCancelled => StatusCodes.Status409Conflict,
         AnalyticsError.DatabaseError => StatusCodes.Status500InternalServerError,
         AnalyticsError.InternalServerError => StatusCodes.Status500InternalServerError,
@@ -26,5 +28,17 @@ public static class AnalyticsActionResultAssembler
         if (result.IsSuccess) return onSuccess(result.Value!);
         var statusCode = ToStatusCode((AnalyticsError)result.Error!);
         return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);
+    }
+    
+    public static IActionResult ToActionResultFromGetMaterialResult(
+        ControllerBase controller, Material? material,
+        IStringLocalizer<ErrorMessages> localizer, ProblemDetailsFactory problemDetailsFactory,
+        Func<Material, IActionResult> onSuccess)
+    {
+        if (material is null)
+            return problemDetailsFactory.CreateProblemDetails(
+                controller, ToStatusCode(AnalyticsError.MaterialNotFound),
+                AnalyticsError.MaterialNotFound, localizer[nameof(AnalyticsError.MaterialNotFound)]);
+        return onSuccess(material);
     }
 }
