@@ -31,6 +31,15 @@ public partial class Machinery
         Status = "MachineryDataUpdated";
     }
     
+    public decimal? MaintenanceScheduledAtHours { get; private set; }
+    
+    public void SchedulePreventiveMaintenance(SchedulePreventiveMaintenanceCommand command)
+    {
+        EngineHours = new EngineHours(command.EngineHours);
+        MaintenanceScheduledAtHours = command.EngineHours;
+        MaintenanceStatus = new MaintenanceStatus("UnderMaintenance");
+        Status = "PreventiveMaintenanceScheduled";
+    }
     public int Id { get; }
     public MachineryId MachineryId { get; private set; }
     public string Model { get; private set; }
@@ -38,4 +47,5 @@ public partial class Machinery
     public EngineHours EngineHours { get; private set; }
     public MaintenanceStatus MaintenanceStatus { get; private set; }
     public string Status { get; private set; }
+    
 }
