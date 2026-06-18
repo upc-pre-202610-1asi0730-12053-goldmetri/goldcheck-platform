@@ -39,6 +39,8 @@ using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.CommandServi
 using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.Analytics.Resources;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -170,6 +172,7 @@ builder.Services.AddScoped<
     GoldMetrics.GoldCheck.Platform.Analytics.Domain.Repositories.IMaterialRepository,
     GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository>();
 builder.Services.AddScoped<IAnalyticsCommandService, AnalyticsCommandService>();
+builder.Services.AddScoped<IAnalyticsQueryService, AnalyticsQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
