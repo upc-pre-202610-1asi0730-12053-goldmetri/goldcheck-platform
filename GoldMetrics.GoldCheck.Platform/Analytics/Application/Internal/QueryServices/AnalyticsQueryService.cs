@@ -9,4 +9,6 @@ public class AnalyticsQueryService(IMaterialRepository materialRepository) : IAn
 {
     public async Task<Material?> Handle(GetRouteProgressByIdQuery query, CancellationToken cancellationToken)
         => await materialRepository.FindByRouteIdAsync(query.RouteId, cancellationToken);
+    public async Task<IEnumerable<Material>> Handle(GetAllRoutesQuery query, CancellationToken cancellationToken)
+        => await materialRepository.ListAsync(cancellationToken);
 }
