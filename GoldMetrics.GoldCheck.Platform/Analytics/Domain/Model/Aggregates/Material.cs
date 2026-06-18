@@ -49,4 +49,10 @@ public partial class Material
         ProductionEnd = period.End;
         Status = "ProductionDataRequested";
     }
+    
+    public void LoadProductionData(LoadProductionDataCommand command)
+    {
+        RouteId = new RouteId(command.RouteId);
+        Status = "ProductionDataLoaded";
+    }
 }
