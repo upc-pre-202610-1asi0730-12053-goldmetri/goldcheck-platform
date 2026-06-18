@@ -21,5 +21,6 @@
     <data name="RouteDataLoaded" xml:space="preserve"><value>Route data loaded successfully.</value></data>
     <data name="ProductionDashboardViewed" xml:space="preserve"><value>Production dashboard viewed successfully.</value></data>
     <data name="ProductionDataRequested" xml:space="preserve"><value>Production data requested successfully.</value></data>
+    <data name="ProductionDataLoaded" xml:space="preserve"><value>Production data loaded successfully.</value></data>
 
 </root>
