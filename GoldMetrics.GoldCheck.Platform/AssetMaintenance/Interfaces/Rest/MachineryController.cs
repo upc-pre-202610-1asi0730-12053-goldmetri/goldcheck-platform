@@ -17,8 +17,10 @@ namespace GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Rest;
 public class MachineryController(
     IAssetMaintenanceCommandService commandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
+    IAssetMaintenanceQueryService queryService,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
+
 {
     [HttpPost]
     [SwaggerOperation("Register Machinery", "Register a new machinery asset.", OperationId = "RegisterMachinery")]
@@ -30,6 +32,19 @@ public class MachineryController(
         var result = await commandService.Handle(command, cancellationToken);
         return AssetMaintenanceActionResultAssembler.ToActionResultFromMachineryResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            m => Created(string.Empty, MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
+            m => CreatedAtAction(nameof(GetMachineryById), new { machineryId = m.MachineryId.Value },
+                MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
+    
+    [HttpGet("{machineryId}")]
+    [SwaggerOperation("Get Machinery By Id", "Get a machinery asset by its identifier.", OperationId = "GetMachineryById")]
+    [SwaggerResponse(200, "Machinery found.", typeof(MachineryResource))]
+    [SwaggerResponse(404, "Machinery not found.")]
+    public async Task<IActionResult> GetMachineryById(string machineryId, CancellationToken cancellationToken)
+    {
+        var machinery = await queryService.Handle(new GetMachineryByIdQuery(machineryId), cancellationToken);
+        return AssetMaintenanceActionResultAssembler.ToActionResultFromGetMachineryResult(
+            this, machinery, errorLocalizer, problemDetailsFactory,
+            m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
 }
