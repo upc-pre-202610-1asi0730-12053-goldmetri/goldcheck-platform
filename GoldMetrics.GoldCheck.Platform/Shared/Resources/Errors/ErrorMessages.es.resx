@@ -329,4 +329,7 @@
   <data name="AssetMaintenanceError.InternalServerError" xml:space="preserve">
       <value>Ocurrió un error interno inesperado en Gestión de Activos y Mantenimiento.</value>
     </data>
+  <data name="AssetMaintenanceError.InvalidEngineHours" xml:space="preserve">
+     <value>Valor de horas de motor inválido.</value>
+   </data>
 </root>
