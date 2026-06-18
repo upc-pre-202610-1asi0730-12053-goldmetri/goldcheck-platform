@@ -1,5 +1,8 @@
 ﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Model.Commands;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -46,5 +49,13 @@ public class MachineryController(
         return AssetMaintenanceActionResultAssembler.ToActionResultFromGetMachineryResult(
             this, machinery, errorLocalizer, problemDetailsFactory,
             m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
+    [HttpGet]
+    [SwaggerOperation("Get All Machinery", "Get all machinery assets.", OperationId = "GetAllMachinery")]
+    [SwaggerResponse(200, "Machinery list found.", typeof(IEnumerable<MachineryResource>))]
+    public async Task<IActionResult> GetAllMachinery(CancellationToken cancellationToken)
+    {
+        var machinery = await queryService.Handle(new GetAllMachineryQuery(), cancellationToken);
+        return Ok(machinery.Select(MachineryResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }
