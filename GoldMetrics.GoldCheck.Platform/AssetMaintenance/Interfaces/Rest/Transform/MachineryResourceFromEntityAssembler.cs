@@ -7,5 +7,6 @@ public static class MachineryResourceFromEntityAssembler
 {
     public static MachineryResource ToResourceFromEntity(Machinery entity) =>
         new(entity.Id, entity.MachineryId.Value, entity.Model, entity.OEM,
-            entity.EngineHours.Hours, entity.MaintenanceStatus.Value, entity.Status);
+            entity.EngineHours.Hours, entity.MaintenanceStatus.Value,
+            entity.MaintenanceScheduledAtHours, entity.Status);
 }
