@@ -12,4 +12,6 @@ public class MaterialRepository(AppDbContext context) : BaseRepository<Material>
         => await Context.Set<Material>().FirstOrDefaultAsync(m => m.RouteId.Value == routeId, cancellationToken);
     public async Task<IEnumerable<Material>> FindBySupervisorIdAsync(string supervisorId, CancellationToken cancellationToken = default)
         => await Context.Set<Material>().Where(m => m.SupervisorId.Value == supervisorId).ToListAsync(cancellationToken);
+    public async Task<IEnumerable<Material>> FindByProductionPeriodAsync(DateTimeOffset start, DateTimeOffset end, CancellationToken cancellationToken = default)
+        => await Context.Set<Material>().Where(m => m.ProductionStart >= start && m.ProductionEnd <= end).ToListAsync(cancellationToken);
 }
