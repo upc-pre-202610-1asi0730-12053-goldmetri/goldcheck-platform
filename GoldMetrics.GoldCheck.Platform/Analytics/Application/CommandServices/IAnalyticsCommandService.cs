@@ -7,4 +7,6 @@ namespace GoldMetrics.GoldCheck.Platform.Analytics.Application.CommandServices;
 public interface IAnalyticsCommandService
 {
     Task<Result<Material>> Handle(ViewRouteProgressCommand command, CancellationToken cancellationToken);
+    Task<Result<Material>> Handle(ViewProductionDashboardCommand command, CancellationToken cancellationToken);
+
 }
