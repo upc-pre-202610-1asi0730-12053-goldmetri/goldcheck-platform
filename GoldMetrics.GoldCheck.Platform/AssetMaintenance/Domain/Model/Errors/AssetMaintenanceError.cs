@@ -5,5 +5,6 @@ public enum AssetMaintenanceError
     None,
     OperationCancelled,
     DatabaseError,
-    InternalServerError
+    InternalServerError,
+    MachineryNotFound
 }

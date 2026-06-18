@@ -47,6 +47,9 @@ using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.Internal.Comma
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Resources;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.QueryServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -183,6 +186,7 @@ builder.Services.AddScoped<IAnalyticsQueryService, AnalyticsQueryService>();
 builder.Services.AddSingleton<IStringLocalizer<AssetMaintenanceMessages>, StringLocalizer<AssetMaintenanceMessages>>();
 builder.Services.AddScoped<IMachineryRepository, MachineryRepository>();
 builder.Services.AddScoped<IAssetMaintenanceCommandService, AssetMaintenanceCommandService>();
+builder.Services.AddScoped<IAssetMaintenanceQueryService, AssetMaintenanceQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
