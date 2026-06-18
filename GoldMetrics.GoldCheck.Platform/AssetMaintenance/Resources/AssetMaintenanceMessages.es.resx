@@ -25,4 +25,7 @@
     <data name="MachineryDataUpdated" xml:space="preserve">
      <value>Datos de maquinaria actualizados exitosamente.</value>
    </data>
+    <data name="PreventiveMaintenanceScheduled" xml:space="preserve">
+      <value>Mantenimiento preventivo programado exitosamente.</value>
+    </data>
 </root>
