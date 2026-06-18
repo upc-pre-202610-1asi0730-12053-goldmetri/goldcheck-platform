@@ -8,4 +8,6 @@ public static class AnalyticsErrors
     public static AnalyticsError InternalServerError => AnalyticsError.InternalServerError;
     public static AnalyticsError MaterialNotFound => AnalyticsError.MaterialNotFound;
     public static AnalyticsError RouteNotFound => AnalyticsError.RouteNotFound;
+    public static AnalyticsError InvalidProductionPeriod => AnalyticsError.InvalidProductionPeriod;
+
 }

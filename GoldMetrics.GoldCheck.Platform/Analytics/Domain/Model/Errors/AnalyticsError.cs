@@ -7,5 +7,6 @@ public enum AnalyticsError
     DatabaseError,
     InternalServerError,
     MaterialNotFound,
-    RouteNotFound
+    RouteNotFound,
+    InvalidProductionPeriod,
 }
