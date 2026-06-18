@@ -61,4 +61,17 @@ public class AnalyticsController(
         var materials = await analyticsQueryService.Handle(query, cancellationToken);
         return Ok(materials.Select(MaterialResourceFromEntityAssembler.ToResourceFromEntity));
     }
+    
+    [HttpPost("production/dashboard")]
+    [SwaggerOperation("View Production Dashboard", "View the production dashboard for a supervisor.", OperationId = "ViewProductionDashboard")]
+    [SwaggerResponse(200, "Dashboard loaded.", typeof(MaterialResource))]
+    [SwaggerResponse(404, "Material not found.")]
+    public async Task<IActionResult> ViewProductionDashboard([FromBody] ViewProductionDashboardResource resource, CancellationToken cancellationToken)
+    {
+        var command = new ViewProductionDashboardCommand(resource.SupervisorId);
+        var result = await analyticsCommandService.Handle(command, cancellationToken);
+        return AnalyticsActionResultAssembler.ToActionResultFromMaterialResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MaterialResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
 }
