@@ -9,5 +9,6 @@ public static class AnalyticsErrors
     public static AnalyticsError MaterialNotFound => AnalyticsError.MaterialNotFound;
     public static AnalyticsError RouteNotFound => AnalyticsError.RouteNotFound;
     public static AnalyticsError InvalidProductionPeriod => AnalyticsError.InvalidProductionPeriod;
-
+    public static AnalyticsError InsufficientData => AnalyticsError.InsufficientData;
+    public static AnalyticsError ProductionDataValidationFailed => AnalyticsError.ProductionDataValidationFailed;
 }
