@@ -1,4 +1,4 @@
-﻿using GoldMetrics.GoldCheck.Platform.Analytics.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Aggregates;
 using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Errors;
