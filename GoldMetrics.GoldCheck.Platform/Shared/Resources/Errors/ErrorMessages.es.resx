@@ -320,4 +320,13 @@
   <data name="SubscriptionsBillingError.InternalServerError" xml:space="preserve">
     <value>Ocurrió un error interno inesperado en Suscripciones y Facturación.</value>
   </data>
+  <data name="AssetMaintenanceError.OperationCancelled" xml:space="preserve">
+      <value>La operación de mantenimiento de activos fue cancelada.</value>
+    </data>
+  <data name="AssetMaintenanceError.DatabaseError" xml:space="preserve">
+      <value>Ocurrió un error de base de datos durante la operación de mantenimiento de activos.</value>
+    </data>
+  <data name="AssetMaintenanceError.InternalServerError" xml:space="preserve">
+      <value>Ocurrió un error interno inesperado en Gestión de Activos y Mantenimiento.</value>
+    </data>
 </root>
