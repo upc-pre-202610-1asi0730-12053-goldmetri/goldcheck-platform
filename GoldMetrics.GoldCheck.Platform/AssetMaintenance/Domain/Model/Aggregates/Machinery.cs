@@ -49,6 +49,16 @@ public partial class Machinery
         MaintenanceStatus = new MaintenanceStatus("Discharged");
         Status = "MachineryDischarged";
     }
+    public string? DischargedComponentId { get; private set; }
+    public string? ComponentDischargeReason { get; private set; }
+    
+    public void DischargeComponent(DischargeComponentCommand command)
+    {
+        DischargedComponentId = new ComponentId(command.ComponentId).Value;
+        ComponentDischargeReason = command.Reason;
+        MaintenanceStatus = new MaintenanceStatus("UnderMaintenance");
+        Status = "ComponentDischarged";
+    }
     public int Id { get; }
     public MachineryId MachineryId { get; private set; }
     public string Model { get; private set; }
