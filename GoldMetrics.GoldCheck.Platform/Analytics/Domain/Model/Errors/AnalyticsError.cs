@@ -9,4 +9,6 @@ public enum AnalyticsError
     MaterialNotFound,
     RouteNotFound,
     InvalidProductionPeriod,
+    InsufficientData,
+    ProductionDataValidationFailed
 }
