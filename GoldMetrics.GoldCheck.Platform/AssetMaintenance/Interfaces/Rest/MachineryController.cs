@@ -1,4 +1,4 @@
-﻿sing System.Net.Mime;
+﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Rest.Transform;
