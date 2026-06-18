@@ -1,0 +1,146 @@
+﻿@startuml
+title GoldMetrics — Analytics (Domain)
+
+package "GoldMetrics" {
+  package "Analytics" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class Material {
+          +Id: int
+          +MaterialId: MaterialId
+          +RouteId: RouteId
+          +RouteStatus: RouteStatus
+          +SupervisorId: SupervisorId
+          +UserId: UserId
+          +Status: string
+          +ProductionStart: DateTimeOffset?
+          +ProductionEnd: DateTimeOffset?
+          +ProductionTons: decimal?
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +Material(command: ViewRouteProgressCommand)
+          +ViewProductionDashboard(command: ViewProductionDashboardCommand): void
+          +RequestProductionData(command: RequestProductionDataCommand): void
+          +LoadProductionData(command: LoadProductionDataCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class MaterialId <<record>> {
+          +Value: string
+        }
+        class RouteId <<record>> {
+          +Value: string
+        }
+        class RouteStatus <<record>> {
+          +Value: string
+        }
+        class SupervisorId <<record>> {
+          +Value: string
+        }
+        class UserId <<record>> {
+          +Value: string
+        }
+        class ProductionPeriod <<record>> {
+          +Start: DateTimeOffset
+          +End: DateTimeOffset
+        }
+        class ProductionVolume <<record>> {
+          +Tons: decimal
+        }
+      }
+
+      package "Commands" {
+        class ViewRouteProgressCommand <<record>> {
+          +RouteId: string
+          +UserId: string
+        }
+        class ViewProductionDashboardCommand <<record>> {
+          +SupervisorId: string
+        }
+        class RequestProductionDataCommand <<record>> {
+          +SupervisorId: string
+          +Start: DateTimeOffset
+          +End: DateTimeOffset
+        }
+        class LoadProductionDataCommand <<record>> {
+          +MaterialId: string
+          +RouteId: string
+        }
+      }
+
+      package "Queries" {
+        class GetRouteProgressByIdQuery <<record>> {
+          +RouteId: string
+        }
+        class GetAllRoutesQuery <<record>> {
+        }
+        class GetProductionDataByPeriodQuery <<record>> {
+          +Start: DateTimeOffset
+          +End: DateTimeOffset
+        }
+        class GetProductionDashboardQuery <<record>> {
+          +SupervisorId: string
+        }
+      }
+
+      package "Events" {
+        class RouteDataLoadedEvent <<record>> {
+          +RouteId: string
+          +UserId: string
+        }
+        class ProductionDataRequestedEvent <<record>> {
+          +SupervisorId: string
+          +Start: DateTimeOffset
+          +End: DateTimeOffset
+        }
+        class ProductionDataLoadedEvent <<record>> {
+          +MaterialId: string
+          +RouteId: string
+        }
+        class ProductionDataValidatedEvent <<record>> {
+          +MaterialId: string
+        }
+      }
+
+      package "Repositories" {
+        interface IMaterialRepository {
+          +FindByRouteIdAsync(routeId: string): Material?
+          +FindBySupervisorIdAsync(supervisorId: string): IEnumerable<Material>
+          +FindByMaterialIdAsync(materialId: string): Material?
+          +FindByProductionPeriodAsync(start: DateTimeOffset, end: DateTimeOffset): IEnumerable<Material>
+        }
+      }
+
+      package "Errors" {
+        enum AnalyticsError {
+          None
+          MaterialNotFound
+          RouteNotFound
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+          InvalidProductionPeriod
+          InsufficientData
+          ProductionDataValidationFailed
+        }
+      }
+
+      Material *-- MaterialId
+      Material *-- RouteId
+      Material *-- RouteStatus
+      Material *-- SupervisorId
+      Material *-- UserId
+      Material ..> ViewRouteProgressCommand : uses
+      Material ..> ViewProductionDashboardCommand : uses
+      Material ..> RequestProductionDataCommand : uses
+      Material ..> LoadProductionDataCommand : uses
+      Material ..> ProductionPeriod : uses
+      Material ..> RouteDataLoadedEvent : fires
+      Material ..> ProductionDataRequestedEvent : fires
+      Material ..> ProductionDataLoadedEvent : fires
+    }
+  }
+}
+@enduml
