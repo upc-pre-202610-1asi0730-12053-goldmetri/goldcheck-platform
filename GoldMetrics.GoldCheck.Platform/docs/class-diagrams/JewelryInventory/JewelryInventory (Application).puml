@@ -1,0 +1,80 @@
+﻿@startuml
+title GoldMetrics — JewelryInventory (Application)
+
+package "GoldMetrics" {
+  package "JewelryInventory" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IJewelryMaterialCommandService {
+          +Handle(command: RegisterNonCertifiedMaterialCommand): Result<JewelryMaterial>
+          +Handle(command: ScanQRMaterialCommand): Result<JewelryMaterial>
+          +Handle(command: RegisterMaterialInInventoryCommand): Result<JewelryMaterial>
+          +Handle(command: GenerateCertificateCommand): Result<JewelryMaterial>
+        }
+        interface IJewelryCommandService {
+          +Handle(command: SignCertificateCommand): Result<Jewelry>
+        }
+      }
+
+      package "QueryServices" {
+        interface IJewelryMaterialQueryService {
+          +Handle(query: GetMaterialByIdQuery): JewelryMaterial?
+          +Handle(query: GetAllMaterialsQuery): IEnumerable<JewelryMaterial>
+        }
+        interface IJewelryQueryService {
+          +Handle(query: GetCertificateByIdQuery): Jewelry?
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class JewelryMaterialCommandService {
+          -materialRepository: IJewelryMaterialRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: RegisterNonCertifiedMaterialCommand): Result<JewelryMaterial>
+          +Handle(command: ScanQRMaterialCommand): Result<JewelryMaterial>
+          +Handle(command: RegisterMaterialInInventoryCommand): Result<JewelryMaterial>
+          +Handle(command: GenerateCertificateCommand): Result<JewelryMaterial>
+        }
+        class JewelryCommandService {
+          -jewelryRepository: IJewelryRepository
+          -materialRepository: IJewelryMaterialRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: SignCertificateCommand): Result<Jewelry>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class JewelryMaterialQueryService {
+          -materialRepository: IJewelryMaterialRepository
+          +Handle(query: GetMaterialByIdQuery): JewelryMaterial?
+          +Handle(query: GetAllMaterialsQuery): IEnumerable<JewelryMaterial>
+        }
+        class JewelryQueryService {
+          -jewelryRepository: IJewelryRepository
+          +Handle(query: GetCertificateByIdQuery): Jewelry?
+        }
+      }
+
+      JewelryMaterialCommandService ..|> IJewelryMaterialCommandService
+      JewelryCommandService ..|> IJewelryCommandService
+      JewelryMaterialQueryService ..|> IJewelryMaterialQueryService
+      JewelryQueryService ..|> IJewelryQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IJewelryMaterialRepository
+      interface IJewelryRepository
+    }
+  }
+}
+
+JewelryMaterialCommandService ..> IJewelryMaterialRepository : uses
+JewelryCommandService ..> IJewelryRepository : uses
+JewelryCommandService ..> IJewelryMaterialRepository : uses
+JewelryMaterialQueryService ..> IJewelryMaterialRepository : uses
+JewelryQueryService ..> IJewelryRepository : uses
+
+@enduml
