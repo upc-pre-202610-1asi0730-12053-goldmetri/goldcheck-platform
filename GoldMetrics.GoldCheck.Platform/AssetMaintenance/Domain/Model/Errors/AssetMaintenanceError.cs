@@ -7,5 +7,6 @@ public enum AssetMaintenanceError
     DatabaseError,
     InternalServerError,
     MachineryNotFound,
-    InvalidEngineHours
+    InvalidEngineHours,
+    MaintenanceAlreadyScheduled
 }

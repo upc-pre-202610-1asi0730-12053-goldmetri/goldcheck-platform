@@ -8,4 +8,5 @@ public static class AssetMaintenanceErrors
     public static AssetMaintenanceError InternalServerError => AssetMaintenanceError.InternalServerError;
     public static AssetMaintenanceError MachineryNotFound => AssetMaintenanceError.MachineryNotFound;
     public static AssetMaintenanceError InvalidEngineHours => AssetMaintenanceError.InvalidEngineHours;
+    public static AssetMaintenanceError MaintenanceAlreadyScheduled => AssetMaintenanceError.MaintenanceAlreadyScheduled;
 }
