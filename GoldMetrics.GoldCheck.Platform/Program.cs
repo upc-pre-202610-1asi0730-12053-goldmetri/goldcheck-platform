@@ -41,6 +41,7 @@ using GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.Entity
 using GoldMetrics.GoldCheck.Platform.Analytics.Resources;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.QueryServices;
+using MaterialRepository = GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
