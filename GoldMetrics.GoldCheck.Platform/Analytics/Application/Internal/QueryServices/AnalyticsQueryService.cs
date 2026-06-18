@@ -11,4 +11,6 @@ public class AnalyticsQueryService(IMaterialRepository materialRepository) : IAn
         => await materialRepository.FindByRouteIdAsync(query.RouteId, cancellationToken);
     public async Task<IEnumerable<Material>> Handle(GetAllRoutesQuery query, CancellationToken cancellationToken)
         => await materialRepository.ListAsync(cancellationToken);
+    public async Task<IEnumerable<Material>> Handle(GetProductionDataByPeriodQuery query, CancellationToken cancellationToken)
+        => await materialRepository.FindByProductionPeriodAsync(query.Start, query.End, cancellationToken);
 }
