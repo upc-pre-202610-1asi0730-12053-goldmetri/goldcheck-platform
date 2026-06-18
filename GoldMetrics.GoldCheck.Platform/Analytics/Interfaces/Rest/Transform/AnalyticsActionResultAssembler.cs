@@ -18,6 +18,8 @@ public static class AnalyticsActionResultAssembler
         AnalyticsError.DatabaseError => StatusCodes.Status500InternalServerError,
         AnalyticsError.InternalServerError => StatusCodes.Status500InternalServerError,
         AnalyticsError.InvalidProductionPeriod => StatusCodes.Status400BadRequest,
+        AnalyticsError.InsufficientData => StatusCodes.Status422UnprocessableEntity,
+        AnalyticsError.ProductionDataValidationFailed => StatusCodes.Status422UnprocessableEntity,
         _ => StatusCodes.Status400BadRequest
         
     };
