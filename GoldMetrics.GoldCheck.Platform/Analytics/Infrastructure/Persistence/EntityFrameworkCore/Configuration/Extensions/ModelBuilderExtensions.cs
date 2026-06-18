@@ -9,6 +9,8 @@ public static class ModelBuilderExtensions
     {
         builder.Entity<Material>().HasKey(m => m.Id);
         builder.Entity<Material>().Property(m => m.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Material>().Property(m => m.ProductionStart).HasColumnName("ProductionStart");
+        builder.Entity<Material>().Property(m => m.ProductionEnd).HasColumnName("ProductionEnd");
         builder.Entity<Material>().OwnsOne(m => m.MaterialId, mid =>
         {
             mid.WithOwner().HasForeignKey("Id");
