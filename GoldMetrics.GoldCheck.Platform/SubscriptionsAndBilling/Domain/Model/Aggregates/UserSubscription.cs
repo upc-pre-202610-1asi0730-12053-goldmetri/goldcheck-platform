@@ -57,4 +57,11 @@ public partial class UserSubscription
         SubscriptionStatus = new SubscriptionStatus("Active");
         Status = "DowngradeExecuted";
     }
+    
+    public bool DecideAccess(DecideAccessCommand command)
+    {
+        AccessGranted = AssignedFeatures.Contains(command.FeatureName);
+        Status = AccessGranted ? "AccessGranted" : "AccessDenied";
+        return AccessGranted;
+    }
 }
