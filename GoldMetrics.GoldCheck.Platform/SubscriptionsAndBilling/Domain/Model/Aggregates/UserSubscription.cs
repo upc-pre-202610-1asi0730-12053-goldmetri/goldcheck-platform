@@ -35,4 +35,10 @@ public partial class UserSubscription
         SubscriptionStatus = new SubscriptionStatus("Active");
         Status = "SubscriptionActivated";
     }
+    
+    public void RestrictFeatures(RestrictFeaturesCommand command)
+    {
+        SubscriptionStatus = new SubscriptionStatus("Restricted");
+        Status = "FeaturesRestricted";
+    }
 }
