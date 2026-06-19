@@ -64,4 +64,11 @@ public partial class UserSubscription
         Status = AccessGranted ? "AccessGranted" : "AccessDenied";
         return AccessGranted;
     }
+    
+    public bool CheckFeatureAccess(CheckFeatureAccessCommand command)
+    {
+        var hasAccess = AssignedFeatures.Contains(command.FeatureName);
+        Status = "FeatureAccessChecked";
+        return hasAccess;
+    }
 }
