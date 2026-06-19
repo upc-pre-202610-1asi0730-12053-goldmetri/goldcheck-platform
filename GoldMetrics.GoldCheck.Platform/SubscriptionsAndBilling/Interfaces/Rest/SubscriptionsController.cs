@@ -82,4 +82,15 @@ public class SubscriptionsController(
         var result = await commandService.ExecuteDowngradeAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpPost("{userId}/access-check")]
+    [SwaggerOperation(Summary = "Check feature access for user", OperationId = "CheckFeatureAccess")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CheckFeatureAccess([FromRoute] string userId, [FromBody] CheckFeatureAccessResource resource, CancellationToken ct)
+    {
+        var command = new CheckFeatureAccessCommand(userId, resource.FeatureName);
+        var result = await commandService.CheckFeatureAccessAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
