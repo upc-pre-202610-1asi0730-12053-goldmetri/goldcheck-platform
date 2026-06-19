@@ -11,4 +11,9 @@ public class VehicleQueryService(IVehicleRepository vehicleRepository) : IVehicl
     {
         return await vehicleRepository.FindByVehicleIdAsync(query.VehicleId, cancellationToken);
     }
+
+    public async Task<IEnumerable<Vehicle>> Handle(GetAllVehiclesQuery query, CancellationToken cancellationToken)
+    {
+        return await vehicleRepository.ListAsync(cancellationToken);
+    }
 }
