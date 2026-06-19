@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServic
 public interface IVehicleQueryService
 {
     Task<Vehicle?> Handle(GetVehicleByIdQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<Vehicle>> Handle(GetAllVehiclesQuery query, CancellationToken cancellationToken);
 }
