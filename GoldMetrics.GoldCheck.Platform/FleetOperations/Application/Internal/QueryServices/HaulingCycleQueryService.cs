@@ -11,4 +11,9 @@ public class HaulingCycleQueryService(IHaulingCycleRepository haulingCycleReposi
     {
         return await haulingCycleRepository.FindByIdAsync(query.Id, cancellationToken);
     }
+
+    public async Task<IEnumerable<HaulingCycle>> Handle(GetAllHaulingCyclesQuery query, CancellationToken cancellationToken)
+    {
+        return await haulingCycleRepository.ListAsync(cancellationToken);
+    }
 }
