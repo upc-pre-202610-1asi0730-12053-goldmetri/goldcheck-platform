@@ -121,4 +121,39 @@ public class HaulingCycleCommandService(
                 localizer[nameof(FleetOperationsError.InternalServerError)]);
         }
     }
+
+    public async Task<Result<HaulingCycle>> Handle(UpdateRouteProgressCommand command, CancellationToken cancellationToken)
+    {
+        var cycle = await haulingCycleRepository.FindByIdAsync(command.Id, cancellationToken);
+        if (cycle is null)
+            return Result<HaulingCycle>.Failure(
+                FleetOperationsError.HaulingCycleNotFound,
+                localizer[nameof(FleetOperationsError.HaulingCycleNotFound)]);
+
+        try
+        {
+            cycle.UpdateRouteProgress(command);
+            haulingCycleRepository.Update(cycle);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<HaulingCycle>.Success(cycle);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<HaulingCycle>.Failure(
+                FleetOperationsError.OperationCancelled,
+                localizer[nameof(FleetOperationsError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<HaulingCycle>.Failure(
+                FleetOperationsError.DatabaseError,
+                localizer[nameof(FleetOperationsError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<HaulingCycle>.Failure(
+                FleetOperationsError.InternalServerError,
+                localizer[nameof(FleetOperationsError.InternalServerError)]);
+        }
+    }
 }
