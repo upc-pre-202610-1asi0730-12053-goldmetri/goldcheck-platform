@@ -135,4 +135,15 @@ public class SubscriptionsController(
         var result = await queryService.GetPaymentHistoryByUserAsync(new GetPaymentHistoryByUserQuery(userId), ct);
         return assembler.ToInvoiceCollectionActionResult(result, this);
     }
+    
+    [HttpPost("plans/check")]
+    [SwaggerOperation(Summary = "Check user plan (admin)", OperationId = "CheckUserPlan")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CheckUserPlan([FromBody] CheckUserPlanResource resource, CancellationToken ct)
+    {
+        var command = new CheckUserPlanCommand(resource.UserId, resource.AdministratorId);
+        var result = await commandService.CheckUserPlanAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
