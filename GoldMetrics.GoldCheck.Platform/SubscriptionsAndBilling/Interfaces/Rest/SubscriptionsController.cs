@@ -146,4 +146,15 @@ public class SubscriptionsController(
         var result = await commandService.CheckUserPlanAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpPost("plans/{planType}/features")]
+    [SwaggerOperation(Summary = "Assign features to a plan", OperationId = "AssignFeatures")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AssignFeatures([FromRoute] string planType, [FromBody] AssignFeaturesResource resource, CancellationToken ct)
+    {
+        var command = new AssignFeaturesCommand(resource.UserId, planType, resource.Features);
+        var result = await commandService.AssignFeaturesAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
