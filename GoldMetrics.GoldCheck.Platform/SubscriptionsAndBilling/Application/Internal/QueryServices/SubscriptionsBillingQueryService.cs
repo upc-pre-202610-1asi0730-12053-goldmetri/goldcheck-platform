@@ -20,4 +20,9 @@ public class SubscriptionsBillingQueryService(
             ? Result<UserSubscription>.Failure(SubscriptionsBillingError.UserSubscriptionNotFound, localizer[nameof(SubscriptionsBillingError.UserSubscriptionNotFound)])
             : Result<UserSubscription>.Success(subscription);
     }
+    public async Task<Result<IEnumerable<UserSubscription>>> GetAllUserSubscriptionsAsync(GetAllUserSubscriptionsQuery query, CancellationToken ct = default)
+    {
+        var list = await repository.ListAsync(ct);
+        return Result<IEnumerable<UserSubscription>>.Success(list);
+    }
 }
