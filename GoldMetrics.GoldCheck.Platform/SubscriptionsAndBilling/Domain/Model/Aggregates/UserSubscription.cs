@@ -107,4 +107,9 @@ public partial class UserSubscription
     {
         Status = "UserPlanDefined";
     }
+    
+    public void RequestAccess(RequestAccessCommand command)
+    {
+        Status = "AccessRequested";
+    }
 }
