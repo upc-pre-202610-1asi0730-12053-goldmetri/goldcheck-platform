@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.FleetOperations.Application.CommandServ
 public interface IVehicleCommandService
 {
     Task<Result<Vehicle>> Handle(AssignVehicleCommand command, CancellationToken cancellationToken);
+    Task<Result<Vehicle>> Handle(StartEngineCommand command, CancellationToken cancellationToken);
 }
