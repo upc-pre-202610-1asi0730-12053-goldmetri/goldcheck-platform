@@ -157,4 +157,13 @@ public class SubscriptionsController(
         var result = await commandService.AssignFeaturesAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpGet("plans/{planType}/features")]
+    [SwaggerOperation(Summary = "Get features for a plan", OperationId = "GetPlanFeatures")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPlanFeatures([FromRoute] string planType, CancellationToken ct)
+    {
+        var result = await queryService.GetPlanFeaturesAsync(new GetPlanFeaturesQuery(planType), ct);
+        return assembler.ToFeaturesActionResult(result, this);
+    }
 }

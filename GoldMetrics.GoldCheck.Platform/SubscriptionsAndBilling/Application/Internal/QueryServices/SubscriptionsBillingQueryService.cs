@@ -45,4 +45,14 @@ public class SubscriptionsBillingQueryService(
             return Result<IEnumerable<Invoice>>.Failure(SubscriptionsBillingError.UserSubscriptionNotFound, localizer[nameof(SubscriptionsBillingError.UserSubscriptionNotFound)]);
         return Result<IEnumerable<Invoice>>.Success(subscription.Invoices);
     }
+    
+    public async Task<Result<IEnumerable<string>>> GetPlanFeaturesAsync(GetPlanFeaturesQuery query, CancellationToken ct = default)
+    {
+        var all = await repository.ListAsync(ct);
+        var features = all
+            .Where(s => s.PlanType.Value == query.PlanType)
+            .SelectMany(s => s.AssignedFeatures)
+            .Distinct();
+        return Result<IEnumerable<string>>.Success(features);
+    }
 }
