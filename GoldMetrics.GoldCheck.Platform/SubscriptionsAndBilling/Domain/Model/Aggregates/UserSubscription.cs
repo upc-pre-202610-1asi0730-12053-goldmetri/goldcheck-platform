@@ -77,4 +77,8 @@ public partial class UserSubscription
         Status = "PaymentHistoryLoaded";
     }
     
+    public void RequestPaymentHistory(RequestPaymentHistoryCommand command)
+    {
+        Status = "PaymentHistoryRequested";
+    }
 }
