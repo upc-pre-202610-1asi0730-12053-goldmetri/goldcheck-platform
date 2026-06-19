@@ -39,6 +39,16 @@ public class VehiclesController(
                 VehicleResourceFromEntityAssembler.ToResourceFromEntity(vehicle)));
     }
 
+    [HttpGet]
+    [SwaggerOperation("Get All Vehicles", "Get all vehicles.", OperationId = "GetAllVehicles")]
+    [SwaggerResponse(200, "The vehicles were found.", typeof(IEnumerable<VehicleResource>))]
+    public async Task<IActionResult> GetAllVehicles(CancellationToken cancellationToken)
+    {
+        var query = new GetAllVehiclesQuery();
+        var vehicles = await vehicleQueryService.Handle(query, cancellationToken);
+        return Ok(vehicles.Select(VehicleResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpGet("{vehicleId}")]
     [SwaggerOperation("Get Vehicle by Id", "Get a vehicle by its identifier.", OperationId = "GetVehicleById")]
     [SwaggerResponse(200, "The vehicle was found.", typeof(VehicleResource))]
