@@ -9,4 +9,5 @@ public interface IHaulingCycleCommandService
     Task<Result<HaulingCycle>> Handle(StartHaulingCycleCommand command, CancellationToken cancellationToken);
     Task<Result<HaulingCycle>> Handle(LoadMaterialCommand command, CancellationToken cancellationToken);
     Task<Result<HaulingCycle>> Handle(CompleteHaulingCycleCommand command, CancellationToken cancellationToken);
+    Task<Result<HaulingCycle>> Handle(UpdateRouteProgressCommand command, CancellationToken cancellationToken);
 }
