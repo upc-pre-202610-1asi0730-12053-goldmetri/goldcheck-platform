@@ -27,11 +27,19 @@ public partial class HaulingCycle
     public string RouteProgress { get; private set; }
     public string Status { get; private set; }
     public decimal? PayloadTons { get; private set; }
+    public string? DumpingPointName { get; private set; }
 
     public void LoadMaterial(LoadMaterialCommand command)
     {
         var payload = new Payload(command.PayloadTons);
         PayloadTons = payload.Tons;
         Status = "MaterialLoaded";
+    }
+
+    public void Complete(CompleteHaulingCycleCommand command)
+    {
+        var dumpingPoint = new DumpingPoint(command.DumpingPoint);
+        DumpingPointName = dumpingPoint.Name;
+        Status = "Completed";
     }
 }
