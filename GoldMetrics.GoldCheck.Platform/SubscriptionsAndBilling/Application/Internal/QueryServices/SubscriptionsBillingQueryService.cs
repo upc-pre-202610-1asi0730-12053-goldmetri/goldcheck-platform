@@ -37,4 +37,12 @@ public class SubscriptionsBillingQueryService(
             ? Result<Invoice>.Failure(SubscriptionsBillingError.InvoiceNotFound, localizer[nameof(SubscriptionsBillingError.InvoiceNotFound)])
             : Result<Invoice>.Success(invoice);
     }
+    
+    public async Task<Result<IEnumerable<Invoice>>> GetPaymentHistoryByUserAsync(GetPaymentHistoryByUserQuery query, CancellationToken ct = default)
+    {
+        var subscription = await repository.FindByUserIdAsync(query.UserId, ct);
+        if (subscription is null)
+            return Result<IEnumerable<Invoice>>.Failure(SubscriptionsBillingError.UserSubscriptionNotFound, localizer[nameof(SubscriptionsBillingError.UserSubscriptionNotFound)]);
+        return Result<IEnumerable<Invoice>>.Success(subscription.Invoices);
+    }
 }
