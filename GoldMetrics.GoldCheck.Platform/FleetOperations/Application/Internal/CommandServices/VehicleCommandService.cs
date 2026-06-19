@@ -51,4 +51,39 @@ public class VehicleCommandService(
                 localizer[nameof(FleetOperationsError.InternalServerError)]);
         }
     }
+
+    public async Task<Result<Vehicle>> Handle(StartEngineCommand command, CancellationToken cancellationToken)
+    {
+        var vehicle = await vehicleRepository.FindByVehicleIdAsync(command.VehicleId, cancellationToken);
+        if (vehicle is null)
+            return Result<Vehicle>.Failure(
+                FleetOperationsError.VehicleNotFound,
+                localizer[nameof(FleetOperationsError.VehicleNotFound)]);
+
+        vehicle.StartEngine();
+        try
+        {
+            vehicleRepository.Update(vehicle);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<Vehicle>.Success(vehicle);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<Vehicle>.Failure(
+                FleetOperationsError.OperationCancelled,
+                localizer[nameof(FleetOperationsError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<Vehicle>.Failure(
+                FleetOperationsError.DatabaseError,
+                localizer[nameof(FleetOperationsError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<Vehicle>.Failure(
+                FleetOperationsError.InternalServerError,
+                localizer[nameof(FleetOperationsError.InternalServerError)]);
+        }
+    }
 }

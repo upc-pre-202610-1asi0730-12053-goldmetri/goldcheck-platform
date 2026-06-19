@@ -25,4 +25,10 @@ public partial class Vehicle
     public OperatorId OperatorId { get; private set; }
     public bool IsEngineOn { get; private set; }
     public string Status { get; private set; }
+
+    public void StartEngine()
+    {
+        IsEngineOn = true;
+        Status = "EngineOn";
+    }
 }
