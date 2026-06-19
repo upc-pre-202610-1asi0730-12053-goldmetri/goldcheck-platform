@@ -10,6 +10,7 @@ public static class HaulingCycleResourceFromEntityAssembler
             entity.Id,
             entity.VehicleId.Value,
             entity.LoadingPoint.Name,
+            entity.DumpingPointName,
             entity.PayloadTons,
             entity.Status,
             entity.RouteProgress);
