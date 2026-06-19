@@ -82,6 +82,12 @@ public partial class UserSubscription
         Status = "PaymentHistoryRequested";
     }
     
+    public void AssignFeatures(AssignFeaturesCommand command)
+    {
+        AssignedFeatures = [.. command.Features];
+        Status = "FeaturesAssigned";
+    }
+    
     public Invoice GenerateInvoice(GenerateInvoiceCommand command)
     {
         var invoice = new Invoice(command.InvoiceId, 0m);
