@@ -42,4 +42,11 @@ public partial class HaulingCycle
         DumpingPointName = dumpingPoint.Name;
         Status = "Completed";
     }
+
+    public void UpdateRouteProgress(UpdateRouteProgressCommand command)
+    {
+        RouteProgress = command.RouteProgress;
+        if (string.Equals(command.RouteProgress, "ChargingPoint", StringComparison.OrdinalIgnoreCase))
+            Status = "ChargingPointReached";
+    }
 }
