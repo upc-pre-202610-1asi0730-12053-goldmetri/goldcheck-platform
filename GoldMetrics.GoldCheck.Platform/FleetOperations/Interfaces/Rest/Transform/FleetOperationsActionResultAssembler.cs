@@ -31,4 +31,20 @@ public static class FleetOperationsActionResultAssembler
         var statusCode = ToStatusCode((FleetOperationsError)result.Error!);
         return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);
     }
+
+    public static IActionResult ToActionResultFromGetVehicleResult(
+        ControllerBase controller,
+        Vehicle? vehicle,
+        IStringLocalizer<ErrorMessages> localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<Vehicle, IActionResult> onSuccess)
+    {
+        if (vehicle is null)
+            return problemDetailsFactory.CreateProblemDetails(
+                controller,
+                ToStatusCode(FleetOperationsError.VehicleNotFound),
+                FleetOperationsError.VehicleNotFound,
+                localizer[nameof(FleetOperationsError.VehicleNotFound)]);
+        return onSuccess(vehicle);
+    }
 }
