@@ -59,4 +59,15 @@ public class SubscriptionsController(
         var result = await commandService.ConfirmSubscriptionAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpPut("{userId}/downgrade")]
+    [SwaggerOperation(Summary = "Request a plan downgrade", OperationId = "RequestDowngrade")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RequestDowngrade([FromRoute] string userId, [FromBody] RequestDowngradeResource resource, CancellationToken ct)
+    {
+        var command = new RequestDowngradeCommand(userId, resource.NewPlanType);
+        var result = await commandService.RequestDowngradeAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
