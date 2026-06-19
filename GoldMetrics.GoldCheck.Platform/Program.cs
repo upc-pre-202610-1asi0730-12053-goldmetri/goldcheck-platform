@@ -202,6 +202,7 @@ builder.Services.AddScoped<IVehicleCommandService, VehicleCommandService>();
 builder.Services.AddScoped<IVehicleQueryService, VehicleQueryService>();
 builder.Services.AddScoped<IHaulingCycleRepository, HaulingCycleRepository>();
 builder.Services.AddScoped<IHaulingCycleCommandService, HaulingCycleCommandService>();
+builder.Services.AddScoped<IHaulingCycleQueryService, HaulingCycleQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
