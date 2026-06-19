@@ -3,11 +3,12 @@
 public enum AssetMaintenanceError
 {
     None,
-    OperationCancelled,
-    DatabaseError,
-    InternalServerError,
     MachineryNotFound,
+    ComponentNotFound,
+    MachineryAlreadyDischarged,
     InvalidEngineHours,
     MaintenanceAlreadyScheduled,
-    MachineryAlreadyDischarged
+    OperationCancelled,
+    DatabaseError,
+    InternalServerError
 }

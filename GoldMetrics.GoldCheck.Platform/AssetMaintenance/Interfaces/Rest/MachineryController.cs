@@ -98,4 +98,16 @@ public class MachineryController(
             this, result, errorLocalizer, problemDetailsFactory,
             m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
     }
+    [HttpPut("{machineryId}/components/{componentId}/discharge")]
+    [SwaggerOperation("Discharge Component", "Discharge a specific component from a machinery asset.", OperationId = "DischargeComponent")]
+    [SwaggerResponse(200, "Component discharged.", typeof(MachineryResource))]
+    [SwaggerResponse(404, "Machinery not found.")]
+    public async Task<IActionResult> DischargeComponent(string machineryId, string componentId, [FromBody] DischargeComponentResource resource, CancellationToken cancellationToken)
+    {
+        var command = new DischargeComponentCommand(machineryId, componentId, resource.Reason);
+        var result = await commandService.Handle(command, cancellationToken);
+        return AssetMaintenanceActionResultAssembler.ToActionResultFromMachineryResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            m => Ok(MachineryResourceFromEntityAssembler.ToResourceFromEntity(m)));
+    }
 }

@@ -344,4 +344,7 @@
   <data name="AssetMaintenanceError.MachineryAlreadyDischarged" xml:space="preserve">
      <value>The machinery has already been discharged.</value>
    </data>
+  <data name="AssetMaintenanceError.ComponentNotFound" xml:space="preserve">
+     <value>The component was not found on this machinery.</value>
+   </data>
 </root>

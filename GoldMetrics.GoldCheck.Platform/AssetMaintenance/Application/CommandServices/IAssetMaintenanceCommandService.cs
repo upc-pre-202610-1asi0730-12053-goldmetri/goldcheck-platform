@@ -10,4 +10,5 @@ public interface IAssetMaintenanceCommandService
     Task<Result<Machinery>> Handle(UpdateMachineryDataCommand command, CancellationToken cancellationToken);
     Task<Result<Machinery>> Handle(SchedulePreventiveMaintenanceCommand command, CancellationToken cancellationToken);
     Task<Result<Machinery>> Handle(DischargeMachineryCommand command, CancellationToken cancellationToken);
+    Task<Result<Machinery>> Handle(DischargeComponentCommand command, CancellationToken cancellationToken);
 }

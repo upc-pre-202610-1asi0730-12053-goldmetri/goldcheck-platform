@@ -31,4 +31,7 @@
     <data name="MachineryDischarged" xml:space="preserve">
       <value>Machinery discharged successfully.</value>
     </data>
+    <data name="ComponentDischarged" xml:space="preserve">
+      <value>Component discharged successfully.</value>
+    </data>
 </root>

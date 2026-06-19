@@ -338,4 +338,7 @@
   <data name="AssetMaintenanceError.MachineryAlreadyDischarged" xml:space="preserve">
      <value>La maquinaria ya fue dada de baja.</value>
    </data>
+  <data name="AssetMaintenanceError.ComponentNotFound" xml:space="preserve">
+     <value>No se encontró el componente en esta maquinaria.</value>
+   </data>
 </root>
