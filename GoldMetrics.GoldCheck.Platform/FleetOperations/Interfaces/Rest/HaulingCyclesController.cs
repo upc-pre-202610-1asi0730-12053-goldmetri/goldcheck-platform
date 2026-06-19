@@ -39,6 +39,16 @@ public class HaulingCyclesController(
                 HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
     }
 
+    [HttpGet]
+    [SwaggerOperation("Get All Hauling Cycles", "Get all hauling cycles.", OperationId = "GetAllHaulingCycles")]
+    [SwaggerResponse(200, "The hauling cycles were found.", typeof(IEnumerable<HaulingCycleResource>))]
+    public async Task<IActionResult> GetAllHaulingCycles(CancellationToken cancellationToken)
+    {
+        var query = new GetAllHaulingCyclesQuery();
+        var cycles = await haulingCycleQueryService.Handle(query, cancellationToken);
+        return Ok(cycles.Select(HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity));
+    }
+
     [HttpGet("{cycleId:int}")]
     [SwaggerOperation("Get Hauling Cycle by Id", "Get a hauling cycle by its identifier.", OperationId = "GetHaulingCycleById")]
     [SwaggerResponse(200, "The hauling cycle was found.", typeof(HaulingCycleResource))]
