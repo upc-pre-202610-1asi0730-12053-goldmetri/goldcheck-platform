@@ -12,4 +12,6 @@ public class AssetMaintenanceQueryService(IMachineryRepository machineryReposito
     
     public async Task<IEnumerable<Machinery>> Handle(GetAllMachineryQuery query, CancellationToken cancellationToken)
         => await machineryRepository.ListAsync(cancellationToken);
+    public async Task<IEnumerable<Machinery>> Handle(GetMachineryByStatusQuery query, CancellationToken cancellationToken)
+        => await machineryRepository.FindByStatusAsync(query.Status, cancellationToken);
 }
