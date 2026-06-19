@@ -73,6 +73,23 @@ public class SubscriptionsBillingCommandService(
         catch (OperationCanceledException) { return Cancelled<UserSubscription>(); }
         catch (Exception) { return ServerError<UserSubscription>(); }
     }
+    
+    public async Task<Result<UserSubscription>> ExecuteDowngradeAsync(ExecuteDowngradeCommand command, CancellationToken ct = default)
+    {
+        try
+        {
+            var subscription = await repository.FindByUserIdAsync(command.UserId, ct);
+            if (subscription is null) return NotFound<UserSubscription>();
+            if (subscription.SubscriptionStatus.Value != "DowngradeRequested")
+                return Result<UserSubscription>.Failure(SubscriptionsBillingError.DowngradeNotAllowed, localizer[nameof(SubscriptionsBillingError.DowngradeNotAllowed)]);
+            subscription.ExecuteDowngrade(command);
+            repository.Update(subscription);
+            await unitOfWork.CompleteAsync(ct);
+            return Result<UserSubscription>.Success(subscription);
+        }
+        catch (OperationCanceledException) { return Cancelled<UserSubscription>(); }
+        catch (Exception) { return ServerError<UserSubscription>(); }
+    }
 
     private Result<T> NotFound<T>() =>
         Result<T>.Failure(SubscriptionsBillingError.UserSubscriptionNotFound, localizer[nameof(SubscriptionsBillingError.UserSubscriptionNotFound)]);

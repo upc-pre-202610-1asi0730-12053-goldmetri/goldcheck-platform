@@ -48,4 +48,13 @@ public partial class UserSubscription
         SubscriptionStatus = new SubscriptionStatus("DowngradeRequested");
         Status = "DowngradeRequested";
     }
+    
+    public void ExecuteDowngrade(ExecuteDowngradeCommand command)
+    {
+        if (RequestedDowngradePlan is not null)
+            PlanType = new PlanType(RequestedDowngradePlan);
+        RequestedDowngradePlan = null;
+        SubscriptionStatus = new SubscriptionStatus("Active");
+        Status = "DowngradeExecuted";
+    }
 }
