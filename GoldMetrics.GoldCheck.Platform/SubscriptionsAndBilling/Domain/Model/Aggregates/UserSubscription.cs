@@ -81,4 +81,12 @@ public partial class UserSubscription
     {
         Status = "PaymentHistoryRequested";
     }
+    
+    public Invoice GenerateInvoice(GenerateInvoiceCommand command)
+    {
+        var invoice = new Invoice(command.InvoiceId, 0m);
+        Invoices.Add(invoice);
+        Status = "InvoiceGenerated";
+        return invoice;
+    }
 }

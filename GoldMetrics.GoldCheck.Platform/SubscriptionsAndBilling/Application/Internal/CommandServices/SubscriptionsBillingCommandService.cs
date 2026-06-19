@@ -150,6 +150,22 @@ public class SubscriptionsBillingCommandService(
         catch (OperationCanceledException) { return Cancelled<UserSubscription>(); }
         catch (Exception) { return ServerError<UserSubscription>(); }
     }
+    
+    public async Task<Result<Invoice>> GenerateInvoiceAsync(GenerateInvoiceCommand command, CancellationToken ct = default)
+    {
+        try
+        {
+            var subscription = await repository.FindByUserIdAsync(command.UserId, ct);
+            if (subscription is null) return NotFound<Invoice>();
+            var invoice = subscription.GenerateInvoice(command);
+            repository.Update(subscription);
+            await unitOfWork.CompleteAsync(ct);
+            return Result<Invoice>.Success(invoice);
+        }
+        catch (OperationCanceledException) { return Cancelled<Invoice>(); }
+        catch (Exception) { return ServerError<Invoice>(); }
+    }
+    
 
     private Result<T> NotFound<T>() =>
         Result<T>.Failure(SubscriptionsBillingError.UserSubscriptionNotFound, localizer[nameof(SubscriptionsBillingError.UserSubscriptionNotFound)]);
