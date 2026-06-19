@@ -54,6 +54,8 @@ using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Internal.Comman
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Resources;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -197,6 +199,7 @@ builder.Services.AddScoped<IAssetMaintenanceQueryService, AssetMaintenanceQueryS
 builder.Services.AddSingleton<IStringLocalizer<FleetOperationsMessages>, StringLocalizer<FleetOperationsMessages>>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleCommandService, VehicleCommandService>();
+builder.Services.AddScoped<IVehicleQueryService, VehicleQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
