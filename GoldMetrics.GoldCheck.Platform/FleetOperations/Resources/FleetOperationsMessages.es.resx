@@ -8,4 +8,7 @@
   <data name="VehicleAssigned" xml:space="preserve">
     <value>Vehículo asignado exitosamente.</value>
   </data>
+  <data name="HaulingCycleStarted" xml:space="preserve">
+    <value>Ciclo de acarreo iniciado exitosamente.</value>
+  </data>
 </root>

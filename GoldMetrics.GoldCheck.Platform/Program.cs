@@ -200,6 +200,8 @@ builder.Services.AddSingleton<IStringLocalizer<FleetOperationsMessages>, StringL
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleCommandService, VehicleCommandService>();
 builder.Services.AddScoped<IVehicleQueryService, VehicleQueryService>();
+builder.Services.AddScoped<IHaulingCycleRepository, HaulingCycleRepository>();
+builder.Services.AddScoped<IHaulingCycleCommandService, HaulingCycleCommandService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
