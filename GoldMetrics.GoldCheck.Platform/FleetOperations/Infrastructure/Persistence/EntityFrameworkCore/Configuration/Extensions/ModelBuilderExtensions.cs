@@ -38,5 +38,6 @@ public static class ModelBuilderExtensions
         });
         builder.Entity<HaulingCycle>().Property(h => h.RouteProgress).IsRequired().HasMaxLength(500);
         builder.Entity<HaulingCycle>().Property(h => h.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<HaulingCycle>().Property(h => h.PayloadTons).HasColumnName("PayloadTons");
     }
 }
