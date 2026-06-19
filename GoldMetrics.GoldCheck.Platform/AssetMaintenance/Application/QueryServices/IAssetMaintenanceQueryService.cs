@@ -8,4 +8,5 @@ public interface IAssetMaintenanceQueryService
     Task<Machinery?> Handle(GetMachineryByIdQuery query, CancellationToken cancellationToken);
     Task<IEnumerable<Machinery>> Handle(GetAllMachineryQuery query, CancellationToken cancellationToken);
     Task<IEnumerable<Machinery>> Handle(GetMachineryByStatusQuery query, CancellationToken cancellationToken);
+    Task<Machinery?> Handle(GetMaintenanceScheduleQuery query, CancellationToken cancellationToken);
 }
