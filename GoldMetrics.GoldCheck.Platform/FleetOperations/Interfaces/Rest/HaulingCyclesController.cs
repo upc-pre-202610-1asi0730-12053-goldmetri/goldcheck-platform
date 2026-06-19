@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Interfaces.Rest.Transform;
@@ -37,6 +38,21 @@ public class HaulingCyclesController(
             cycle => CreatedAtAction(nameof(GetHaulingCycleById),
                 new { cycleId = cycle.Id },
                 HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
+    }
+
+    [HttpPut("{cycleId:int}/load")]
+    [SwaggerOperation("Load Material", "Load material into a hauling cycle.", OperationId = "LoadMaterial")]
+    [SwaggerResponse(200, "Material loaded successfully.", typeof(HaulingCycleResource))]
+    [SwaggerResponse(400, "Invalid payload.")]
+    [SwaggerResponse(404, "The hauling cycle was not found.")]
+    public async Task<IActionResult> LoadMaterial(int cycleId, [FromBody] LoadMaterialResource resource, CancellationToken cancellationToken)
+    {
+        var command = new LoadMaterialCommand(cycleId, resource.PayloadTons);
+        var result = await haulingCycleCommandService.Handle(command, cancellationToken);
+
+        return FleetOperationsActionResultAssembler.ToActionResultFromHaulingCycleResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            cycle => Ok(HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
     }
 
     [HttpGet]
