@@ -2,6 +2,7 @@
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Transform;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.QueryServices;
 using Microsoft.AspNetCore.Mvc;
@@ -37,5 +38,14 @@ public class SubscriptionsController(
     {
         var result = await queryService.GetUserSubscriptionByUserIdAsync(new GetUserSubscriptionByUserIdQuery(userId), ct);
         return assembler.ToActionResult(result, this);
+    }
+    
+    [HttpGet]
+    [SwaggerOperation(Summary = "Get all user subscriptions", OperationId = "GetAllUserSubscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllUserSubscriptions(CancellationToken ct)
+    {
+        var result = await queryService.GetAllUserSubscriptionsAsync(new GetAllUserSubscriptionsQuery(), ct);
+        return assembler.ToCollectionActionResult(result, this);
     }
 }
