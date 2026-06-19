@@ -55,6 +55,20 @@ public class HaulingCyclesController(
             cycle => Ok(HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
     }
 
+    [HttpPut("{cycleId:int}/complete")]
+    [SwaggerOperation("Complete Hauling Cycle", "Complete a hauling cycle.", OperationId = "CompleteHaulingCycle")]
+    [SwaggerResponse(200, "Hauling cycle completed.", typeof(HaulingCycleResource))]
+    [SwaggerResponse(404, "The hauling cycle was not found.")]
+    public async Task<IActionResult> CompleteHaulingCycle(int cycleId, [FromBody] CompleteHaulingCycleResource resource, CancellationToken cancellationToken)
+    {
+        var command = new CompleteHaulingCycleCommand(cycleId, resource.DumpingPoint);
+        var result = await haulingCycleCommandService.Handle(command, cancellationToken);
+
+        return FleetOperationsActionResultAssembler.ToActionResultFromHaulingCycleResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            cycle => Ok(HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
+    }
+
     [HttpGet]
     [SwaggerOperation("Get All Hauling Cycles", "Get all hauling cycles.", OperationId = "GetAllHaulingCycles")]
     [SwaggerResponse(200, "The hauling cycles were found.", typeof(IEnumerable<HaulingCycleResource>))]
