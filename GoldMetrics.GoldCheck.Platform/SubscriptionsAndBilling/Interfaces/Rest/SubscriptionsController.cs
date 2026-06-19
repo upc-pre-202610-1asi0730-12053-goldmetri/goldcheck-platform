@@ -48,4 +48,15 @@ public class SubscriptionsController(
         var result = await queryService.GetAllUserSubscriptionsAsync(new GetAllUserSubscriptionsQuery(), ct);
         return assembler.ToCollectionActionResult(result, this);
     }
+    
+    [HttpPut("{userId}/confirm")]
+    [SwaggerOperation(Summary = "Confirm subscription with payment method", OperationId = "ConfirmSubscription")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ConfirmSubscription([FromRoute] string userId, [FromBody] ConfirmSubscriptionResource resource, CancellationToken ct)
+    {
+        var command = new ConfirmSubscriptionCommand(userId, resource.PaymentMethod);
+        var result = await commandService.ConfirmSubscriptionAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
