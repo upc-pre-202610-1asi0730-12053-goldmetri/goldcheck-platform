@@ -26,4 +26,12 @@ public partial class HaulingCycle
     public LoadingPoint LoadingPoint { get; private set; }
     public string RouteProgress { get; private set; }
     public string Status { get; private set; }
+    public decimal? PayloadTons { get; private set; }
+
+    public void LoadMaterial(LoadMaterialCommand command)
+    {
+        var payload = new Payload(command.PayloadTons);
+        PayloadTons = payload.Tons;
+        Status = "MaterialLoaded";
+    }
 }

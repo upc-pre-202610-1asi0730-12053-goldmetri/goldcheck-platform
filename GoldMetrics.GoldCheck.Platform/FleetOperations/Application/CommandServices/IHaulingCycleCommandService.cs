@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.FleetOperations.Application.CommandServ
 public interface IHaulingCycleCommandService
 {
     Task<Result<HaulingCycle>> Handle(StartHaulingCycleCommand command, CancellationToken cancellationToken);
+    Task<Result<HaulingCycle>> Handle(LoadMaterialCommand command, CancellationToken cancellationToken);
 }

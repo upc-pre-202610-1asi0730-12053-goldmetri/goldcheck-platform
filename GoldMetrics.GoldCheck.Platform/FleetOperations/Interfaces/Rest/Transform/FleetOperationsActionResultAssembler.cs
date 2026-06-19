@@ -15,6 +15,7 @@ public static class FleetOperationsActionResultAssembler
         FleetOperationsError.VehicleNotFound => StatusCodes.Status404NotFound,
         FleetOperationsError.HaulingCycleNotFound => StatusCodes.Status404NotFound,
         FleetOperationsError.VehicleAlreadyAssigned => StatusCodes.Status409Conflict,
+        FleetOperationsError.InvalidPayload => StatusCodes.Status400BadRequest,
         FleetOperationsError.OperationCancelled => StatusCodes.Status409Conflict,
         FleetOperationsError.DatabaseError => StatusCodes.Status500InternalServerError,
         FleetOperationsError.InternalServerError => StatusCodes.Status500InternalServerError,
