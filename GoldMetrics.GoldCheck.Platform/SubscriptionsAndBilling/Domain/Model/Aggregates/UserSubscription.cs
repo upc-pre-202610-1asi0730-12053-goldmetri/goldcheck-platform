@@ -94,4 +94,12 @@ public partial class UserSubscription
     {
         Status = "InvoiceRequested";
     }
+    
+    public Invoice? DownloadInvoice(DownloadInvoiceCommand command)
+    {
+        var invoice = Invoices.FirstOrDefault(i => i.InvoiceId.Value == command.InvoiceId);
+        invoice?.MarkDownloaded();
+        Status = "InvoiceDownloaded";
+        return invoice;
+    }
 }
