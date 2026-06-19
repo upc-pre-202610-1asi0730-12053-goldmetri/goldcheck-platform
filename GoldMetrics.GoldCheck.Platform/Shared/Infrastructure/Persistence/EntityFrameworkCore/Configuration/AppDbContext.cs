@@ -43,5 +43,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // AssetMaintenance Context
         builder.ApplyAssetMaintenanceConfiguration();
+        
+        // SubscriptionsAndBilling Context
+        builder.ApplySubscriptionsBillingConfiguration();
     }
 }

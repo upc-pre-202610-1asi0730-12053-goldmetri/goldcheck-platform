@@ -341,4 +341,38 @@
   <data name="AssetMaintenanceError.ComponentNotFound" xml:space="preserve">
      <value>No se encontró el componente en esta maquinaria.</value>
    </data>
+
+  <data name="SubscriptionsBillingError.UserSubscriptionNotFound" xml:space="preserve">
+    <value>Suscripción de usuario no encontrada.</value>
+  </data>
+    <data name="SubscriptionsBillingError.InvoiceNotFound" xml:space="preserve">
+    <value>Factura no encontrada.</value>
+  </data>
+    <data name="SubscriptionsBillingError.InvalidPlanType" xml:space="preserve">
+    <value>Tipo de plan inválido. Permitidos: Free, Basic, Professional, Enterprise.</value>
+  </data>
+    <data name="SubscriptionsBillingError.InvalidBillingCycle" xml:space="preserve">
+    <value>Ciclo de facturación inválido. Permitidos: Monthly, Annual.</value>
+  </data>
+    <data name="SubscriptionsBillingError.PaymentMethodValidationFailed" xml:space="preserve">
+    <value>La validación del método de pago falló.</value>
+  </data>
+    <data name="SubscriptionsBillingError.FeatureNotAvailableInPlan" xml:space="preserve">
+    <value>Funcionalidad no disponible en el plan actual.</value>
+  </data>
+    <data name="SubscriptionsBillingError.DowngradeNotAllowed" xml:space="preserve">
+    <value>La degradación de plan no está permitida para esta suscripción.</value>
+  </data>
+    <data name="SubscriptionsBillingError.AccessDenied" xml:space="preserve">
+    <value>Acceso a esta funcionalidad denegado.</value>
+  </data>
+    <data name="SubscriptionsBillingError.OperationCancelled" xml:space="preserve">
+    <value>La operación de suscripciones y facturación fue cancelada.</value>
+  </data>
+    <data name="SubscriptionsBillingError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de suscripciones y facturación.</value>
+  </data>
+    <data name="SubscriptionsBillingError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Suscripciones y Facturación.</value>
+  </data>
 </root>

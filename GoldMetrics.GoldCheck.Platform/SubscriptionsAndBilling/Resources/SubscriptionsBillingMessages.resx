@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <data name="PlanSelected" xml:space="preserve"><value>Plan selected successfully.</value></data>
+    <data name="SubscriptionActivated" xml:space="preserve"><value>Subscription activated successfully.</value></data>
+    <data name="UserSubscriptionNotFound" xml:space="preserve"><value>User subscription not found.</value></data>
+    <data name="InvoiceNotFound" xml:space="preserve"><value>Invoice not found.</value></data>
+    <data name="InvalidPlanType" xml:space="preserve"><value>Invalid plan type. Allowed: Free, Basic, Professional, Enterprise.</value></data>
+    <data name="InvalidBillingCycle" xml:space="preserve"><value>Invalid billing cycle. Allowed: Monthly, Annual.</value></data>
+    <data name="PaymentMethodValidationFailed" xml:space="preserve"><value>Payment method validation failed.</value></data>
+    <data name="FeatureNotAvailableInPlan" xml:space="preserve"><value>Feature not available in the current plan.</value></data>
+    <data name="DowngradeNotAllowed" xml:space="preserve"><value>Downgrade is not allowed for this subscription.</value></data>
+    <data name="AccessDenied" xml:space="preserve"><value>Access to this feature is denied.</value></data>
+    <data name="OperationCancelled" xml:space="preserve"><value>Subscriptions and billing operation was cancelled.</value></data>
+    <data name="DatabaseError" xml:space="preserve"><value>A database error occurred during the subscriptions and billing operation.</value></data>
+    <data name="InternalServerError" xml:space="preserve"><value>An unexpected internal error occurred in Subscriptions and Billing.</value></data>
+</root>

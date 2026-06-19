@@ -56,6 +56,12 @@ using GoldMetrics.GoldCheck.Platform.FleetOperations.Infrastructure.Persistence.
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Resources;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Transform;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -207,6 +213,12 @@ builder.Services.AddScoped<IHaulingCycleQueryService, HaulingCycleQueryService>(
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
 builder.Services.AddCortexMediator([typeof(Program)]);
+
+// SubscriptionsAndBilling Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<SubscriptionsBillingMessages>, StringLocalizer<SubscriptionsBillingMessages>>();
+builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionsBillingCommandService, SubscriptionsBillingCommandService>();
+builder.Services.AddScoped<SubscriptionsBillingActionResultAssembler>();
 
 var app = builder.Build();
 
