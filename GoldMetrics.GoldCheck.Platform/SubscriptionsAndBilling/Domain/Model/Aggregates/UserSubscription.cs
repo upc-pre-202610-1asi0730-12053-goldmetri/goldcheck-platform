@@ -41,4 +41,11 @@ public partial class UserSubscription
         SubscriptionStatus = new SubscriptionStatus("Restricted");
         Status = "FeaturesRestricted";
     }
+    
+    public void RequestDowngrade(RequestDowngradeCommand command)
+    {
+        RequestedDowngradePlan = command.NewPlanType;
+        SubscriptionStatus = new SubscriptionStatus("DowngradeRequested");
+        Status = "DowngradeRequested";
+    }
 }
