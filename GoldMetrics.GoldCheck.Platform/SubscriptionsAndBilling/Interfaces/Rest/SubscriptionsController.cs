@@ -125,4 +125,14 @@ public class SubscriptionsController(
         var result = await queryService.GetInvoiceByIdAsync(new GetInvoiceByIdQuery(userId, invoiceId), ct);
         return assembler.ToInvoiceActionResult(result, this);
     }
+    
+    [HttpGet("{userId}/payment-history")]
+    [SwaggerOperation(Summary = "Get payment history for user", OperationId = "GetPaymentHistoryByUser")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetPaymentHistoryByUser([FromRoute] string userId, CancellationToken ct)
+    {
+        var result = await queryService.GetPaymentHistoryByUserAsync(new GetPaymentHistoryByUserQuery(userId), ct);
+        return assembler.ToInvoiceCollectionActionResult(result, this);
+    }
 }
