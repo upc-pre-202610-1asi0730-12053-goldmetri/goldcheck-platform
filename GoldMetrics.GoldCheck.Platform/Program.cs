@@ -62,6 +62,8 @@ using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Repositories
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -219,6 +221,8 @@ builder.Services.AddSingleton<IStringLocalizer<SubscriptionsBillingMessages>, St
 builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
 builder.Services.AddScoped<ISubscriptionsBillingCommandService, SubscriptionsBillingCommandService>();
 builder.Services.AddScoped<SubscriptionsBillingActionResultAssembler>();
+builder.Services.AddScoped<ISubscriptionsBillingQueryService, SubscriptionsBillingQueryService>();
+
 
 var app = builder.Build();
 
