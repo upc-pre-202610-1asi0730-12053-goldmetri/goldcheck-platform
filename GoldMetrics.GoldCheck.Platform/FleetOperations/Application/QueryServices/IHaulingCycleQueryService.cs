@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServic
 public interface IHaulingCycleQueryService
 {
     Task<HaulingCycle?> Handle(GetHaulingCycleByIdQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<HaulingCycle>> Handle(GetAllHaulingCyclesQuery query, CancellationToken cancellationToken);
 }
