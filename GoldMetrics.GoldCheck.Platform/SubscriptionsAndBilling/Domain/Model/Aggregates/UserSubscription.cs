@@ -89,4 +89,9 @@ public partial class UserSubscription
         Status = "InvoiceGenerated";
         return invoice;
     }
+    
+    public void RequestInvoice(RequestInvoiceCommand command)
+    {
+        Status = "InvoiceRequested";
+    }
 }
