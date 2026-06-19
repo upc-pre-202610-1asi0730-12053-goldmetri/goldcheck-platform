@@ -22,5 +22,21 @@ public static class ModelBuilderExtensions
         });
         builder.Entity<Vehicle>().Property(v => v.IsEngineOn).IsRequired();
         builder.Entity<Vehicle>().Property(v => v.Status).IsRequired().HasMaxLength(50);
+
+        // HaulingCycle
+        builder.Entity<HaulingCycle>().HasKey(h => h.Id);
+        builder.Entity<HaulingCycle>().Property(h => h.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<HaulingCycle>().OwnsOne(h => h.VehicleId, vid =>
+        {
+            vid.WithOwner().HasForeignKey("Id");
+            vid.Property(v => v.Value).HasColumnName("VehicleId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<HaulingCycle>().OwnsOne(h => h.LoadingPoint, lp =>
+        {
+            lp.WithOwner().HasForeignKey("Id");
+            lp.Property(l => l.Name).HasColumnName("LoadingPointName").IsRequired().HasMaxLength(200);
+        });
+        builder.Entity<HaulingCycle>().Property(h => h.RouteProgress).IsRequired().HasMaxLength(500);
+        builder.Entity<HaulingCycle>().Property(h => h.Status).IsRequired().HasMaxLength(50);
     }
 }
