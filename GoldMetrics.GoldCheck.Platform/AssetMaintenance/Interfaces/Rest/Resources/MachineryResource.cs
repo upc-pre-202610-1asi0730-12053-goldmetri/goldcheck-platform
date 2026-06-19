@@ -9,4 +9,6 @@ public record MachineryResource(
     string MaintenanceStatus,
     decimal? MaintenanceScheduledAtHours,
     string? DischargeReason,
+    string? DischargedComponentId,
+    string? ComponentDischargeReason,
     string Status);
