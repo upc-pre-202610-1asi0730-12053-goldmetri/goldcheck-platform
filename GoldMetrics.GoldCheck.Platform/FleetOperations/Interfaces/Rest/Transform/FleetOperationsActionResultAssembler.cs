@@ -13,6 +13,7 @@ public static class FleetOperationsActionResultAssembler
     private static int ToStatusCode(FleetOperationsError error) => error switch
     {
         FleetOperationsError.VehicleNotFound => StatusCodes.Status404NotFound,
+        FleetOperationsError.HaulingCycleNotFound => StatusCodes.Status404NotFound,
         FleetOperationsError.VehicleAlreadyAssigned => StatusCodes.Status409Conflict,
         FleetOperationsError.OperationCancelled => StatusCodes.Status409Conflict,
         FleetOperationsError.DatabaseError => StatusCodes.Status500InternalServerError,
@@ -46,5 +47,33 @@ public static class FleetOperationsActionResultAssembler
                 FleetOperationsError.VehicleNotFound,
                 localizer[nameof(FleetOperationsError.VehicleNotFound)]);
         return onSuccess(vehicle);
+    }
+
+    public static IActionResult ToActionResultFromHaulingCycleResult(
+        ControllerBase controller,
+        Result<HaulingCycle> result,
+        IStringLocalizer<ErrorMessages> localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<HaulingCycle, IActionResult> onSuccess)
+    {
+        if (result.IsSuccess) return onSuccess(result.Value!);
+        var statusCode = ToStatusCode((FleetOperationsError)result.Error!);
+        return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);
+    }
+
+    public static IActionResult ToActionResultFromGetHaulingCycleResult(
+        ControllerBase controller,
+        HaulingCycle? cycle,
+        IStringLocalizer<ErrorMessages> localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<HaulingCycle, IActionResult> onSuccess)
+    {
+        if (cycle is null)
+            return problemDetailsFactory.CreateProblemDetails(
+                controller,
+                ToStatusCode(FleetOperationsError.HaulingCycleNotFound),
+                FleetOperationsError.HaulingCycleNotFound,
+                localizer[nameof(FleetOperationsError.HaulingCycleNotFound)]);
+        return onSuccess(cycle);
     }
 }
