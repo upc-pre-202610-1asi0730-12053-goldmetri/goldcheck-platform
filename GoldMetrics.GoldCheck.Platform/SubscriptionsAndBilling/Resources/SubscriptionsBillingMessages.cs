@@ -1,0 +1,2 @@
+﻿namespace GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources;
+public class SubscriptionsBillingMessages;
