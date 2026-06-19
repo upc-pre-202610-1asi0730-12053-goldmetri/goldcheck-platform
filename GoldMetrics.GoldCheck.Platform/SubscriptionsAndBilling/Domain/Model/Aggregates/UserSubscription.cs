@@ -102,4 +102,9 @@ public partial class UserSubscription
         Status = "InvoiceDownloaded";
         return invoice;
     }
+    
+    public void CheckUserPlan(CheckUserPlanCommand command)
+    {
+        Status = "UserPlanDefined";
+    }
 }
