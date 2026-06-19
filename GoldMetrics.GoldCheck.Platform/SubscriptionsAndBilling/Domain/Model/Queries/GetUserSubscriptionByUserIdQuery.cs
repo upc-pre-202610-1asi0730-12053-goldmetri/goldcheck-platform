@@ -1,0 +1,2 @@
+﻿namespace GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Model.Queries;
+public record GetUserSubscriptionByUserIdQuery(string UserId);
