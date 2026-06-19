@@ -115,4 +115,14 @@ public class SubscriptionsController(
         var result = await commandService.DownloadInvoiceAsync(command, ct);
         return assembler.ToInvoiceActionResult(result, this);
     }
+    
+    [HttpGet("{userId}/invoices/{invoiceId}")]
+    [SwaggerOperation(Summary = "Get invoice by ID", OperationId = "GetInvoiceById")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetInvoiceById([FromRoute] string userId, [FromRoute] string invoiceId, CancellationToken ct)
+    {
+        var result = await queryService.GetInvoiceByIdAsync(new GetInvoiceByIdQuery(userId, invoiceId), ct);
+        return assembler.ToInvoiceActionResult(result, this);
+    }
 }
