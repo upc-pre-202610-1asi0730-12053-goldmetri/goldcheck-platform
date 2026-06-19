@@ -1,5 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -16,6 +18,7 @@ namespace GoldMetrics.GoldCheck.Platform.FleetOperations.Interfaces.Rest;
 [SwaggerTag("Available Hauling Cycle Endpoints.")]
 public class HaulingCyclesController(
     IHaulingCycleCommandService haulingCycleCommandService,
+    IHaulingCycleQueryService haulingCycleQueryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -31,6 +34,22 @@ public class HaulingCyclesController(
 
         return FleetOperationsActionResultAssembler.ToActionResultFromHaulingCycleResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            cycle => Created(string.Empty, HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
+            cycle => CreatedAtAction(nameof(GetHaulingCycleById),
+                new { cycleId = cycle.Id },
+                HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(cycle)));
+    }
+
+    [HttpGet("{cycleId:int}")]
+    [SwaggerOperation("Get Hauling Cycle by Id", "Get a hauling cycle by its identifier.", OperationId = "GetHaulingCycleById")]
+    [SwaggerResponse(200, "The hauling cycle was found.", typeof(HaulingCycleResource))]
+    [SwaggerResponse(404, "The hauling cycle was not found.")]
+    public async Task<IActionResult> GetHaulingCycleById(int cycleId, CancellationToken cancellationToken)
+    {
+        var query = new GetHaulingCycleByIdQuery(cycleId);
+        var cycle = await haulingCycleQueryService.Handle(query, cancellationToken);
+
+        return FleetOperationsActionResultAssembler.ToActionResultFromGetHaulingCycleResult(
+            this, cycle, errorLocalizer, problemDetailsFactory,
+            c => Ok(HaulingCycleResourceFromEntityAssembler.ToResourceFromEntity(c)));
     }
 }
