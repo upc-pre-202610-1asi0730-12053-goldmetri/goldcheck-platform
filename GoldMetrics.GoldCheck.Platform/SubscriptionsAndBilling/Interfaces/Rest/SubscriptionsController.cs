@@ -2,16 +2,19 @@
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Transform;
+
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest;
+
 
 [ApiController]
 [Route("api/v1/subscriptions")]
 [Produces("application/json")]
 public class SubscriptionsController(
     ISubscriptionsBillingCommandService commandService,
+    ISubscriptionsBillingQueryService queryService,
     SubscriptionsBillingActionResultAssembler assembler) : ControllerBase
 {
     [HttpPost]
@@ -23,5 +26,15 @@ public class SubscriptionsController(
         var command = new SelectPlanCommand(resource.UserId, resource.PlanType, resource.BillingCycle);
         var result = await commandService.SelectPlanAsync(command, ct);
         return assembler.ToCreatedActionResult(result, this);
+    }
+    
+    [HttpGet("{userId}", Name = "GetUserSubscriptionByUserId")]
+    [SwaggerOperation(Summary = "Get subscription by user ID", OperationId = "GetUserSubscriptionByUserId")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserSubscriptionByUserId([FromRoute] string userId, CancellationToken ct)
+    {
+        var result = await queryService.GetUserSubscriptionByUserIdAsync(new GetUserSubscriptionByUserIdQuery(userId), ct);
+        return assembler.ToActionResult(result, this);
     }
 }
