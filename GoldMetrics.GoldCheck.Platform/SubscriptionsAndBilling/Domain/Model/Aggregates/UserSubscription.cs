@@ -29,4 +29,10 @@ public partial class UserSubscription
         Invoices = [];
         Status = "PlanSelected";
     }
+    
+    public void ConfirmSubscription(ConfirmSubscriptionCommand command)
+    {
+        SubscriptionStatus = new SubscriptionStatus("Active");
+        Status = "SubscriptionActivated";
+    }
 }
