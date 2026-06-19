@@ -5,6 +5,7 @@ public enum FleetOperationsError
     None,
     VehicleNotFound,
     VehicleAlreadyAssigned,
+    HaulingCycleNotFound,
     OperationCancelled,
     DatabaseError,
     InternalServerError
