@@ -11,4 +11,9 @@ public class MachineryRepository(AppDbContext context) : BaseRepository<Machiner
     public async Task<Machinery?> FindByMachineryIdAsync(string machineryId, CancellationToken cancellationToken = default)
         => await Context.Set<Machinery>()
             .FirstOrDefaultAsync(m => m.MachineryId.Value == machineryId, cancellationToken);
+    
+    public async Task<IEnumerable<Machinery>> FindByStatusAsync(string status, CancellationToken cancellationToken = default)
+        => await Context.Set<Machinery>()
+            .Where(m => m.MaintenanceStatus.Value == status)
+            .ToListAsync(cancellationToken);
 }
