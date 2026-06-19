@@ -166,4 +166,15 @@ public class SubscriptionsController(
         var result = await queryService.GetPlanFeaturesAsync(new GetPlanFeaturesQuery(planType), ct);
         return assembler.ToFeaturesActionResult(result, this);
     }
+    
+    [HttpPost("{userId}/access-request")]
+    [SwaggerOperation(Summary = "Request access to a feature", OperationId = "RequestAccess")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RequestAccess([FromRoute] string userId, [FromBody] RequestAccessResource resource, CancellationToken ct)
+    {
+        var command = new RequestAccessCommand(userId, resource.FeatureName);
+        var result = await commandService.RequestAccessAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
