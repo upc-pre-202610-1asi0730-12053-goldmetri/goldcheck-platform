@@ -5,6 +5,7 @@ using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Model.Querie
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources;
 using GoldMetrics.GoldCheck.Platform.Shared.Application.Model;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Model.Entities;
 using Microsoft.Extensions.Localization;
 
 namespace GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.QueryServices;
@@ -24,5 +25,16 @@ public class SubscriptionsBillingQueryService(
     {
         var list = await repository.ListAsync(ct);
         return Result<IEnumerable<UserSubscription>>.Success(list);
+    }
+    
+    public async Task<Result<Invoice>> GetInvoiceByIdAsync(GetInvoiceByIdQuery query, CancellationToken ct = default)
+    {
+        var subscription = await repository.FindByUserIdAsync(query.UserId, ct);
+        if (subscription is null)
+            return Result<Invoice>.Failure(SubscriptionsBillingError.UserSubscriptionNotFound, localizer[nameof(SubscriptionsBillingError.UserSubscriptionNotFound)]);
+        var invoice = subscription.Invoices.FirstOrDefault(i => i.InvoiceId.Value == query.InvoiceId);
+        return invoice is null
+            ? Result<Invoice>.Failure(SubscriptionsBillingError.InvoiceNotFound, localizer[nameof(SubscriptionsBillingError.InvoiceNotFound)])
+            : Result<Invoice>.Success(invoice);
     }
 }
