@@ -93,4 +93,15 @@ public class SubscriptionsController(
         var result = await commandService.CheckFeatureAccessAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpPost("{userId}/invoices")]
+    [SwaggerOperation(Summary = "Request an invoice", OperationId = "RequestInvoice")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RequestInvoice([FromRoute] string userId, CancellationToken ct)
+    {
+        var command = new RequestInvoiceCommand(userId);
+        var result = await commandService.RequestInvoiceAsync(command, ct);
+        return assembler.ToActionResult(result, this);
+    }
 }
