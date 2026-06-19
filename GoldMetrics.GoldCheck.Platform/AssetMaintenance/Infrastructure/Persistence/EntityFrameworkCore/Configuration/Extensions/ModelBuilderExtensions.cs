@@ -29,5 +29,7 @@ public static class ModelBuilderExtensions
         builder.Entity<Machinery>().Property(m => m.Status).IsRequired().HasMaxLength(50);
         builder.Entity<Machinery>().Property(m => m.MaintenanceScheduledAtHours).HasColumnName("MaintenanceScheduledAtHours");
         builder.Entity<Machinery>().Property(m => m.DischargeReason).HasMaxLength(500);
+        builder.Entity<Machinery>().Property(m => m.DischargedComponentId).HasMaxLength(100);
+        builder.Entity<Machinery>().Property(m => m.ComponentDischargeReason).HasMaxLength(500);
     }
 }
