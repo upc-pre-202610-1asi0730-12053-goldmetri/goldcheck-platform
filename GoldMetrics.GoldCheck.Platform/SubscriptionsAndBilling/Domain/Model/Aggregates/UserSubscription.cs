@@ -71,4 +71,10 @@ public partial class UserSubscription
         Status = "FeatureAccessChecked";
         return hasAccess;
     }
+    
+    public void ViewPaymentHistory(ViewPaymentHistoryCommand command)
+    {
+        Status = "PaymentHistoryLoaded";
+    }
+    
 }
