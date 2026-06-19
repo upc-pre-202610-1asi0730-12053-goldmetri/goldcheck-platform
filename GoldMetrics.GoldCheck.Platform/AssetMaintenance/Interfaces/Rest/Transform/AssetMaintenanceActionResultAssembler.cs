@@ -13,11 +13,12 @@ public static class AssetMaintenanceActionResultAssembler
     private static int ToStatusCode(AssetMaintenanceError error) => error switch
     {
         AssetMaintenanceError.MachineryNotFound => StatusCodes.Status404NotFound,
-        AssetMaintenanceError.OperationCancelled => StatusCodes.Status409Conflict,
-        AssetMaintenanceError.DatabaseError => StatusCodes.Status500InternalServerError,
+        AssetMaintenanceError.ComponentNotFound => StatusCodes.Status404NotFound,
+        AssetMaintenanceError.MachineryAlreadyDischarged => StatusCodes.Status409Conflict,
         AssetMaintenanceError.InvalidEngineHours => StatusCodes.Status400BadRequest,
         AssetMaintenanceError.MaintenanceAlreadyScheduled => StatusCodes.Status409Conflict,
-        AssetMaintenanceError.MachineryAlreadyDischarged => StatusCodes.Status409Conflict,
+        AssetMaintenanceError.OperationCancelled => StatusCodes.Status409Conflict,
+        AssetMaintenanceError.DatabaseError => StatusCodes.Status500InternalServerError,
         AssetMaintenanceError.InternalServerError => StatusCodes.Status500InternalServerError,
         _ => StatusCodes.Status400BadRequest
     };
