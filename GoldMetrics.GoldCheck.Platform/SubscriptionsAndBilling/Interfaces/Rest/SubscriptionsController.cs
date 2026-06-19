@@ -104,4 +104,15 @@ public class SubscriptionsController(
         var result = await commandService.RequestInvoiceAsync(command, ct);
         return assembler.ToActionResult(result, this);
     }
+    
+    [HttpGet("{userId}/invoices/{invoiceId}/download")]
+    [SwaggerOperation(Summary = "Download an invoice", OperationId = "DownloadInvoice")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DownloadInvoice([FromRoute] string userId, [FromRoute] string invoiceId, CancellationToken ct)
+    {
+        var command = new DownloadInvoiceCommand(userId, invoiceId);
+        var result = await commandService.DownloadInvoiceAsync(command, ct);
+        return assembler.ToInvoiceActionResult(result, this);
+    }
 }
