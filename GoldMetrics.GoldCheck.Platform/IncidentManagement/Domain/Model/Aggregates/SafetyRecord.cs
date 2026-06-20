@@ -28,6 +28,8 @@ public partial class SafetyRecord
     public OperatorId OperatorId { get; private set; }
     public AssetId AssetId { get; private set; }
     public RiskLevel RiskLevel { get; private set; }
+    public string? Description { get; private set; }
+
     public string Status { get; private set; }
     
     public void EscalateRiskLevel(EscalateRiskLevelCommand command)
