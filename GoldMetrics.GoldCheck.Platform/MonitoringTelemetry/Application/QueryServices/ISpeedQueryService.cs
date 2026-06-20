@@ -6,4 +6,6 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QuerySe
 public interface ISpeedQueryService
 {
     Task<IEnumerable<SpeedReading>> Handle(GetSpeedReadingByAssetQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<SpeedReading>> Handle(GetSpeedViolationsByAssetQuery query, CancellationToken cancellationToken = default);
+
 }
