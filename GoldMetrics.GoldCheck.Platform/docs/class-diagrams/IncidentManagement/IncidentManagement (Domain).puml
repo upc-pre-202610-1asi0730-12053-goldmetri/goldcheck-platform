@@ -1,0 +1,153 @@
+@startuml
+title GoldMetrics — IncidentManagement (Domain)
+
+package "GoldMetrics" {
+  package "IncidentManagement" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class SafetyRecord {
+          +Id: int
+          +IncidentType: IncidentType
+          +OperatorId: OperatorId
+          +AssetId: AssetId
+          +RiskLevel: RiskLevel
+          +Description: string?
+          +Status: string
+          +SafetyRecord(command: DetectDriverFatigueCommand)
+          +SafetyRecord(command: DetectSmokeCommand)
+          +SafetyRecord(command: CommitAccidentCommand)
+          +EscalateRiskLevel(command: EscalateRiskLevelCommand): void
+          +EvaluateSafetyRisk(command: EvaluateSafetyRiskCommand): void
+          +SendRiskLevelAlert(command: SendRiskLevelAlertCommand): void
+          +TriggerSmokeAlert(command: TriggerSmokeAlertCommand): void
+          +CommitSmokeAlert(command: CommitSmokeAlertCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class IncidentType <<record>> {
+          +Value: string
+        }
+        class OperatorId <<record>> {
+          +Value: string
+        }
+        class AssetId <<record>> {
+          +Value: string
+        }
+        class RiskLevel <<record>> {
+          +Value: string
+        }
+        class IncidentId <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Commands" {
+        class DetectDriverFatigueCommand <<record>> {
+          +OperatorId: string
+          +AssetId: string
+        }
+        class DetectSmokeCommand <<record>> {
+          +AssetId: string
+        }
+        class CommitAccidentCommand <<record>> {
+          +OperatorId: string
+          +Description: string
+        }
+        class EscalateRiskLevelCommand <<record>> {
+          +IncidentId: int
+          +NewRiskLevel: string
+        }
+        class EvaluateSafetyRiskCommand <<record>> {
+          +IncidentId: int
+        }
+        class SendRiskLevelAlertCommand <<record>> {
+          +IncidentId: int
+        }
+        class TriggerSmokeAlertCommand <<record>> {
+          +IncidentId: int
+        }
+        class CommitSmokeAlertCommand <<record>> {
+          +IncidentId: int
+        }
+      }
+
+      package "Queries" {
+        class GetIncidentByIdQuery <<record>> {
+          +IncidentId: int
+        }
+        class GetAllIncidentsQuery <<record>> {
+        }
+        class GetIncidentsByTypeQuery <<record>> {
+          +IncidentType: string
+        }
+        class GetIncidentsByRiskLevelQuery <<record>> {
+          +RiskLevel: string
+        }
+      }
+
+      package "Events" {
+        class FatigueEventTriggeredEvent <<record>> {
+          +IncidentId: int
+          +OperatorId: string
+        }
+        class SmokeDetectedEvent <<record>> {
+          +IncidentId: int
+          +AssetId: string
+        }
+        class AccidentCommittedEvent <<record>> {
+          +IncidentId: int
+          +OperatorId: string
+        }
+        class RiskLevelEscalatedEvent <<record>> {
+          +IncidentId: int
+          +NewRiskLevel: string
+        }
+        class RiskLevelUpdatedEvent <<record>> {
+          +IncidentId: int
+        }
+        class RiskLevelAlertCommittedEvent <<record>> {
+          +IncidentId: int
+        }
+        class SmokeAlertCommittedEvent <<record>> {
+          +IncidentId: int
+        }
+      }
+
+      package "Repositories" {
+        interface ISafetyRecordRepository {
+          +FindByIncidentTypeAsync(incidentType: string): IEnumerable<SafetyRecord>
+          +FindByRiskLevelAsync(riskLevel: string): IEnumerable<SafetyRecord>
+        }
+      }
+
+      package "Errors" {
+        enum IncidentManagementError {
+          None
+          IncidentNotFound
+          InvalidRiskLevel
+          InvalidIncidentType
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      SafetyRecord *-- IncidentType
+      SafetyRecord *-- OperatorId
+      SafetyRecord *-- AssetId
+      SafetyRecord *-- RiskLevel
+      SafetyRecord ..> DetectDriverFatigueCommand : uses
+      SafetyRecord ..> DetectSmokeCommand : uses
+      SafetyRecord ..> CommitAccidentCommand : uses
+      SafetyRecord ..> EscalateRiskLevelCommand : uses
+      SafetyRecord ..> FatigueEventTriggeredEvent : fires
+      SafetyRecord ..> SmokeDetectedEvent : fires
+      SafetyRecord ..> AccidentCommittedEvent : fires
+      SafetyRecord ..> RiskLevelEscalatedEvent : fires
+      SafetyRecord ..> IncidentManagementError : uses
+    }
+  }
+}
+@enduml

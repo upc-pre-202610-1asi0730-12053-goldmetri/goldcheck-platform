@@ -1,0 +1,118 @@
+@startuml
+title GoldMetrics — Iam (Domain)
+
+package "GoldMetrics" {
+  package "Iam" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class User {
+          +Id: int
+          +Username: Username
+          +HashedPassword: HashedPassword
+          +Email: Email
+          +Role: UserRole
+          +Status: string
+          +User(command: RegisterUserCommand)
+          +UpdateProfile(command: UpdateProfileCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class Username <<record>> {
+          +Value: string
+        }
+        class HashedPassword <<record>> {
+          +Value: string
+        }
+        class Email <<record>> {
+          +Value: string
+        }
+        class UserRole <<record>> {
+          +Value: string
+        }
+        class Token <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Commands" {
+        class RegisterUserCommand <<record>> {
+          +Username: string
+          +Password: string
+          +Email: string
+          +Role: string
+        }
+        class AuthenticateUserCommand <<record>> {
+          +Username: string
+          +Password: string
+        }
+        class UpdateProfileCommand <<record>> {
+          +UserId: int
+          +Username: string
+          +Email: string
+        }
+      }
+
+      package "Queries" {
+        class GetUserByIdQuery <<record>> {
+          +Id: int
+        }
+        class GetUserByUsernameQuery <<record>> {
+          +Username: string
+        }
+        class GetAllUsersQuery <<record>> {
+        }
+      }
+
+      package "Events" {
+        class UserRegisteredEvent <<record>> {
+          +UserId: int
+          +Username: string
+        }
+        class UserLoggedInEvent <<record>> {
+          +UserId: int
+        }
+        class ProfileUpdatedEvent <<record>> {
+          +UserId: int
+        }
+      }
+
+      package "Repositories" {
+        interface IUserRepository {
+          +FindByIdAsync(id: int): User?
+          +FindByUsernameAsync(username: string): User?
+          +FindByEmailAsync(email: string): User?
+          +FindAllAsync(): IEnumerable<User>
+          +AddAsync(user: User): void
+          +Update(user: User): void
+        }
+      }
+
+      package "Errors" {
+        enum IamError {
+          None
+          UserNotFound
+          InvalidCredentials
+          UsernameAlreadyExists
+          EmailAlreadyExists
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      User *-- Username
+      User *-- HashedPassword
+      User *-- Email
+      User *-- UserRole
+      User ..> RegisterUserCommand : uses
+      User ..> UpdateProfileCommand : uses
+      User ..> UserRegisteredEvent : fires
+      User ..> UserLoggedInEvent : fires
+      User ..> ProfileUpdatedEvent : fires
+      User ..> IamError : uses
+    }
+  }
+}
+@enduml

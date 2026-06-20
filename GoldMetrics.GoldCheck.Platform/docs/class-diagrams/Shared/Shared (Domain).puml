@@ -1,0 +1,59 @@
+@startuml
+title GoldMetrics — Shared (Domain)
+
+package "GoldMetrics" {
+  package "Shared" {
+    package "Domain" {
+
+      package "Model" {
+        class Error <<record>> {
+          +Code: string
+          +Message: string
+          +{static} None: Error
+          +{static} NullValue: Error
+        }
+
+        package "Entities" {
+          interface IAuditableEntity {
+            +CreatedAt: DateTimeOffset?
+            +UpdatedAt: DateTimeOffset?
+          }
+        }
+
+        package "Events" {
+          interface IEvent {
+          }
+        }
+      }
+
+      package "Repositories" {
+        interface IBaseRepository<TEntity> {
+          +AddAsync(entity: TEntity): void
+          +FindByIdAsync(id: int): TEntity?
+          +Update(entity: TEntity): void
+          +Remove(entity: TEntity): void
+          +ListAsync(): IEnumerable<TEntity>
+        }
+
+        interface IUnitOfWork {
+          +CompleteAsync(): int
+        }
+      }
+
+      package "Application.Model" {
+        class Result<T> {
+          +IsSuccess: bool
+          +IsFailure: bool
+          +Value: T?
+          +Message: string
+          +Error: Enum?
+          +{static} Success(value: T): Result<T>
+          +{static} Failure(error: Enum, message: string): Result<T>
+        }
+      }
+
+      IBaseRepository ..> IAuditableEntity : constrains
+    }
+  }
+}
+@enduml

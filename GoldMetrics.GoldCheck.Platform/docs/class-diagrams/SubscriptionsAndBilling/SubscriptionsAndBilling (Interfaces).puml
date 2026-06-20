@@ -1,0 +1,103 @@
+@startuml
+title GoldMetrics — SubscriptionsAndBilling (Interfaces)
+
+package "GoldMetrics" {
+  package "SubscriptionsAndBilling" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class SubscriptionsController {
+          -commandService: ISubscriptionsBillingCommandService
+          -queryService: ISubscriptionsBillingQueryService
+          -assembler: SubscriptionsBillingActionResultAssembler
+          +SelectPlan(resource: SelectPlanResource): IActionResult
+          +ConfirmSubscription(userId: string, resource: ConfirmSubscriptionResource): IActionResult
+          +RequestDowngrade(userId: string, resource: RequestDowngradeResource): IActionResult
+          +ExecuteDowngrade(userId: string): IActionResult
+          +GetUserSubscriptionByUserId(userId: string): IActionResult
+          +GetAllUserSubscriptions(): IActionResult
+          +CheckFeatureAccess(userId: string, resource: CheckFeatureAccessResource): IActionResult
+          +RequestAccess(userId: string, resource: RequestAccessResource): IActionResult
+          +GetPaymentHistoryByUser(userId: string): IActionResult
+          +RequestInvoice(userId: string): IActionResult
+          +GetInvoiceById(userId: string, invoiceId: string): IActionResult
+          +DownloadInvoice(userId: string, invoiceId: string): IActionResult
+          +CheckUserPlan(resource: CheckUserPlanResource): IActionResult
+          +AssignFeatures(planType: string, resource: AssignFeaturesResource): IActionResult
+          +GetPlanFeatures(planType: string): IActionResult
+        }
+
+        package "Resources" {
+          class SelectPlanResource <<record>> {
+            +UserId: string
+            +PlanType: string
+            +BillingCycle: string
+          }
+          class ConfirmSubscriptionResource <<record>> {
+            +PaymentMethod: string
+          }
+          class RequestDowngradeResource <<record>> {
+            +NewPlanType: string
+          }
+          class CheckFeatureAccessResource <<record>> {
+            +FeatureName: string
+          }
+          class RequestAccessResource <<record>> {
+            +FeatureName: string
+          }
+          class CheckUserPlanResource <<record>> {
+            +UserId: string
+            +AdministratorId: string
+          }
+          class AssignFeaturesResource <<record>> {
+            +UserId: string
+            +Features: IEnumerable<string>
+          }
+          class UserSubscriptionResponse <<record>> {
+            +Id: int
+            +UserId: string
+            +PlanType: string
+            +BillingCycle: string
+            +SubscriptionStatus: string
+            +AssignedFeatures: List<string>
+            +AccessGranted: bool
+            +Status: string
+          }
+          class InvoiceResponse <<record>> {
+            +InvoiceId: string
+            +Amount: decimal
+            +IsDownloaded: bool
+          }
+        }
+
+        package "Transform" {
+          class UserSubscriptionResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: UserSubscription): UserSubscriptionResponse
+          }
+          class SubscriptionsBillingActionResultAssembler {
+            +ToCreatedActionResult(result: Result<UserSubscription>, ...): IActionResult
+            +ToActionResult(result: Result<UserSubscription>, ...): IActionResult
+            +ToInvoiceActionResult(result: Result<Invoice>, ...): IActionResult
+            +ToInvoiceCollectionActionResult(result: IEnumerable<Invoice>, ...): IActionResult
+            +ToCollectionActionResult(result: IEnumerable<UserSubscription>, ...): IActionResult
+            +ToFeaturesActionResult(result: IEnumerable<string>, ...): IActionResult
+          }
+        }
+
+        SubscriptionsController ..> UserSubscriptionResourceFromEntityAssembler : uses
+        SubscriptionsController ..> SubscriptionsBillingActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface ISubscriptionsBillingCommandService
+      interface ISubscriptionsBillingQueryService
+    }
+  }
+}
+
+SubscriptionsController ..> ISubscriptionsBillingCommandService : uses
+SubscriptionsController ..> ISubscriptionsBillingQueryService : uses
+
+@enduml

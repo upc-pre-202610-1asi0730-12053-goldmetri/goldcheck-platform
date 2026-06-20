@@ -1,0 +1,57 @@
+@startuml
+title GoldMetrics — Iam (Application)
+
+package "GoldMetrics" {
+  package "Iam" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IIamCommandService {
+          +RegisterUserAsync(command: RegisterUserCommand): Result<User>
+          +AuthenticateUserAsync(command: AuthenticateUserCommand): Result<string>
+          +UpdateProfileAsync(command: UpdateProfileCommand): Result<User>
+        }
+      }
+
+      package "QueryServices" {
+        interface IIamQueryService {
+          +Handle(query: GetUserByIdQuery): User?
+          +Handle(query: GetUserByUsernameQuery): User?
+          +Handle(query: GetAllUsersQuery): IEnumerable<User>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class IamCommandService {
+          -userRepository: IUserRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +RegisterUserAsync(command: RegisterUserCommand): Result<User>
+          +AuthenticateUserAsync(command: AuthenticateUserCommand): Result<string>
+          +UpdateProfileAsync(command: UpdateProfileCommand): Result<User>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class IamQueryService {
+          -userRepository: IUserRepository
+          +Handle(query: GetUserByIdQuery): User?
+          +Handle(query: GetUserByUsernameQuery): User?
+          +Handle(query: GetAllUsersQuery): IEnumerable<User>
+        }
+      }
+
+      IamCommandService ..|> IIamCommandService
+      IamQueryService ..|> IIamQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IUserRepository
+    }
+  }
+}
+
+IamCommandService ..> IUserRepository : uses
+IamQueryService ..> IUserRepository : uses
+
+@enduml

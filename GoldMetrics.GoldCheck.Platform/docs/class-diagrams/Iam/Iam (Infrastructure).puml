@@ -1,0 +1,36 @@
+@startuml
+title GoldMetrics — Iam (Infrastructure)
+
+package "GoldMetrics" {
+  package "Iam" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class UserRepository {
+          -context: AppDbContext
+          +FindByIdAsync(id: int): User?
+          +FindByUsernameAsync(username: string): User?
+          +FindByEmailAsync(email: string): User?
+          +FindAllAsync(): IEnumerable<User>
+          +AddAsync(user: User): void
+          +Update(user: User): void
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyIAMConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IUserRepository
+    }
+  }
+}
+
+UserRepository ..|> IUserRepository
+
+@enduml

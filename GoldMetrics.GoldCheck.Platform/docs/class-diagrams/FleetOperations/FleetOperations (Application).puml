@@ -1,0 +1,84 @@
+@startuml
+title GoldMetrics — FleetOperations (Application)
+
+package "GoldMetrics" {
+  package "FleetOperations" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IVehicleCommandService {
+          +Handle(command: AssignVehicleCommand): Result<Vehicle>
+          +Handle(command: StartEngineCommand): Result<Vehicle>
+        }
+        interface IHaulingCycleCommandService {
+          +Handle(command: StartHaulingCycleCommand): Result<HaulingCycle>
+          +Handle(command: LoadMaterialCommand): Result<HaulingCycle>
+          +Handle(command: CompleteHaulingCycleCommand): Result<HaulingCycle>
+          +Handle(command: UpdateRouteProgressCommand): Result<HaulingCycle>
+        }
+      }
+
+      package "QueryServices" {
+        interface IVehicleQueryService {
+          +Handle(query: GetVehicleByIdQuery): Vehicle?
+          +Handle(query: GetAllVehiclesQuery): IEnumerable<Vehicle>
+        }
+        interface IHaulingCycleQueryService {
+          +Handle(query: GetHaulingCycleByIdQuery): HaulingCycle?
+          +Handle(query: GetAllHaulingCyclesQuery): IEnumerable<HaulingCycle>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class VehicleCommandService {
+          -vehicleRepository: IVehicleRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: AssignVehicleCommand): Result<Vehicle>
+          +Handle(command: StartEngineCommand): Result<Vehicle>
+        }
+        class HaulingCycleCommandService {
+          -haulingCycleRepository: IHaulingCycleRepository
+          -vehicleRepository: IVehicleRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: StartHaulingCycleCommand): Result<HaulingCycle>
+          +Handle(command: LoadMaterialCommand): Result<HaulingCycle>
+          +Handle(command: CompleteHaulingCycleCommand): Result<HaulingCycle>
+          +Handle(command: UpdateRouteProgressCommand): Result<HaulingCycle>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class VehicleQueryService {
+          -vehicleRepository: IVehicleRepository
+          +Handle(query: GetVehicleByIdQuery): Vehicle?
+          +Handle(query: GetAllVehiclesQuery): IEnumerable<Vehicle>
+        }
+        class HaulingCycleQueryService {
+          -haulingCycleRepository: IHaulingCycleRepository
+          +Handle(query: GetHaulingCycleByIdQuery): HaulingCycle?
+          +Handle(query: GetAllHaulingCyclesQuery): IEnumerable<HaulingCycle>
+        }
+      }
+
+      VehicleCommandService ..|> IVehicleCommandService
+      HaulingCycleCommandService ..|> IHaulingCycleCommandService
+      VehicleQueryService ..|> IVehicleQueryService
+      HaulingCycleQueryService ..|> IHaulingCycleQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IVehicleRepository
+      interface IHaulingCycleRepository
+    }
+  }
+}
+
+VehicleCommandService ..> IVehicleRepository : uses
+HaulingCycleCommandService ..> IHaulingCycleRepository : uses
+HaulingCycleCommandService ..> IVehicleRepository : uses
+VehicleQueryService ..> IVehicleRepository : uses
+HaulingCycleQueryService ..> IHaulingCycleRepository : uses
+
+@enduml

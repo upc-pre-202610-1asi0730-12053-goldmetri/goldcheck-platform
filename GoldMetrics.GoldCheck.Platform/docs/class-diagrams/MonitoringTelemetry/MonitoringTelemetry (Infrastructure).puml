@@ -1,0 +1,66 @@
+@startuml
+title GoldMetrics — MonitoringTelemetry (Infrastructure)
+
+package "GoldMetrics" {
+  package "MonitoringTelemetry" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class TelemetryDataRepository {
+          -context: AppDbContext
+          +FindByAssetIdAsync(assetId: string): TelemetryData?
+        }
+        class GNSSStatusRepository {
+          -context: AppDbContext
+          +FindByAssetIdAsync(assetId: string): GNSSStatus?
+        }
+        class SpeedReadingRepository {
+          -context: AppDbContext
+          +FindByAssetIdAsync(assetId: string): SpeedReading?
+          +FindViolationsByAssetAsync(assetId: string): IEnumerable<SpeedReading>
+        }
+        class PressureReadingRepository {
+          -context: AppDbContext
+          +FindByAssetIdAsync(assetId: string): PressureReading?
+          +FindAnomaliesByAssetAsync(assetId: string): IEnumerable<PressureReading>
+        }
+        class TemperatureReadingRepository {
+          -context: AppDbContext
+          +FindByAssetIdAsync(assetId: string): TemperatureReading?
+          +FindAnomaliesByAssetAsync(assetId: string): IEnumerable<TemperatureReading>
+          +FindAllAsync(): IEnumerable<TemperatureReading>
+        }
+        class CommunicationChannelRepository {
+          -context: AppDbContext
+          +FindByAssetIdAsync(assetId: string): CommunicationChannel?
+          +FindAnomaliesByAssetAsync(assetId: string): IEnumerable<CommunicationChannel>
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyMonitoringTelemetryConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface ITelemetryDataRepository
+      interface IGNSSStatusRepository
+      interface ISpeedReadingRepository
+      interface IPressureReadingRepository
+      interface ITemperatureReadingRepository
+      interface ICommunicationChannelRepository
+    }
+  }
+}
+
+TelemetryDataRepository ..|> ITelemetryDataRepository
+GNSSStatusRepository ..|> IGNSSStatusRepository
+SpeedReadingRepository ..|> ISpeedReadingRepository
+PressureReadingRepository ..|> IPressureReadingRepository
+TemperatureReadingRepository ..|> ITemperatureReadingRepository
+CommunicationChannelRepository ..|> ICommunicationChannelRepository
+
+@enduml

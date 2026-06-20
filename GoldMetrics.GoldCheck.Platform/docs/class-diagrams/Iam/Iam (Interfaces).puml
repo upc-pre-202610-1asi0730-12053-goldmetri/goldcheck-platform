@@ -1,0 +1,80 @@
+@startuml
+title GoldMetrics — Iam (Interfaces)
+
+package "GoldMetrics" {
+  package "Iam" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class AuthenticationController {
+          -commandService: IIamCommandService
+          -assembler: IamActionResultAssembler
+          +RegisterUser(resource: RegisterUserResource): IActionResult
+          +AuthenticateUser(resource: AuthenticateUserResource): IActionResult
+        }
+
+        class UsersController {
+          -commandService: IIamCommandService
+          -queryService: IIamQueryService
+          -assembler: IamActionResultAssembler
+          +GetUserById(userId: int): IActionResult
+          +GetAllUsers(): IActionResult
+          +UpdateProfile(userId: int, resource: UpdateProfileResource): IActionResult
+        }
+
+        package "Resources" {
+          class RegisterUserResource <<record>> {
+            +Username: string
+            +Password: string
+            +Email: string
+            +Role: string
+          }
+          class AuthenticateUserResource <<record>> {
+            +Username: string
+            +Password: string
+          }
+          class UpdateProfileResource <<record>> {
+            +Username: string
+            +Email: string
+          }
+          class UserResponse <<record>> {
+            +Id: int
+            +Username: string
+            +Email: string
+            +Role: string
+          }
+          class AuthTokenResponse <<record>> {
+            +Token: string
+          }
+        }
+
+        package "Transform" {
+          class UserResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: User): UserResponse
+          }
+          class IamActionResultAssembler {
+            +ToCreatedActionResult(result: Result<User>, ...): IActionResult
+            +ToTokenActionResult(result: Result<string>, ...): IActionResult
+          }
+        }
+
+        AuthenticationController ..> UserResourceFromEntityAssembler : uses
+        AuthenticationController ..> IamActionResultAssembler : uses
+        UsersController ..> UserResourceFromEntityAssembler : uses
+        UsersController ..> IamActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IIamCommandService
+      interface IIamQueryService
+    }
+  }
+}
+
+AuthenticationController ..> IIamCommandService : uses
+UsersController ..> IIamCommandService : uses
+UsersController ..> IIamQueryService : uses
+
+@enduml

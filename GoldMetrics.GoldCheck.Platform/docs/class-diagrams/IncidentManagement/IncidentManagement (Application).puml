@@ -1,0 +1,69 @@
+@startuml
+title GoldMetrics — IncidentManagement (Application)
+
+package "GoldMetrics" {
+  package "IncidentManagement" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IIncidentManagementCommandService {
+          +Handle(command: DetectDriverFatigueCommand): Result<SafetyRecord>
+          +Handle(command: EscalateRiskLevelCommand): Result<SafetyRecord>
+          +Handle(command: EvaluateSafetyRiskCommand): Result<SafetyRecord>
+          +Handle(command: SendRiskLevelAlertCommand): Result<SafetyRecord>
+          +Handle(command: DetectSmokeCommand): Result<SafetyRecord>
+          +Handle(command: TriggerSmokeAlertCommand): Result<SafetyRecord>
+          +Handle(command: CommitSmokeAlertCommand): Result<SafetyRecord>
+          +Handle(command: CommitAccidentCommand): Result<SafetyRecord>
+        }
+      }
+
+      package "QueryServices" {
+        interface IIncidentManagementQueryService {
+          +Handle(query: GetIncidentByIdQuery): SafetyRecord?
+          +Handle(query: GetAllIncidentsQuery): IEnumerable<SafetyRecord>
+          +Handle(query: GetIncidentsByTypeQuery): IEnumerable<SafetyRecord>
+          +Handle(query: GetIncidentsByRiskLevelQuery): IEnumerable<SafetyRecord>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class IncidentManagementCommandService {
+          -safetyRecordRepository: ISafetyRecordRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: DetectDriverFatigueCommand): Result<SafetyRecord>
+          +Handle(command: EscalateRiskLevelCommand): Result<SafetyRecord>
+          +Handle(command: EvaluateSafetyRiskCommand): Result<SafetyRecord>
+          +Handle(command: SendRiskLevelAlertCommand): Result<SafetyRecord>
+          +Handle(command: DetectSmokeCommand): Result<SafetyRecord>
+          +Handle(command: TriggerSmokeAlertCommand): Result<SafetyRecord>
+          +Handle(command: CommitSmokeAlertCommand): Result<SafetyRecord>
+          +Handle(command: CommitAccidentCommand): Result<SafetyRecord>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class IncidentManagementQueryService {
+          -safetyRecordRepository: ISafetyRecordRepository
+          +Handle(query: GetIncidentByIdQuery): SafetyRecord?
+          +Handle(query: GetAllIncidentsQuery): IEnumerable<SafetyRecord>
+          +Handle(query: GetIncidentsByTypeQuery): IEnumerable<SafetyRecord>
+          +Handle(query: GetIncidentsByRiskLevelQuery): IEnumerable<SafetyRecord>
+        }
+      }
+
+      IncidentManagementCommandService ..|> IIncidentManagementCommandService
+      IncidentManagementQueryService ..|> IIncidentManagementQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface ISafetyRecordRepository
+    }
+  }
+}
+
+IncidentManagementCommandService ..> ISafetyRecordRepository : uses
+IncidentManagementQueryService ..> ISafetyRecordRepository : uses
+
+@enduml

@@ -1,0 +1,189 @@
+@startuml
+title GoldMetrics — MonitoringTelemetry (Domain)
+
+package "GoldMetrics" {
+  package "MonitoringTelemetry" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class TelemetryData {
+          +Id: int
+          +AssetId: AssetId
+          +TelemetryDataId: string
+          +RawData: string
+          +Status: string
+          +IsValidated: bool
+          +TelemetryData(command: ProcessTelemetryDataCommand)
+          +Validate(command: ValidateTelemetryDataCommand): void
+        }
+
+        class GNSSStatus {
+          +Id: int
+          +AssetId: AssetId
+          +Status: string
+          +RestartReason: string?
+          +RestartCount: int
+          +GNSSStatus(command: MonitorGNSSStatusCommand)
+          +ResetMonitoring(): void
+          +DetectAnomaly(command: DetectGNSSAnomalyCommand): void
+          +Restart(command: RestartGNSSCommand): void
+          +LogRestart(command: LogGNSSRestartCommand): void
+        }
+
+        class SpeedReading {
+          +Id: int
+          +AssetId: AssetId
+          +Status: string
+          +CurrentSpeedKmPerHour: decimal?
+          +SpeedLimitKmPerHour: decimal?
+          +IsViolation: bool
+          +ViolationDescription: string?
+          +SpeedReading(command: MonitorSpeedStatusCommand)
+          +ResetMonitoring(): void
+          +DetectExcess(command: DetectSpeedExcessCommand): void
+          +LogExcess(command: LogSpeedExcessCommand): void
+        }
+
+        class PressureReading {
+          +Id: int
+          +AssetId: AssetId
+          +Status: string
+          +OilFilterDifferenceBar: decimal?
+          +OilPanBar: decimal?
+          +AbsoluteEngineOilBar: decimal?
+          +OilFilterBar: decimal?
+          +AnomalyPressureType: string?
+          +AnomalyDescription: string?
+          +PressureReading(command: MonitorPressureCommand)
+          +ResetMonitoring(): void
+          +AnalysePressure(command: AnalysePressureCommand): void
+          +DetectAnomaly(command: DetectPressureAnomalyCommand): void
+          +LogAnomaly(command: LogPressureAnomalyCommand): void
+        }
+
+        class TemperatureReading {
+          +Id: int
+          +AssetId: AssetId
+          +Status: string
+          +ExhaustCelsius: decimal?
+          +ExhaustLimitCelsius: decimal?
+          +CylinderNumber: int?
+          +RefrigerantCelsius: decimal?
+          +OilCelsius: decimal?
+          +FuelCelsius: decimal?
+          +AnomalyType: string?
+          +AnomalyCelsius: decimal?
+          +AnomalyDescription: string?
+          +TemperatureReading(command: MonitorEngineTemperatureCommand)
+          +ResetMonitoring(): void
+          +AnalyseExhaust(command: AnalyseExhaustTemperatureCommand): void
+          +AnalyseExhaustLimitPerCylinder(command: AnalyseExhaustTemperatureLimitPerCylinderCommand): void
+          +AnalyseRefrigerant(command: AnalyseEngineRefrigerantTemperatureCommand): void
+          +AnalyseOilTemperature(command: AnalyseEngineOilTemperatureCommand): void
+          +AnalyseFuelTemperature(command: AnalyseEngineFuelTemperatureCommand): void
+          +DetectAnomaly(command: DetectTemperatureAnomalyCommand): void
+          +LogAnomaly(command: LogTemperatureAnomalyCommand): void
+        }
+
+        class CommunicationChannel {
+          +Id: int
+          +AssetId: AssetId
+          +Status: string
+          +LastAnalysedProtocol: string?
+          +AnomalyProtocol: string?
+          +AnomalyDescription: string?
+          +CommunicationChannel(command: MonitorCommunicationChannelCommand)
+          +ResetMonitoring(): void
+          +AnalyseCommunication(command: AnalyseCommunicationCommand): void
+          +DetectAnomaly(command: DetectCommunicationAnomalyCommand): void
+          +LogAnomaly(command: LogCommunicationAnomalyCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class AssetId <<record>> {
+          +Value: string
+        }
+        class Speed <<record>> {
+          +KmPerHour: decimal
+        }
+        class Pressure <<record>> {
+          +Bar: decimal
+        }
+        class PressureType <<record>> {
+          +Value: string
+        }
+        class Temperature <<record>> {
+          +Celsius: decimal
+        }
+        class TemperatureType <<record>> {
+          +Value: string
+        }
+        class AnomalyType <<record>> {
+          +Value: string
+        }
+        class CommunicationProtocol <<record>> {
+          +Value: string
+        }
+        class GNSSCoordinate <<record>> {
+          +Latitude: decimal
+          +Longitude: decimal
+        }
+        class RiskLevel <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Repositories" {
+        interface ITelemetryDataRepository {
+          +FindByAssetIdAsync(assetId: string): TelemetryData?
+        }
+        interface IGNSSStatusRepository {
+          +FindByAssetIdAsync(assetId: string): GNSSStatus?
+        }
+        interface ISpeedReadingRepository {
+          +FindByAssetIdAsync(assetId: string): SpeedReading?
+          +FindViolationsByAssetAsync(assetId: string): IEnumerable<SpeedReading>
+        }
+        interface IPressureReadingRepository {
+          +FindByAssetIdAsync(assetId: string): PressureReading?
+          +FindAnomaliesByAssetAsync(assetId: string): IEnumerable<PressureReading>
+        }
+        interface ITemperatureReadingRepository {
+          +FindByAssetIdAsync(assetId: string): TemperatureReading?
+          +FindAnomaliesByAssetAsync(assetId: string): IEnumerable<TemperatureReading>
+          +FindAllAsync(): IEnumerable<TemperatureReading>
+        }
+        interface ICommunicationChannelRepository {
+          +FindByAssetIdAsync(assetId: string): CommunicationChannel?
+          +FindAnomaliesByAssetAsync(assetId: string): IEnumerable<CommunicationChannel>
+        }
+      }
+
+      package "Errors" {
+        enum MonitoringTelemetryError {
+          None
+          AssetNotFound
+          InvalidTelemetryData
+          TelemetryDataAlreadyValidated
+          GNSSStatusNotFound
+          SpeedReadingNotFound
+          PressureReadingNotFound
+          TemperatureReadingNotFound
+          CommunicationChannelNotFound
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      TelemetryData *-- AssetId
+      GNSSStatus *-- AssetId
+      SpeedReading *-- AssetId
+      PressureReading *-- AssetId
+      TemperatureReading *-- AssetId
+      CommunicationChannel *-- AssetId
+    }
+  }
+}
+@enduml

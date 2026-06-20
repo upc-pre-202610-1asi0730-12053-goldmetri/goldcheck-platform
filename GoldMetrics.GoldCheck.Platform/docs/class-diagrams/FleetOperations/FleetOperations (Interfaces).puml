@@ -1,0 +1,108 @@
+@startuml
+title GoldMetrics — FleetOperations (Interfaces)
+
+package "GoldMetrics" {
+  package "FleetOperations" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class VehiclesController {
+          -vehicleCommandService: IVehicleCommandService
+          -vehicleQueryService: IVehicleQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +AssignVehicle(resource: CreateVehicleResource): IActionResult
+          +GetVehicleById(vehicleId: string): IActionResult
+          +GetAllVehicles(): IActionResult
+        }
+
+        class HaulingCyclesController {
+          -haulingCycleCommandService: IHaulingCycleCommandService
+          -haulingCycleQueryService: IHaulingCycleQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +StartHaulingCycle(resource: StartHaulingCycleResource): IActionResult
+          +LoadMaterial(cycleId: int, resource: LoadMaterialResource): IActionResult
+          +CompleteHaulingCycle(cycleId: int, resource: CompleteHaulingCycleResource): IActionResult
+          +GetHaulingCycleById(cycleId: int): IActionResult
+          +GetAllHaulingCycles(): IActionResult
+        }
+
+        package "Resources" {
+          class CreateVehicleResource <<record>> {
+            +VehicleId: string
+            +OperatorId: string
+          }
+          class StartHaulingCycleResource <<record>> {
+            +VehicleId: string
+            +LoadingPoint: string
+          }
+          class LoadMaterialResource <<record>> {
+            +PayloadTons: decimal
+          }
+          class CompleteHaulingCycleResource <<record>> {
+            +DumpingPoint: string
+          }
+          class VehicleResource <<record>> {
+            +Id: int
+            +VehicleId: string
+            +OperatorId: string
+            +IsEngineOn: bool
+            +Status: string
+          }
+          class HaulingCycleResource <<record>> {
+            +Id: int
+            +VehicleId: string
+            +LoadingPoint: string
+            +DumpingPointName: string?
+            +PayloadTons: decimal?
+            +RouteProgress: string
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class AssignVehicleCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(resource: CreateVehicleResource): AssignVehicleCommand
+          }
+          class StartHaulingCycleCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(resource: StartHaulingCycleResource): StartHaulingCycleCommand
+          }
+          class VehicleResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Vehicle): VehicleResource
+          }
+          class HaulingCycleResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: HaulingCycle): HaulingCycleResource
+          }
+          class FleetOperationsActionResultAssembler <<static>> {
+            +ToActionResultFromVehicleResult(...): IActionResult
+            +ToActionResultFromGetVehicleResult(...): IActionResult
+            +ToActionResultFromHaulingCycleResult(...): IActionResult
+          }
+        }
+
+        VehiclesController ..> AssignVehicleCommandFromResourceAssembler : uses
+        VehiclesController ..> VehicleResourceFromEntityAssembler : uses
+        VehiclesController ..> FleetOperationsActionResultAssembler : uses
+        HaulingCyclesController ..> StartHaulingCycleCommandFromResourceAssembler : uses
+        HaulingCyclesController ..> HaulingCycleResourceFromEntityAssembler : uses
+        HaulingCyclesController ..> FleetOperationsActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IVehicleCommandService
+      interface IVehicleQueryService
+      interface IHaulingCycleCommandService
+      interface IHaulingCycleQueryService
+    }
+  }
+}
+
+VehiclesController ..> IVehicleCommandService : uses
+VehiclesController ..> IVehicleQueryService : uses
+HaulingCyclesController ..> IHaulingCycleCommandService : uses
+HaulingCyclesController ..> IHaulingCycleQueryService : uses
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+title GoldMetrics — IncidentManagement (Infrastructure)
+
+package "GoldMetrics" {
+  package "IncidentManagement" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class SafetyRecordRepository {
+          -context: AppDbContext
+          +FindByIncidentTypeAsync(incidentType: string): IEnumerable<SafetyRecord>
+          +FindByRiskLevelAsync(riskLevel: string): IEnumerable<SafetyRecord>
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyIncidentManagementConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface ISafetyRecordRepository
+    }
+  }
+}
+
+SafetyRecordRepository ..|> ISafetyRecordRepository
+
+@enduml
