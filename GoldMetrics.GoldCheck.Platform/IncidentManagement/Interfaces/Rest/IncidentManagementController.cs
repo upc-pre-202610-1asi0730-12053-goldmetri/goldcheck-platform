@@ -101,4 +101,19 @@ public class IncidentManagementController(
             this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPost("smoke")]
+    [SwaggerOperation("Detect Smoke", "Create a new smoke detection incident.", OperationId = "DetectSmoke")]
+    [SwaggerResponse(201, "Smoke detected.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(400, "Invalid request data.")]
+    public async Task<IActionResult> DetectSmoke([FromBody] DetectSmokeResource resource, CancellationToken cancellationToken)
+    {
+        var command = new DetectSmokeCommand(resource.AssetId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => CreatedAtAction(nameof(GetIncidentById),
+                new { incidentId = r.Id },
+                SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
