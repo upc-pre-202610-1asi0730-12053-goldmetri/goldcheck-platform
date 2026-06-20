@@ -50,5 +50,19 @@ public static class ModelBuilderExtensions
         builder.Entity<PressureReading>().Property(r => r.OilFilterBar).HasColumnType("decimal(8,4)");
         builder.Entity<PressureReading>().Property(r => r.AnomalyPressureType).HasMaxLength(50);
         builder.Entity<PressureReading>().Property(r => r.AnomalyDescription).HasMaxLength(500);
+        
+        // ── SpeedReading ──────────────────────────────────────────────────────
+
+        builder.Entity<SpeedReading>().HasKey(r => r.Id);
+        builder.Entity<SpeedReading>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<SpeedReading>().OwnsOne(r => r.AssetId, aid =>
+        {
+            aid.WithOwner().HasForeignKey("Id");
+            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<SpeedReading>().Property(r => r.Status).IsRequired().HasMaxLength(50);
+        //builder.Entity<SpeedReading>().Property(r => r.CurrentSpeedKmPerHour).HasColumnType("decimal(8,2)");
+        //builder.Entity<SpeedReading>().Property(r => r.SpeedLimitKmPerHour).HasColumnType("decimal(8,2)");
+        //builder.Entity<SpeedReading>().Property(r => r.ViolationDescription).HasMaxLength(500);
     }
 }
