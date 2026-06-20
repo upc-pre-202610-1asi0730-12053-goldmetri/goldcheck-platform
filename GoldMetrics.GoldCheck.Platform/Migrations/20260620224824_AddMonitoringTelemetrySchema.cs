@@ -108,10 +108,7 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 table: "telemetry_data",
                 newName: "telemetry_data_id");
 
-            migrationBuilder.RenameColumn(
-                name: "RawData",
-                table: "telemetry_data",
-                newName: "raw_data");
+            migrationBuilder.Sql("ALTER TABLE `telemetry_data` CHANGE `RawData` `raw_data` longtext NOT NULL;");
 
             migrationBuilder.RenameColumn(
                 name: "IsValidated",
@@ -163,10 +160,7 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 table: "gnss_statuses",
                 newName: "asset_id");
 
-            migrationBuilder.RenameColumn(
-                name: "Status",
-                table: "user_subscriptions",
-                newName: "status");
+            migrationBuilder.Sql("ALTER TABLE `user_subscriptions` CHANGE `Status` `status` longtext NOT NULL;");
 
             migrationBuilder.RenameColumn(
                 name: "Id",
@@ -443,10 +437,7 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 table: "machineries",
                 newName: "engine_hours");
 
-            migrationBuilder.RenameColumn(
-                name: "Status",
-                table: "invoices",
-                newName: "status");
+            migrationBuilder.Sql("ALTER TABLE `invoices` CHANGE `Status` `status` longtext NOT NULL;");
 
             migrationBuilder.RenameColumn(
                 name: "Id",
@@ -715,10 +706,7 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 table: "telemetry_data",
                 newName: "TelemetryDataId");
 
-            migrationBuilder.RenameColumn(
-                name: "raw_data",
-                table: "telemetry_data",
-                newName: "RawData");
+            migrationBuilder.Sql("ALTER TABLE `telemetry_data` CHANGE `raw_data` `RawData` longtext NOT NULL;");
 
             migrationBuilder.RenameColumn(
                 name: "is_validated",
@@ -770,10 +758,7 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 table: "gnss_statuses",
                 newName: "AssetId");
 
-            migrationBuilder.RenameColumn(
-                name: "status",
-                table: "UserSubscription",
-                newName: "Status");
+            migrationBuilder.Sql("ALTER TABLE `UserSubscription` CHANGE `status` `Status` longtext NOT NULL;");
 
             migrationBuilder.RenameColumn(
                 name: "id",
@@ -990,10 +975,7 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 table: "Machinery",
                 newName: "EngineHours");
 
-            migrationBuilder.RenameColumn(
-                name: "status",
-                table: "Invoice",
-                newName: "Status");
+            migrationBuilder.Sql("ALTER TABLE `Invoice` CHANGE `status` `Status` longtext NOT NULL;");
 
             migrationBuilder.RenameColumn(
                 name: "id",
