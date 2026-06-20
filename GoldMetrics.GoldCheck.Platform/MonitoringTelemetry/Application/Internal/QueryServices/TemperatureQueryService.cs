@@ -9,4 +9,6 @@ public class TemperatureQueryService(ITemperatureReadingRepository repository) :
 {
     public async Task<IEnumerable<TemperatureReading>> Handle(GetTemperatureReadingByAssetQuery query, CancellationToken cancellationToken = default)
         => await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+    public async Task<IEnumerable<TemperatureReading>> Handle(GetAllTemperatureReadingsQuery query, CancellationToken cancellationToken = default)
+        => await repository.FindAllAsync(cancellationToken);
 }
