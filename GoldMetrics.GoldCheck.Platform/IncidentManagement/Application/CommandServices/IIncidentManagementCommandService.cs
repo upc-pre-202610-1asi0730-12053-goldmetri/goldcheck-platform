@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.CommandS
 public interface IIncidentManagementCommandService
 {
     Task<Result<SafetyRecord>> Handle(DetectDriverFatigueCommand command, CancellationToken cancellationToken);
+    Task<Result<SafetyRecord>> Handle(EscalateRiskLevelCommand command, CancellationToken cancellationToken);
 }
