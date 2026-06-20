@@ -6,4 +6,6 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QuerySe
 public interface IPressureQueryService
 {
     Task<IEnumerable<PressureReading>> Handle(GetPressureReadingByAssetQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<PressureReading>> Handle(GetPressureAnomaliesByAssetQuery query, CancellationToken cancellationToken = default);
+
 }
