@@ -66,4 +66,20 @@ public class IncidentManagementCommandService(
         catch (DbUpdateException) { return DbError(); }
         catch (Exception) { return ServerError(); }
     }
+    
+    public async Task<Result<SafetyRecord>> Handle(EvaluateSafetyRiskCommand command, CancellationToken cancellationToken)
+    {
+        var record = await FindByIncidentId(command.Id, cancellationToken);
+        if (record is null) return NotFound();
+        try
+        {
+            record.EvaluateSafetyRisk(command);
+            safetyRecordRepository.Update(record);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<SafetyRecord>.Success(record);
+        }
+        catch (OperationCanceledException) { return Cancelled(); }
+        catch (DbUpdateException) { return DbError(); }
+        catch (Exception) { return ServerError(); }
+    }
 }
