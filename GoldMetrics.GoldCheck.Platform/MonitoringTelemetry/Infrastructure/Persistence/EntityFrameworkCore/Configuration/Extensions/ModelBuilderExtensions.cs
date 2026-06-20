@@ -64,7 +64,8 @@ public static class ModelBuilderExtensions
         //builder.Entity<SpeedReading>().Property(r => r.CurrentSpeedKmPerHour).HasColumnType("decimal(8,2)");
         //builder.Entity<SpeedReading>().Property(r => r.SpeedLimitKmPerHour).HasColumnType("decimal(8,2)");
         //builder.Entity<SpeedReading>().Property(r => r.ViolationDescription).HasMaxLength(500);
-        
+       
+        // ── TemperatureReading ──────────────────────────────────────────────────────
         builder.Entity<TemperatureReading>().Property(r => r.Status).IsRequired().HasMaxLength(50);
         builder.Entity<TemperatureReading>().Property(r => r.ExhaustCelsius).HasColumnType("decimal(8,2)");
         builder.Entity<TemperatureReading>().Property(r => r.ExhaustLimitCelsius).HasColumnType("decimal(8,2)");
@@ -74,5 +75,19 @@ public static class ModelBuilderExtensions
         builder.Entity<TemperatureReading>().Property(r => r.AnomalyCelsius).HasColumnType("decimal(8,2)");
         builder.Entity<TemperatureReading>().Property(r => r.AnomalyType).HasMaxLength(50);
         builder.Entity<TemperatureReading>().Property(r => r.AnomalyDescription).HasMaxLength(500);
+        
+        // ── CommunicationChannel ──────────────────────────────────────────────
+
+        builder.Entity<CommunicationChannel>().HasKey(c => c.Id);
+        builder.Entity<CommunicationChannel>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<CommunicationChannel>().OwnsOne(c => c.AssetId, aid =>
+        {
+            aid.WithOwner().HasForeignKey("Id");
+            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<CommunicationChannel>().Property(c => c.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<CommunicationChannel>().Property(c => c.LastAnalysedProtocol).HasMaxLength(50);
+        builder.Entity<CommunicationChannel>().Property(c => c.AnomalyProtocol).HasMaxLength(50);
+        builder.Entity<CommunicationChannel>().Property(c => c.AnomalyDescription).HasMaxLength(500);
     }
 }
