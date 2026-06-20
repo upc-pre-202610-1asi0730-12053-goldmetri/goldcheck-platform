@@ -19,6 +19,70 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                 .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.Aggregates.JewelryProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("ScanCount")
+                        .HasColumnType("int")
+                        .HasColumnName("scan_count");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_jewelry_products");
+
+                    b.ToTable("jewelry_products");
+                });
+
+            modelBuilder.Entity("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.Aggregates.TraceabilityJourney", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("JourneySummary")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("journey_summary");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_traceability_journeys");
+
+                    b.ToTable("traceability_journeys");
+                });
+
             modelBuilder.Entity("GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Aggregates.Material", b =>
                 {
                     b.Property<int>("Id")
@@ -481,6 +545,112 @@ namespace GoldMetrics.GoldCheck.Platform.Migrations
                     b.HasIndex("UserSubscriptionId");
 
                     b.ToTable("Invoice");
+                });
+
+            modelBuilder.Entity("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.Aggregates.JewelryProduct", b =>
+                {
+                    b.OwnsOne("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.ValueObjects.ConsumerId", "ConsumerId", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .HasColumnType("int")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("consumer_id");
+
+                            b1.HasKey("Id")
+                                .HasName("p_k_jewelry_products");
+
+                            b1.ToTable("jewelry_products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Id")
+                                .HasConstraintName("f_k_jewelry_products_jewelry_products_id");
+                        });
+
+                    b.OwnsOne("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.ValueObjects.ProductQRCode", "QRCode", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .HasColumnType("int")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("q_r_code");
+
+                            b1.HasKey("Id")
+                                .HasName("p_k_jewelry_products");
+
+                            b1.ToTable("jewelry_products");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Id")
+                                .HasConstraintName("f_k_jewelry_products_jewelry_products_id");
+                        });
+
+                    b.Navigation("ConsumerId")
+                        .IsRequired();
+
+                    b.Navigation("QRCode")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.Aggregates.TraceabilityJourney", b =>
+                {
+                    b.OwnsOne("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.ValueObjects.ConsumerId", "ConsumerId", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .HasColumnType("int")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("consumer_id");
+
+                            b1.HasKey("Id")
+                                .HasName("p_k_traceability_journeys");
+
+                            b1.ToTable("traceability_journeys");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Id")
+                                .HasConstraintName("f_k_traceability_journeys_traceability_journeys_id");
+                        });
+
+                    b.OwnsOne("GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.ValueObjects.ProductQRCode", "ProductQRCode", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .HasColumnType("int")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("product_q_r_code");
+
+                            b1.HasKey("Id")
+                                .HasName("p_k_traceability_journeys");
+
+                            b1.ToTable("traceability_journeys");
+
+                            b1.WithOwner()
+                                .HasForeignKey("Id")
+                                .HasConstraintName("f_k_traceability_journeys_traceability_journeys_id");
+                        });
+
+                    b.Navigation("ConsumerId")
+                        .IsRequired();
+
+                    b.Navigation("ProductQRCode")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GoldMetrics.GoldCheck.Platform.Analytics.Domain.Model.Aggregates.Material", b =>

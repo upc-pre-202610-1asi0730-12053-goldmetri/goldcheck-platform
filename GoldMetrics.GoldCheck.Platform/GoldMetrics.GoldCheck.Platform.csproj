@@ -41,6 +41,14 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>AssetMaintenanceMessages.es.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConsumerTraceabilityMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ConsumerTraceabilityMessages.es.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -53,6 +61,16 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>AnalyticsMessages.es.resx</DependentUpon>
+      </Compile>
+      <Compile Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConsumerTraceabilityMessages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="ConsumerTraceability\Resources\ConsumerTraceabilityMessages.es.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ConsumerTraceabilityMessages.es.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

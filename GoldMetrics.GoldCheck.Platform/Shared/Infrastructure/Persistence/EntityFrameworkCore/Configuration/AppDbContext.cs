@@ -1,5 +1,6 @@
 using GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -39,6 +40,10 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
 
         // FleetOperations Context
         builder.ApplyFleetOperationsConfiguration();
+
+        // ConsumerTraceability Context
+        builder.ApplyConsumerTraceabilityConfiguration();
+
         builder.UseSnakeCaseNamingConvention();
         
         // Analytics Context

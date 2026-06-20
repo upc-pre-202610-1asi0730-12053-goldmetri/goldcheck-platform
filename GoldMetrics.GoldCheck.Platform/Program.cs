@@ -76,6 +76,13 @@ using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.Co
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Resources;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Resources;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -223,6 +230,18 @@ builder.Services.AddScoped<IVehicleQueryService, VehicleQueryService>();
 builder.Services.AddScoped<IHaulingCycleRepository, HaulingCycleRepository>();
 builder.Services.AddScoped<IHaulingCycleCommandService, HaulingCycleCommandService>();
 builder.Services.AddScoped<IHaulingCycleQueryService, HaulingCycleQueryService>();
+
+// ConsumerTraceability Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<ConsumerTraceabilityMessages>, StringLocalizer<ConsumerTraceabilityMessages>>();
+builder.Services.AddScoped<IJewelryProductRepository, JewelryProductRepository>();
+builder.Services.AddScoped<ITraceabilityJourneyRepository, TraceabilityJourneyRepository>();
+builder.Services.AddScoped<IJewelryProductCommandService, JewelryProductCommandService>();
+builder.Services.AddScoped<IJewelryProductQueryService, JewelryProductQueryService>();
+builder.Services.AddScoped<ITraceabilityJourneyCommandService, TraceabilityJourneyCommandService>();
+builder.Services.AddScoped<ITraceabilityJourneyQueryService, TraceabilityJourneyQueryService>();
+
+
+builder.Services.AddScoped<IJewelryProductQueryService, JewelryProductQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));

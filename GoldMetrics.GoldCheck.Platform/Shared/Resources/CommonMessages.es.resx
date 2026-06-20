@@ -24,4 +24,28 @@
   </data>
   <data name="AnalyticsError.MaterialNotFound" xml:space="preserve"><value>No se encontró el registro de material.</value></data>
   <data name="AnalyticsError.RouteNotFound" xml:space="preserve"><value>No se encontró la ruta.</value></data>
+  <data name="ConsumerTraceabilityError.ProductNotFound" xml:space="preserve">
+  <value>Producto no encontrado para el código QR proporcionado.</value>
+  </data>
+    <data name="ConsumerTraceabilityError.InvalidQRCode" xml:space="preserve">
+    <value>Código QR inválido proporcionado.</value>
+  </data>
+    <data name="ConsumerTraceabilityError.OperationCancelled" xml:space="preserve">
+    <value>La operación de trazabilidad al consumidor fue cancelada.</value>
+  </data>
+    <data name="ConsumerTraceabilityError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de trazabilidad al consumidor.</value>
+  </data>
+    <data name="ConsumerTraceabilityError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Trazabilidad al Consumidor.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.LanguageNotSupported" xml:space="preserve">
+  <value>El idioma solicitado no es compatible. Idiomas admitidos: en, es.</value>
+  </data>
+  <data name="ConsumerTraceabilityError.CertificateNotFound" xml:space="preserve">
+  <value>Certificado no encontrado.</value>
+</data>
+  <data name="ConsumerTraceabilityError.AccessDenied" xml:space="preserve">
+  <value>Acceso a este recurso denegado.</value>
+</data>
 </root>
