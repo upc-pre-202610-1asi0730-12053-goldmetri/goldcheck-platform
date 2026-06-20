@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true" />
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="MonitoringStarted" xml:space="preserve"><value>Engine temperature monitoring started.</value></data>
+  <data name="TemperatureAnalysed" xml:space="preserve"><value>Temperature analysis completed.</value></data>
+  <data name="AnomalyDetected" xml:space="preserve"><value>Temperature anomaly detected and logged.</value></data>
+  <data name="CommunicationMonitoringStarted" xml:space="preserve"><value>Communication channel monitoring started.</value></data>
+  <data name="CommunicationAnalysed" xml:space="preserve"><value>Communication channel analysis completed.</value></data>
+  <data name="CommunicationAnomalyDetected" xml:space="preserve"><value>Communication anomaly detected and logged.</value></data>
+  <data name="GNSSMonitoringStarted" xml:space="preserve"><value>GNSS status monitoring started.</value></data>
+  <data name="GNSSAnomalyDetected" xml:space="preserve"><value>GNSS anomaly detected.</value></data>
+  <data name="GNSSRestarted" xml:space="preserve"><value>GNSS restarted and logged.</value></data>
+  <data name="SpeedMonitoringStarted" xml:space="preserve"><value>Speed monitoring started.</value></data>
+  <data name="SpeedExcessDetected" xml:space="preserve"><value>Speed excess detected and logged.</value></data>
+  <data name="PressureMonitoringStarted" xml:space="preserve"><value>Pressure monitoring started.</value></data>
+  <data name="PressureAnalysed" xml:space="preserve"><value>Pressure analysis completed.</value></data>
+  <data name="PressureAnomalyDetected" xml:space="preserve"><value>Pressure anomaly detected and logged.</value></data>
+  <data name="TelemetryProcessed" xml:space="preserve"><value>Telemetry data processed successfully.</value></data>
+  <data name="TelemetryValidated" xml:space="preserve"><value>Telemetry data validated successfully.</value></data>
+</root>
