@@ -51,4 +51,11 @@ public partial class TemperatureReading
         OilCelsius = new Temperature(command.OilCelsius).Celsius;
         Status = "OilTemperatureAnalysed";
     }
+    
+    public decimal? FuelCelsius { get; private set; }
+    public void AnalyseFuelTemperature(AnalyseEngineFuelTemperatureCommand command)
+    {
+        FuelCelsius = new Temperature(command.FuelCelsius).Celsius;
+        Status = "FuelTemperatureAnalysed";
+    }
 }

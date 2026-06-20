@@ -91,4 +91,18 @@
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
         }
+        
+        // POST api/v1/monitoring/temperature/{assetId}/analyse/fuel
+        [HttpPost("{assetId}/analyse/fuel")]
+        [SwaggerOperation("AnalyseFuelTemperature", "Analyses engine fuel temperature.")]
+        [ProducesResponseType(typeof(TemperatureReadingResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AnalyseFuel(
+            string assetId, [FromBody] AnalyseFuelTemperatureResource resource, CancellationToken cancellationToken)
+        {
+            var command = TemperatureReadingResourceFromEntityAssembler.AnalyseFuelTemperatureCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
     }
