@@ -71,6 +71,11 @@ using GoldMetrics.GoldCheck.Platform.IncidentManagement.Infrastructure.Persisten
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Resources;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -235,6 +240,11 @@ builder.Services.AddSingleton<IStringLocalizer<IncidentManagementMessages>, Stri
 builder.Services.AddScoped<ISafetyRecordRepository, SafetyRecordRepository>();
 builder.Services.AddScoped<IIncidentManagementCommandService, IncidentManagementCommandService>();
 builder.Services.AddScoped<IIncidentManagementQueryService, IncidentManagementQueryService>();
+
+// MonitoringTelemetry Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<MonitoringTelemetryMessages>, StringLocalizer<MonitoringTelemetryMessages>>();
+builder.Services.AddScoped<ITelemetryDataRepository, TelemetryDataRepository>();
+builder.Services.AddScoped<ITelemetryCommandService, TelemetryCommandService>();
 
 
 var app = builder.Build();
