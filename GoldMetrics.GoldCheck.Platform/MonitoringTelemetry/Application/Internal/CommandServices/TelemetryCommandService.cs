@@ -39,4 +39,29 @@ public class TelemetryCommandService(
             return Result<TelemetryData>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
         }
     }
+    
+    public async Task<Result<TelemetryData>> Handle(ValidateTelemetryDataCommand command, CancellationToken cancellationToken = default)
+    {
+        var data = await repository.FindByTelemetryDataIdAsync(command.TelemetryDataId, cancellationToken);
+        if (data is null)
+            return Result<TelemetryData>.Failure(MonitoringTelemetryError.TelemetryDataNotFound, localizer[nameof(MonitoringTelemetryError.TelemetryDataNotFound)]);
+        try
+        {
+            data.Validate(command);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<TelemetryData>.Success(data);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<TelemetryData>.Failure(MonitoringTelemetryError.OperationCancelled, localizer[nameof(MonitoringTelemetryError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<TelemetryData>.Failure(MonitoringTelemetryError.DatabaseError, localizer[nameof(MonitoringTelemetryError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<TelemetryData>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
+        }
+    }
 }
