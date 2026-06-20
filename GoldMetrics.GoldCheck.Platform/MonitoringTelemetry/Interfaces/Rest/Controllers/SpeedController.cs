@@ -17,6 +17,7 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Con
 [SwaggerTag("Available Monitoring & Telemetry — Speed Endpoints.")]
 public class SpeedController(
     ISpeedCommandService commandService,
+    ISpeedQueryService queryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -48,5 +49,15 @@ public class SpeedController(
         var result = await commandService.Handle(command, cancellationToken);
         return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(SpeedReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
+    
+    // GET api/v1/monitoring/speed/{assetId}
+    [HttpGet("{assetId}")]
+    [SwaggerOperation("GetSpeedReadingsByAsset", "Returns speed readings for an asset.")]
+    [ProducesResponseType(typeof(IEnumerable<SpeedReadingResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByAsset(string assetId, CancellationToken cancellationToken)
+    {
+        var readings = await queryService.Handle(new GetSpeedReadingByAssetQuery(assetId), cancellationToken);
+        return Ok(readings.Select(SpeedReadingResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }
