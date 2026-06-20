@@ -35,4 +35,10 @@ public static class TemperatureReadingResourceFromEntityAssembler
         public static AnalyseEngineRefrigerantTemperatureCommand ToCommandFromResource(string assetId, AnalyseRefrigerantTemperatureResource resource)
             => new(assetId, resource.RefrigerantCelsius);
     }
+    
+    public static class AnalyseOilTemperatureCommandFromResourceAssembler
+    {
+        public static AnalyseEngineOilTemperatureCommand ToCommandFromResource(string assetId, AnalyseOilTemperatureResource resource)
+            => new(assetId, resource.OilCelsius);
+    }
 }
