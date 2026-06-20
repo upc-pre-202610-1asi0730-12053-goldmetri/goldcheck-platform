@@ -282,6 +282,8 @@ builder.Services.AddScoped<IPressureQueryService, PressureQueryService>();
 builder.Services.AddScoped<ISpeedReadingRepository, SpeedReadingRepository>();
 builder.Services.AddScoped<ISpeedCommandService, SpeedCommandService>();
 builder.Services.AddScoped<ISpeedQueryService, SpeedQueryService>();
+builder.Services.AddScoped<ITemperatureReadingRepository, TemperatureReadingRepository>();
+builder.Services.AddScoped<ITemperatureCommandService, TemperatureCommandService>();
 
 var app = builder.Build();
 
