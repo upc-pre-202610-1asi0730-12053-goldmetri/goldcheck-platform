@@ -1,0 +1,24 @@
+﻿using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
+using Microsoft.EntityFrameworkCore;
+
+namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+
+public static class ModelBuilderExtensions
+{
+    public static void ApplyMonitoringTelemetryConfiguration(this ModelBuilder builder)
+    {
+        // ── TelemetryData ─────────────────────────────────────────────────────
+
+        builder.Entity<TelemetryData>().HasKey(d => d.Id);
+        builder.Entity<TelemetryData>().Property(d => d.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<TelemetryData>().ToTable("telemetry_data");
+        builder.Entity<TelemetryData>().OwnsOne(d => d.AssetId, aid =>
+        {
+            aid.WithOwner().HasForeignKey("Id");
+            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<TelemetryData>().Property(d => d.TelemetryDataId).IsRequired().HasMaxLength(36);
+        builder.Entity<TelemetryData>().Property(d => d.RawData).IsRequired();
+        builder.Entity<TelemetryData>().Property(d => d.Status).IsRequired().HasMaxLength(50);
+    }
+}

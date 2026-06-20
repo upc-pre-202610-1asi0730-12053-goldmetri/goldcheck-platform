@@ -5,6 +5,7 @@ using GoldMetrics.GoldCheck.Platform.Iam.Infrastructure.Persistence.EntityFramew
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
@@ -51,5 +52,8 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         
         // IncidentManagement Context
         builder.ApplyIncidentManagementConfiguration();
+        
+        // MonitoringTelemetry Context
+        builder.ApplyMonitoringTelemetryConfiguration();
     }
 }

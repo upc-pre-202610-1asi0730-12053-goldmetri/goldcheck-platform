@@ -418,4 +418,52 @@
   <data name="AccidentCommitted" xml:space="preserve">
     <value>Accidente registrado exitosamente.</value>
   </data>
+  <data name="MonitoringTelemetryError.AssetNotFound" xml:space="preserve">
+    <value>Activo no encontrado.</value>
+  </data>
+    <data name="MonitoringTelemetryError.TelemetryDataNotFound" xml:space="preserve">
+    <value>Datos de telemetría no encontrados.</value>
+  </data>
+    <data name="MonitoringTelemetryError.TemperatureReadingNotFound" xml:space="preserve">
+    <value>No se encontró una lectura de temperatura para este activo.</value>
+  </data>
+    <data name="MonitoringTelemetryError.CommunicationChannelNotFound" xml:space="preserve">
+    <value>No se encontró un registro de canal de comunicación para este activo.</value>
+  </data>
+    <data name="MonitoringTelemetryError.GNSSStatusNotFound" xml:space="preserve">
+    <value>No se encontró un registro de estado GNSS para este activo.</value>
+  </data>
+    <data name="MonitoringTelemetryError.SpeedReadingNotFound" xml:space="preserve">
+    <value>No se encontró una lectura de velocidad para este activo.</value>
+  </data>
+    <data name="MonitoringTelemetryError.PressureReadingNotFound" xml:space="preserve">
+    <value>No se encontró una lectura de presión para este activo.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidTemperature" xml:space="preserve">
+    <value>Valor de temperatura inválido.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidSpeed" xml:space="preserve">
+    <value>Valor de velocidad inválido.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidPressure" xml:space="preserve">
+    <value>Valor de presión inválido.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidProtocol" xml:space="preserve">
+    <value>Protocolo de comunicación inválido.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidAnomalyType" xml:space="preserve">
+    <value>Tipo de anomalía inválido.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidPressureType" xml:space="preserve">
+    <value>Tipo de presión inválido.</value>
+  </data>
+    <data name="MonitoringTelemetryError.OperationCancelled" xml:space="preserve">
+    <value>La operación de monitoreo y telemetría fue cancelada.</value>
+  </data>
+    <data name="MonitoringTelemetryError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de monitoreo y telemetría.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Monitoreo y Telemetría.</value>
+  </data>
 </root>
