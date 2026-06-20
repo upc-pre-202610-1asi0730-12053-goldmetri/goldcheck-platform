@@ -51,4 +51,14 @@ public class IncidentManagementController(
             this, record, errorLocalizer, problemDetailsFactory,
             r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpGet]
+    [SwaggerOperation("Get All Incidents", "Get all safety incident records.", OperationId = "GetAllIncidents")]
+    [SwaggerResponse(200, "Incidents found.", typeof(IEnumerable<SafetyRecordResource>))]
+    public async Task<IActionResult> GetAllIncidents(CancellationToken cancellationToken)
+    {
+        var query = new GetAllIncidentsQuery();
+        var records = await queryService.Handle(query, cancellationToken);
+        return Ok(records.Select(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }
