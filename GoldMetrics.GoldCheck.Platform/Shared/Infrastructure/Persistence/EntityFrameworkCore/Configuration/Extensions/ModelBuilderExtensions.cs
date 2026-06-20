@@ -40,14 +40,5 @@ public static class ModelBuilderExtensions
             aid.WithOwner().HasForeignKey("Id");
             aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
         });
-        builder.Entity<TemperatureReading>().Property(r => r.Status).IsRequired().HasMaxLength(50);
-        builder.Entity<TemperatureReading>().Property(r => r.ExhaustCelsius).HasColumnType("decimal(8,2)");
-        builder.Entity<TemperatureReading>().Property(r => r.ExhaustLimitCelsius).HasColumnType("decimal(8,2)");
-        builder.Entity<TemperatureReading>().Property(r => r.RefrigerantCelsius).HasColumnType("decimal(8,2)");
-        builder.Entity<TemperatureReading>().Property(r => r.OilCelsius).HasColumnType("decimal(8,2)");
-        builder.Entity<TemperatureReading>().Property(r => r.FuelCelsius).HasColumnType("decimal(8,2)");
-        builder.Entity<TemperatureReading>().Property(r => r.AnomalyCelsius).HasColumnType("decimal(8,2)");
-        builder.Entity<TemperatureReading>().Property(r => r.AnomalyType).HasMaxLength(50);
-        builder.Entity<TemperatureReading>().Property(r => r.AnomalyDescription).HasMaxLength(500);
     }
 }

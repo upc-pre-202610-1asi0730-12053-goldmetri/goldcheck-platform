@@ -64,5 +64,15 @@ public static class ModelBuilderExtensions
         //builder.Entity<SpeedReading>().Property(r => r.CurrentSpeedKmPerHour).HasColumnType("decimal(8,2)");
         //builder.Entity<SpeedReading>().Property(r => r.SpeedLimitKmPerHour).HasColumnType("decimal(8,2)");
         //builder.Entity<SpeedReading>().Property(r => r.ViolationDescription).HasMaxLength(500);
+        
+        builder.Entity<TemperatureReading>().Property(r => r.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<TemperatureReading>().Property(r => r.ExhaustCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.ExhaustLimitCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.RefrigerantCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.OilCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.FuelCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.AnomalyCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.AnomalyType).HasMaxLength(50);
+        builder.Entity<TemperatureReading>().Property(r => r.AnomalyDescription).HasMaxLength(500);
     }
 }
