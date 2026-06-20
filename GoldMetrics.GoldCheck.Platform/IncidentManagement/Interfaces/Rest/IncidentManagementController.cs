@@ -116,4 +116,17 @@ public class IncidentManagementController(
                 new { incidentId = r.Id },
                 SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPut("{incidentId:int}/smoke-alert")]
+    [SwaggerOperation("Commit Smoke Alert", "Commit the smoke alert for an incident.", OperationId = "CommitSmokeAlert")]
+    [SwaggerResponse(200, "Smoke alert committed.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(404, "Incident not found.")]
+    public async Task<IActionResult> CommitSmokeAlert(int incidentId, CancellationToken cancellationToken)
+    {
+        var command = new CommitSmokeAlertCommand(incidentId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
