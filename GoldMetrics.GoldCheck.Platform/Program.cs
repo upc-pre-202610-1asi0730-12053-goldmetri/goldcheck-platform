@@ -64,6 +64,11 @@ using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Tra
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.Internal.CommandServices;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -223,6 +228,10 @@ builder.Services.AddScoped<ISubscriptionsBillingCommandService, SubscriptionsBil
 builder.Services.AddScoped<SubscriptionsBillingActionResultAssembler>();
 builder.Services.AddScoped<ISubscriptionsBillingQueryService, SubscriptionsBillingQueryService>();
 
+// IncidentManagement Bounded Context
+builder.Services.AddSingleton<IStringLocalizer<IncidentManagementMessages>, StringLocalizer<IncidentManagementMessages>>();
+builder.Services.AddScoped<ISafetyRecordRepository, SafetyRecordRepository>();
+builder.Services.AddScoped<IIncidentManagementCommandService, IncidentManagementCommandService>();
 
 var app = builder.Build();
 

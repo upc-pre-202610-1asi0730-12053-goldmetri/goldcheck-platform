@@ -375,4 +375,29 @@
     <data name="SubscriptionsBillingError.InternalServerError" xml:space="preserve">
     <value>Ocurrió un error interno inesperado en Suscripciones y Facturación.</value>
   </data>
+
+  <data name="IncidentManagementError.IncidentNotFound" xml:space="preserve">
+    <value>No se encontró el registro de incidente.</value>
+  </data>
+    <data name="IncidentManagementError.InvalidRiskLevel" xml:space="preserve">
+    <value>Nivel de riesgo inválido. Valores permitidos: Low, Medium, High, Critical.</value>
+  </data>
+    <data name="IncidentManagementError.InvalidIncidentType" xml:space="preserve">
+    <value>Tipo de incidente inválido. Valores permitidos: Fatigue, Smoke, Accident.</value>
+  </data>
+    <data name="IncidentManagementError.IncidentAlreadyCommitted" xml:space="preserve">
+    <value>El incidente ya fue registrado.</value>
+  </data>
+    <data name="IncidentManagementError.RiskLevelValidationFailed" xml:space="preserve">
+    <value>La validación del nivel de riesgo falló para este incidente.</value>
+  </data>
+    <data name="IncidentManagementError.OperationCancelled" xml:space="preserve">
+    <value>La operación de gestión de incidentes fue cancelada.</value>
+  </data>
+    <data name="IncidentManagementError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos durante la operación de gestión de incidentes.</value>
+  </data>
+    <data name="IncidentManagementError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado en Gestión de Incidentes.</value>
+  </data>
 </root>
