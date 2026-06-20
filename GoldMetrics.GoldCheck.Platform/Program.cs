@@ -16,8 +16,6 @@ using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.CommandServi
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.Internal.CommandServices;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories;
-using GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.MaterialOperations.Resources;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.ReportingNotifications.Application.Internal.CommandServices;
@@ -36,8 +34,6 @@ using GoldMetrics.GoldCheck.Platform.JewelryInventory.Resources;
 using JewelryCommandService = GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.CommandServices.JewelryCommandService;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.CommandServices;
-using GoldMetrics.GoldCheck.Platform.Analytics.Domain.Repositories;
-using GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.Analytics.Resources;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.Analytics.Application.QueryServices;
@@ -83,14 +79,6 @@ using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Infrastructure.Persist
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Resources;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
 
@@ -289,6 +277,7 @@ builder.Services.AddScoped<ITemperatureCommandService, TemperatureCommandService
 builder.Services.AddScoped<ITemperatureQueryService, TemperatureQueryService>();
 builder.Services.AddScoped<ICommunicationChannelRepository, CommunicationChannelRepository>();
 builder.Services.AddScoped<ICommunicationCommandService, CommunicationCommandService>();
+builder.Services.AddScoped<ICommunicationQueryService, CommunicationQueryService>();
 
 var app = builder.Build();
 
