@@ -1,3 +1,4 @@
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -32,5 +33,21 @@ public static class ModelBuilderExtensions
                 if (!string.IsNullOrEmpty(indexDatabaseName)) index.SetDatabaseName(indexDatabaseName.ToSnakeCase());
             }
         }
+        builder.Entity<TemperatureReading>().HasKey(r => r.Id);
+        builder.Entity<TemperatureReading>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<TemperatureReading>().OwnsOne(r => r.AssetId, aid =>
+        {
+            aid.WithOwner().HasForeignKey("Id");
+            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<TemperatureReading>().Property(r => r.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<TemperatureReading>().Property(r => r.ExhaustCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.ExhaustLimitCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.RefrigerantCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.OilCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.FuelCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.AnomalyCelsius).HasColumnType("decimal(8,2)");
+        builder.Entity<TemperatureReading>().Property(r => r.AnomalyType).HasMaxLength(50);
+        builder.Entity<TemperatureReading>().Property(r => r.AnomalyDescription).HasMaxLength(500);
     }
 }
