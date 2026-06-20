@@ -73,4 +73,32 @@
                 return Result<TemperatureReading>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
             }
         }
+        public async Task<Result<TemperatureReading>> Handle(AnalyseExhaustTemperatureLimitPerCylinderCommand command, CancellationToken cancellationToken = default)
+        {
+            var reading = await FindLatestByAsset(command.AssetId, cancellationToken);
+            if (reading is null)
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.TemperatureReadingNotFound, localizer[nameof(MonitoringTelemetryError.TemperatureReadingNotFound)]);
+            try
+            {
+                reading.AnalyseExhaustLimitPerCylinder(command);
+                await unitOfWork.CompleteAsync(cancellationToken);
+                return Result<TemperatureReading>.Success(reading);
+            }
+            catch (ArgumentException)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.InvalidTemperature, localizer[nameof(MonitoringTelemetryError.InvalidTemperature)]);
+            }
+            catch (OperationCanceledException)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.OperationCancelled, localizer[nameof(MonitoringTelemetryError.OperationCancelled)]);
+            }
+            catch (DbUpdateException)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.DatabaseError, localizer[nameof(MonitoringTelemetryError.DatabaseError)]);
+            }
+            catch (Exception)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
+            }
+        }
     }
