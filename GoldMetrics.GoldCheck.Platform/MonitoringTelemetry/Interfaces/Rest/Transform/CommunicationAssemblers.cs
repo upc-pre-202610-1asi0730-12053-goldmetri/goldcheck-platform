@@ -16,4 +16,10 @@ public static class CommunicationChannelResourceFromEntityAssembler
         => new(entity.Id, entity.AssetId.Value, entity.Status,
             entity.LastAnalysedProtocol, entity.AnomalyProtocol, entity.AnomalyDescription,
             entity.CreatedAt, entity.UpdatedAt);
+    
+    public static class AnalyseCommunicationCommandFromResourceAssembler
+    {
+        public static AnalyseCommunicationCommand ToCommandFromResource(string assetId, AnalyseCommunicationResource resource)
+            => new(assetId, resource.Protocol);
+    }
 }
