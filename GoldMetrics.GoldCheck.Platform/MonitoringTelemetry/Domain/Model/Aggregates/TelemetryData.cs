@@ -22,4 +22,10 @@ public partial class TelemetryData
     public string RawData { get; private set; }
     public string Status { get; private set; }
     public bool IsValidated { get; private set; }
+    
+    public void Validate(ValidateTelemetryDataCommand command)
+    {
+        IsValidated = true;
+        Status = "Validated";
+    }
 }
