@@ -98,4 +98,18 @@ public class IncidentManagementCommandService(
         catch (DbUpdateException) { return DbError(); }
         catch (Exception) { return ServerError(); }
     }
+    
+    public async Task<Result<SafetyRecord>> Handle(DetectSmokeCommand command, CancellationToken cancellationToken)
+    {
+        var record = new SafetyRecord(command);
+        try
+        {
+            await safetyRecordRepository.AddAsync(record, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<SafetyRecord>.Success(record);
+        }
+        catch (OperationCanceledException) { return Cancelled(); }
+        catch (DbUpdateException) { return DbError(); }
+        catch (Exception) { return ServerError(); }
+    }
 }
