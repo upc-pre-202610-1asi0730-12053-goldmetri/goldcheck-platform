@@ -18,4 +18,11 @@ public partial class CommunicationChannel
     public string Status { get; private set; }
 
     public void ResetMonitoring() => Status = "Monitoring";
+    
+    public string? LastAnalysedProtocol { get; private set; }
+    public void AnalyseCommunication(AnalyseCommunicationCommand command)
+    {
+        LastAnalysedProtocol = new CommunicationProtocol(command.Protocol).Value;
+        Status = $"{LastAnalysedProtocol}Analysed";
+    }
 }

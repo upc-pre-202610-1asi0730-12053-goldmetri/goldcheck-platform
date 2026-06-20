@@ -35,4 +35,18 @@
                 c => CreatedAtAction(nameof(GetByAsset), new { assetId = c.AssetId.Value },
                     CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity(c)));
         }
+        
+        // POST api/v1/monitoring/communication/{assetId}/analyse
+        [HttpPost("{assetId}/analyse")]
+        [SwaggerOperation("AnalyseCommunication", "Analyses a communication channel for an asset.")]
+        [ProducesResponseType(typeof(CommunicationChannelResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Analyse(
+            string assetId, [FromBody] AnalyseCommunicationResource resource, CancellationToken cancellationToken)
+        {
+            var command = CommunicationChannelResourceFromEntityAssembler.AnalyseCommunicationCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                c => Ok(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity(c)));
+        }
     }

@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Command
 public interface ICommunicationCommandService
 {
     Task<Result<CommunicationChannel>> Handle(MonitorCommunicationChannelCommand command, CancellationToken cancellationToken = default);
+    Task<Result<CommunicationChannel>> Handle(AnalyseCommunicationCommand command, CancellationToken cancellationToken = default);
 }

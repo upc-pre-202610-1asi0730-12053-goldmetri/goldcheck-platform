@@ -11,3 +11,5 @@ public record CommunicationChannelResource(
     string? AnomalyDescription,
     DateTimeOffset? CreatedAt,
     DateTimeOffset? UpdatedAt);
+
+public record AnalyseCommunicationResource(string Protocol);
