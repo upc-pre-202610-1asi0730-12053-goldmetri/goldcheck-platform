@@ -1,5 +1,7 @@
 ﻿using System.Net.Mime;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+    using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
+    using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Queries;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Resources;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Transform;
     using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -17,6 +19,7 @@
     [SwaggerTag("Available Monitoring & Telemetry — Communication Endpoints.")]
     public class CommunicationController(
         ICommunicationCommandService commandService,
+        ICommunicationQueryService queryService,
         IStringLocalizer<ErrorMessages> errorLocalizer,
         ProblemDetailsFactory problemDetailsFactory)
         : ControllerBase
@@ -62,5 +65,15 @@
             var result = await commandService.Handle(command, cancellationToken);
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 c => Ok(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity(c)));
+        }
+        
+        // GET api/v1/monitoring/communication/{assetId}
+        [HttpGet("{assetId}")]
+        [SwaggerOperation("GetCommunicationChannelsByAsset", "Returns communication channel records for an asset.")]
+        [ProducesResponseType(typeof(IEnumerable<CommunicationChannelResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByAsset(string assetId, CancellationToken cancellationToken)
+        {
+            var channels = await queryService.Handle(new GetCommunicationChannelByAssetQuery(assetId), cancellationToken);
+            return Ok(channels.Select(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity));
         }
     }
