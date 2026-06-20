@@ -13,4 +13,5 @@ public interface IIncidentManagementCommandService
     Task<Result<SafetyRecord>> Handle(DetectSmokeCommand command, CancellationToken cancellationToken);
     Task<Result<SafetyRecord>> Handle(TriggerSmokeAlertCommand command, CancellationToken cancellationToken);
     Task<Result<SafetyRecord>> Handle(CommitSmokeAlertCommand command, CancellationToken cancellationToken);
+    Task<Result<SafetyRecord>> Handle(CommitAccidentCommand command, CancellationToken cancellationToken);
 }

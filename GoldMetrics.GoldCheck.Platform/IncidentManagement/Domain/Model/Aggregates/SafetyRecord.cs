@@ -64,4 +64,14 @@ public partial class SafetyRecord
     {
         Status = "SmokeAlertCommitted";
     }
+    
+    public SafetyRecord(CommitAccidentCommand command)
+    {
+        IncidentType = new IncidentType("Accident");
+        OperatorId = new OperatorId(command.OperatorId);
+        AssetId = new AssetId();
+        RiskLevel = new RiskLevel("Critical");
+        Description = command.Description;
+        Status = "AccidentCommitted";
+    }
 }
