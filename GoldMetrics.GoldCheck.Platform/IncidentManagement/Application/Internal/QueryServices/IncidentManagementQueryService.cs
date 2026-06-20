@@ -12,4 +12,6 @@ public class IncidentManagementQueryService(ISafetyRecordRepository safetyRecord
         => await safetyRecordRepository.FindByIdAsync(query.Id, cancellationToken);
     public async Task<IEnumerable<SafetyRecord>> Handle(GetAllIncidentsQuery query, CancellationToken cancellationToken)
         => await safetyRecordRepository.ListAsync(cancellationToken);
+    public async Task<IEnumerable<SafetyRecord>> Handle(GetIncidentsByTypeQuery query, CancellationToken cancellationToken)
+        => await safetyRecordRepository.FindByIncidentTypeAsync(query.IncidentType, cancellationToken);
 }

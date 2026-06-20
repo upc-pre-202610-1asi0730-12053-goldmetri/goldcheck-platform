@@ -144,4 +144,14 @@ public class IncidentManagementController(
                 new { incidentId = r.Id },
                 SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpGet("type/{incidentType}")]
+    [SwaggerOperation("Get Incidents By Type", "Get all incidents of a specific type.", OperationId = "GetIncidentsByType")]
+    [SwaggerResponse(200, "Incidents found.", typeof(IEnumerable<SafetyRecordResource>))]
+    public async Task<IActionResult> GetIncidentsByType(string incidentType, CancellationToken cancellationToken)
+    {
+        var query = new GetIncidentsByTypeQuery(incidentType);
+        var records = await queryService.Handle(query, cancellationToken);
+        return Ok(records.Select(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }

@@ -7,4 +7,6 @@ public interface IIncidentManagementQueryService
 {
     Task<SafetyRecord?> Handle(GetIncidentByIdQuery query, CancellationToken cancellationToken);
     Task<IEnumerable<SafetyRecord>> Handle(GetAllIncidentsQuery query, CancellationToken cancellationToken);
+    Task<IEnumerable<SafetyRecord>> Handle(GetIncidentsByTypeQuery query, CancellationToken cancellationToken);
+
 }
