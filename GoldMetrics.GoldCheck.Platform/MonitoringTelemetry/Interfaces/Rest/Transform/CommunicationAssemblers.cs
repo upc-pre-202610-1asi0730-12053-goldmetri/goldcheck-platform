@@ -22,4 +22,10 @@ public static class CommunicationChannelResourceFromEntityAssembler
         public static AnalyseCommunicationCommand ToCommandFromResource(string assetId, AnalyseCommunicationResource resource)
             => new(assetId, resource.Protocol);
     }
+    
+    public static class DetectCommunicationAnomalyCommandFromResourceAssembler
+    {
+        public static DetectCommunicationAnomalyCommand ToCommandFromResource(string assetId, DetectCommunicationAnomalyResource resource)
+            => new(assetId, resource.Protocol, resource.AnomalyDescription);
+    }
 }
