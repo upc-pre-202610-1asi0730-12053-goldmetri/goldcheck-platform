@@ -416,5 +416,8 @@
   <data name="RiskLevelAlertCommitted" xml:space="preserve">
     <value>Risk level alert sent and committed successfully.</value>
   </data>
-  
+
+  <data name="SmokeDetected" xml:space="preserve">
+    <value>Smoke detected and recorded successfully.</value>
+  </data>
 </root>
