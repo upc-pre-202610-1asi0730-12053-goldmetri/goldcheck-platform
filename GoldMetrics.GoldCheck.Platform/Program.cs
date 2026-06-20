@@ -272,6 +272,8 @@ builder.Services.AddScoped<ITelemetryQueryService, TelemetryQueryService>();
 builder.Services.AddScoped<IGNSSStatusRepository, GNSSStatusRepository>();
 builder.Services.AddScoped<IGNSSCommandService, GNSSCommandService>();
 builder.Services.AddScoped<IGNSSQueryService, GNSSQueryService>();
+builder.Services.AddScoped<IPressureReadingRepository, PressureReadingRepository>();
+builder.Services.AddScoped<IPressureCommandService, PressureCommandService>();
 
 
 var app = builder.Build();
