@@ -428,4 +428,52 @@
   <data name="AccidentCommitted" xml:space="preserve">
     <value>Accident recorded and committed successfully.</value>
   </data>
+  <data name="MonitoringTelemetryError.AssetNotFound" xml:space="preserve">
+    <value>Asset not found.</value>
+  </data>
+    <data name="MonitoringTelemetryError.TelemetryDataNotFound" xml:space="preserve">
+    <value>Telemetry data not found.</value>
+  </data>
+    <data name="MonitoringTelemetryError.TemperatureReadingNotFound" xml:space="preserve">
+    <value>Temperature reading not found for this asset.</value>
+  </data>
+    <data name="MonitoringTelemetryError.CommunicationChannelNotFound" xml:space="preserve">
+    <value>Communication channel record not found for this asset.</value>
+  </data>
+    <data name="MonitoringTelemetryError.GNSSStatusNotFound" xml:space="preserve">
+    <value>GNSS status record not found for this asset.</value>
+  </data>
+    <data name="MonitoringTelemetryError.SpeedReadingNotFound" xml:space="preserve">
+    <value>Speed reading not found for this asset.</value>
+  </data>
+    <data name="MonitoringTelemetryError.PressureReadingNotFound" xml:space="preserve">
+    <value>Pressure reading not found for this asset.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidTemperature" xml:space="preserve">
+    <value>Invalid temperature value provided.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidSpeed" xml:space="preserve">
+    <value>Invalid speed value provided.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidPressure" xml:space="preserve">
+    <value>Invalid pressure value provided.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidProtocol" xml:space="preserve">
+    <value>Invalid communication protocol provided.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidAnomalyType" xml:space="preserve">
+    <value>Invalid anomaly type provided.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InvalidPressureType" xml:space="preserve">
+    <value>Invalid pressure type provided.</value>
+  </data>
+    <data name="MonitoringTelemetryError.OperationCancelled" xml:space="preserve">
+    <value>Monitoring telemetry operation was cancelled.</value>
+  </data>
+    <data name="MonitoringTelemetryError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during monitoring telemetry operation.</value>
+  </data>
+    <data name="MonitoringTelemetryError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Monitoring Telemetry.</value>
+  </data>
 </root>
