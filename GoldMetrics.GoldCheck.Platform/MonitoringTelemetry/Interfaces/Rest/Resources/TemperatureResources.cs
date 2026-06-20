@@ -17,3 +17,5 @@ public record TemperatureReadingResource(
     string? AnomalyDescription,
     DateTimeOffset? CreatedAt,
     DateTimeOffset? UpdatedAt);
+    
+public record AnalyseExhaustTemperatureResource(decimal ExhaustCelsius);
