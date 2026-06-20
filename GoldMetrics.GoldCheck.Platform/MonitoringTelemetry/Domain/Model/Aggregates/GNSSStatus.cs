@@ -22,4 +22,16 @@ public partial class GNSSStatus
     
     public void DetectAnomaly(DetectGNSSAnomalyCommand command) =>
         Status = "ChipOff";
+    
+    public string? RestartReason { get; private set; }
+
+    public void Restart(RestartGNSSCommand command)
+    {
+        RestartReason = command.RestartReason;
+        RestartCount++;
+        Status = "Restarted";
+    }
+
+    public void LogRestart(LogGNSSRestartCommand command) =>
+        Status = "RestartLogged";
 }
