@@ -408,4 +408,8 @@
   <data name="RiskLevelEscalated" xml:space="preserve">
     <value>Risk level escalated successfully.</value>
   </data>
+
+  <data name="RiskLevelUpdated" xml:space="preserve">
+    <value>Risk level evaluated and updated successfully.</value>
+  </data>
 </root>
