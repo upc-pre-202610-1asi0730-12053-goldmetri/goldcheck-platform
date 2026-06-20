@@ -60,4 +60,14 @@ public class SpeedController(
         var readings = await queryService.Handle(new GetSpeedReadingByAssetQuery(assetId), cancellationToken);
         return Ok(readings.Select(SpeedReadingResourceFromEntityAssembler.ToResourceFromEntity));
     }
+    
+    // GET api/v1/monitoring/speed/{assetId}/violations
+    [HttpGet("{assetId}/violations")]
+    [SwaggerOperation("GetSpeedViolationsByAsset", "Returns speed violations for an asset.")]
+    [ProducesResponseType(typeof(IEnumerable<SpeedReadingResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetViolations(string assetId, CancellationToken cancellationToken)
+    {
+        var readings = await queryService.Handle(new GetSpeedViolationsByAssetQuery(assetId), cancellationToken);
+        return Ok(readings.Select(SpeedReadingResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }
