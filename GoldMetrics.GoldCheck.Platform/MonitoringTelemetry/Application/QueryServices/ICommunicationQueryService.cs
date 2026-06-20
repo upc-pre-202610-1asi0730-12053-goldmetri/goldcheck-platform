@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QuerySe
 public interface ICommunicationQueryService
 {
     Task<IEnumerable<CommunicationChannel>> Handle(GetCommunicationChannelByAssetQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<CommunicationChannel>> Handle(GetCommunicationAnomaliesByAssetQuery query, CancellationToken cancellationToken = default);
 }
