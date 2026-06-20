@@ -20,3 +20,4 @@ public record TemperatureReadingResource(
     
 public record AnalyseExhaustTemperatureResource(decimal ExhaustCelsius);
 public record AnalyseExhaustLimitPerCylinderResource(decimal LimitCelsius, int CylinderNumber);
+public record AnalyseRefrigerantTemperatureResource(decimal RefrigerantCelsius);
