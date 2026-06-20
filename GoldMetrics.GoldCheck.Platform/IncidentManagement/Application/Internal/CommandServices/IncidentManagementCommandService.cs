@@ -46,4 +46,24 @@ public class IncidentManagementCommandService(
         catch (DbUpdateException) { return DbError(); }
         catch (Exception) { return ServerError(); }
     }
+    
+    public async Task<Result<SafetyRecord>> Handle(EscalateRiskLevelCommand command, CancellationToken cancellationToken)
+    {
+        var record = await FindByIncidentId(command.Id, cancellationToken);
+        if (record is null) return NotFound();
+        try
+        {
+            record.EscalateRiskLevel(command);
+            safetyRecordRepository.Update(record);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<SafetyRecord>.Success(record);
+        }
+        catch (ArgumentException)
+        {
+            return Result<SafetyRecord>.Failure(IncidentManagementError.InvalidRiskLevel, localizer[nameof(IncidentManagementError.InvalidRiskLevel)]);
+        }
+        catch (OperationCanceledException) { return Cancelled(); }
+        catch (DbUpdateException) { return DbError(); }
+        catch (Exception) { return ServerError(); }
+    }
 }
