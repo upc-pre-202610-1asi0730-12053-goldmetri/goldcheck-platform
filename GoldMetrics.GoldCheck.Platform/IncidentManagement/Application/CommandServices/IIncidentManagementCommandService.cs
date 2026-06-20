@@ -9,4 +9,5 @@ public interface IIncidentManagementCommandService
     Task<Result<SafetyRecord>> Handle(DetectDriverFatigueCommand command, CancellationToken cancellationToken);
     Task<Result<SafetyRecord>> Handle(EscalateRiskLevelCommand command, CancellationToken cancellationToken);
     Task<Result<SafetyRecord>> Handle(EvaluateSafetyRiskCommand command, CancellationToken cancellationToken);
+    Task<Result<SafetyRecord>> Handle(SendRiskLevelAlertCommand command, CancellationToken cancellationToken);
 }
