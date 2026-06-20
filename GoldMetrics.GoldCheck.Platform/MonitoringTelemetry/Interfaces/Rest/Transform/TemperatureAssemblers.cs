@@ -29,4 +29,10 @@ public static class TemperatureReadingResourceFromEntityAssembler
         public static AnalyseExhaustTemperatureLimitPerCylinderCommand ToCommandFromResource(string assetId, AnalyseExhaustLimitPerCylinderResource resource)
             => new(assetId, resource.LimitCelsius, resource.CylinderNumber);
     }
+    
+    public static class AnalyseRefrigerantCommandFromResourceAssembler
+    {
+        public static AnalyseEngineRefrigerantTemperatureCommand ToCommandFromResource(string assetId, AnalyseRefrigerantTemperatureResource resource)
+            => new(assetId, resource.RefrigerantCelsius);
+    }
 }
