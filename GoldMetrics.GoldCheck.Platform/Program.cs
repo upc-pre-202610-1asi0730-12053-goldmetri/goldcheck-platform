@@ -91,6 +91,8 @@ using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.Qu
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -284,6 +286,7 @@ builder.Services.AddScoped<ISpeedCommandService, SpeedCommandService>();
 builder.Services.AddScoped<ISpeedQueryService, SpeedQueryService>();
 builder.Services.AddScoped<ITemperatureReadingRepository, TemperatureReadingRepository>();
 builder.Services.AddScoped<ITemperatureCommandService, TemperatureCommandService>();
+builder.Services.AddScoped<ITemperatureQueryService, TemperatureQueryService>();
 
 var app = builder.Build();
 
