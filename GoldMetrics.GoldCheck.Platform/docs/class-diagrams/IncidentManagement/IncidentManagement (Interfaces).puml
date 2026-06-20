@@ -1,0 +1,79 @@
+@startuml
+title GoldMetrics — IncidentManagement (Interfaces)
+
+package "GoldMetrics" {
+  package "IncidentManagement" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class IncidentManagementController {
+          -commandService: IIncidentManagementCommandService
+          -queryService: IIncidentManagementQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +DetectDriverFatigue(resource: DetectDriverFatigueResource): IActionResult
+          +EscalateRiskLevel(incidentId: int, resource: EscalateRiskLevelResource): IActionResult
+          +EvaluateSafetyRisk(incidentId: int): IActionResult
+          +SendRiskLevelAlert(incidentId: int): IActionResult
+          +DetectSmoke(resource: DetectSmokeResource): IActionResult
+          +CommitSmokeAlert(incidentId: int): IActionResult
+          +CommitAccident(resource: CommitAccidentResource): IActionResult
+          +GetIncidentById(incidentId: int): IActionResult
+          +GetAllIncidents(): IActionResult
+          +GetIncidentsByType(incidentType: string): IActionResult
+          +GetIncidentsByRiskLevel(riskLevel: string): IActionResult
+        }
+
+        package "Resources" {
+          class DetectDriverFatigueResource <<record>> {
+            +OperatorId: string
+            +AssetId: string
+          }
+          class DetectSmokeResource <<record>> {
+            +AssetId: string
+          }
+          class CommitAccidentResource <<record>> {
+            +OperatorId: string
+            +Description: string
+          }
+          class EscalateRiskLevelResource <<record>> {
+            +NewRiskLevel: string
+          }
+          class SafetyRecordResource <<record>> {
+            +Id: int
+            +IncidentType: string
+            +OperatorId: string
+            +AssetId: string
+            +RiskLevel: string
+            +Description: string?
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class SafetyRecordResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: SafetyRecord): SafetyRecordResource
+          }
+          class IncidentManagementActionResultAssembler <<static>> {
+            +ToActionResultFromSafetyRecordResult(...): IActionResult
+            +ToActionResultFromGetSafetyRecordResult(...): IActionResult
+          }
+        }
+
+        IncidentManagementController ..> SafetyRecordResourceFromEntityAssembler : uses
+        IncidentManagementController ..> IncidentManagementActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IIncidentManagementCommandService
+      interface IIncidentManagementQueryService
+    }
+  }
+}
+
+IncidentManagementController ..> IIncidentManagementCommandService : uses
+IncidentManagementController ..> IIncidentManagementQueryService : uses
+
+@enduml

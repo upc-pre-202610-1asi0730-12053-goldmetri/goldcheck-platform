@@ -1,0 +1,32 @@
+@startuml
+title GoldMetrics — AssetMaintenance (Infrastructure)
+
+package "GoldMetrics" {
+  package "AssetMaintenance" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class MachineryRepository {
+          -context: AppDbContext
+          +FindByMachineryIdAsync(machineryId: string): Machinery?
+          +FindByStatusAsync(status: string): IEnumerable<Machinery>
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyAssetMaintenanceConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IMachineryRepository
+    }
+  }
+}
+
+MachineryRepository ..|> IMachineryRepository
+
+@enduml

@@ -1,0 +1,63 @@
+@startuml
+title GoldMetrics — AssetMaintenance (Application)
+
+package "GoldMetrics" {
+  package "AssetMaintenance" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IAssetMaintenanceCommandService {
+          +Handle(command: RegisterMachineryCommand): Result<Machinery>
+          +Handle(command: SchedulePreventiveMaintenanceCommand): Result<Machinery>
+          +Handle(command: UpdateMachineryDataCommand): Result<Machinery>
+          +Handle(command: DischargeMachineryCommand): Result<Machinery>
+          +Handle(command: DischargeComponentCommand): Result<Machinery>
+        }
+      }
+
+      package "QueryServices" {
+        interface IAssetMaintenanceQueryService {
+          +Handle(query: GetMachineryByIdQuery): Machinery?
+          +Handle(query: GetAllMachineryQuery): IEnumerable<Machinery>
+          +Handle(query: GetMachineryByStatusQuery): IEnumerable<Machinery>
+          +Handle(query: GetMaintenanceScheduleQuery): Machinery?
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class AssetMaintenanceCommandService {
+          -machineryRepository: IMachineryRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: RegisterMachineryCommand): Result<Machinery>
+          +Handle(command: SchedulePreventiveMaintenanceCommand): Result<Machinery>
+          +Handle(command: UpdateMachineryDataCommand): Result<Machinery>
+          +Handle(command: DischargeMachineryCommand): Result<Machinery>
+          +Handle(command: DischargeComponentCommand): Result<Machinery>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class AssetMaintenanceQueryService {
+          -machineryRepository: IMachineryRepository
+          +Handle(query: GetMachineryByIdQuery): Machinery?
+          +Handle(query: GetAllMachineryQuery): IEnumerable<Machinery>
+          +Handle(query: GetMachineryByStatusQuery): IEnumerable<Machinery>
+          +Handle(query: GetMaintenanceScheduleQuery): Machinery?
+        }
+      }
+
+      AssetMaintenanceCommandService ..|> IAssetMaintenanceCommandService
+      AssetMaintenanceQueryService ..|> IAssetMaintenanceQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IMachineryRepository
+    }
+  }
+}
+
+AssetMaintenanceCommandService ..> IMachineryRepository : uses
+AssetMaintenanceQueryService ..> IMachineryRepository : uses
+
+@enduml

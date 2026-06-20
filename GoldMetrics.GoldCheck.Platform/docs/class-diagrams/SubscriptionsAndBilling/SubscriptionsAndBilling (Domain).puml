@@ -1,0 +1,259 @@
+@startuml
+title GoldMetrics — SubscriptionsAndBilling (Domain)
+
+package "GoldMetrics" {
+  package "SubscriptionsAndBilling" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class UserSubscription {
+          +Id: int
+          +UserId: UserId
+          +PlanType: PlanType
+          +BillingCycle: BillingCycle
+          +SubscriptionStatus: SubscriptionStatus
+          +AssignedFeatures: List<string>
+          +Invoices: List<Invoice>
+          +AccessGranted: bool
+          +RequestedDowngradePlan: string?
+          +Status: string
+          +UserSubscription(command: SelectPlanCommand)
+          +ConfirmSubscription(command: ConfirmSubscriptionCommand): void
+          +RequestDowngrade(command: RequestDowngradeCommand): void
+          +ExecuteDowngrade(command: ExecuteDowngradeCommand): void
+          +RestrictFeatures(command: RestrictFeaturesCommand): void
+          +CheckFeatureAccess(command: CheckFeatureAccessCommand): bool
+          +RequestAccess(command: RequestAccessCommand): void
+          +DecideAccess(command: DecideAccessCommand): bool
+          +RequestPaymentHistory(command: RequestPaymentHistoryCommand): void
+          +ViewPaymentHistory(command: ViewPaymentHistoryCommand): void
+          +RequestInvoice(command: RequestInvoiceCommand): void
+          +GenerateInvoice(command: GenerateInvoiceCommand): Invoice
+          +DownloadInvoice(command: DownloadInvoiceCommand): Invoice?
+          +CheckUserPlan(command: CheckUserPlanCommand): void
+          +AssignFeatures(command: AssignFeaturesCommand): void
+        }
+      }
+
+      package "Entities" {
+        class Invoice {
+          +InvoiceId: InvoiceId
+          +Amount: Amount
+          +IsDownloaded: bool
+          +Invoice(invoiceId: string, amount: decimal)
+          +MarkDownloaded(): void
+        }
+      }
+
+      package "ValueObjects" {
+        class UserId <<record>> {
+          +Value: string
+        }
+        class PlanType <<record>> {
+          +Value: string
+        }
+        class BillingCycle <<record>> {
+          +Value: string
+        }
+        class SubscriptionStatus <<record>> {
+          +Value: string
+        }
+        class InvoiceId <<record>> {
+          +Value: string
+        }
+        class Amount <<record>> {
+          +Value: decimal
+        }
+        class FeatureName <<record>> {
+          +Value: string
+        }
+        class AdministratorId <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Commands" {
+        class SelectPlanCommand <<record>> {
+          +UserId: string
+          +PlanType: string
+          +BillingCycle: string
+        }
+        class ConfirmSubscriptionCommand <<record>> {
+          +UserId: string
+          +PaymentMethod: string
+        }
+        class RequestDowngradeCommand <<record>> {
+          +UserId: string
+          +NewPlanType: string
+        }
+        class ExecuteDowngradeCommand <<record>> {
+          +UserId: string
+        }
+        class RestrictFeaturesCommand <<record>> {
+          +UserId: string
+        }
+        class CheckFeatureAccessCommand <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class RequestAccessCommand <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class DecideAccessCommand <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class RequestPaymentHistoryCommand <<record>> {
+          +UserId: string
+        }
+        class ViewPaymentHistoryCommand <<record>> {
+          +UserId: string
+        }
+        class RequestInvoiceCommand <<record>> {
+          +UserId: string
+        }
+        class GenerateInvoiceCommand <<record>> {
+          +UserId: string
+          +InvoiceId: string
+        }
+        class DownloadInvoiceCommand <<record>> {
+          +UserId: string
+          +InvoiceId: string
+        }
+        class CheckUserPlanCommand <<record>> {
+          +UserId: string
+          +AdministratorId: string
+        }
+        class AssignFeaturesCommand <<record>> {
+          +UserId: string
+          +PlanType: string
+          +Features: IEnumerable<string>
+        }
+      }
+
+      package "Queries" {
+        class GetUserSubscriptionByUserIdQuery <<record>> {
+          +UserId: string
+        }
+        class GetAllUserSubscriptionsQuery <<record>> {
+        }
+        class GetPaymentHistoryByUserQuery <<record>> {
+          +UserId: string
+        }
+        class GetInvoiceByIdQuery <<record>> {
+          +UserId: string
+          +InvoiceId: string
+        }
+        class GetPlanFeaturesQuery <<record>> {
+          +PlanType: string
+        }
+      }
+
+      package "Events" {
+        class PlanSelectedEvent <<record>> {
+          +UserId: string
+          +PlanType: string
+        }
+        class SubscriptionActivatedEvent <<record>> {
+          +UserId: string
+        }
+        class DowngradeRequestedEvent <<record>> {
+          +UserId: string
+          +NewPlanType: string
+        }
+        class DowngradeExecutedEvent <<record>> {
+          +UserId: string
+          +NewPlanType: string
+        }
+        class FeaturesAssignedEvent <<record>> {
+          +UserId: string
+          +PlanType: string
+        }
+        class FeaturesRestrictedEvent <<record>> {
+          +UserId: string
+        }
+        class FeatureAccessCheckedEvent <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class AccessRequestedEvent <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class AccessGrantedEvent <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class AccessDeniedEvent <<record>> {
+          +UserId: string
+          +FeatureName: string
+        }
+        class PaymentHistoryRequestedEvent <<record>> {
+          +UserId: string
+        }
+        class PaymentHistoryLoadedEvent <<record>> {
+          +UserId: string
+        }
+        class InvoiceRequestedEvent <<record>> {
+          +UserId: string
+        }
+        class InvoiceGeneratedEvent <<record>> {
+          +UserId: string
+          +InvoiceId: string
+        }
+        class InvoiceDownloadedEvent <<record>> {
+          +UserId: string
+          +InvoiceId: string
+        }
+        class UserPlanDefinedEvent <<record>> {
+          +UserId: string
+          +PlanType: string
+        }
+      }
+
+      package "Repositories" {
+        interface IUserSubscriptionRepository {
+          +FindByUserIdAsync(userId: string): UserSubscription?
+        }
+      }
+
+      package "Errors" {
+        enum SubscriptionsBillingError {
+          None
+          SubscriptionNotFound
+          PlanNotFound
+          InvalidPlanType
+          InvalidBillingCycle
+          DowngradeNotRequested
+          InvoiceNotFound
+          FeatureNotFound
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      UserSubscription *-- UserId
+      UserSubscription *-- PlanType
+      UserSubscription *-- BillingCycle
+      UserSubscription *-- SubscriptionStatus
+      UserSubscription o-- Invoice
+      Invoice *-- InvoiceId
+      Invoice *-- Amount
+      UserSubscription ..> SelectPlanCommand : uses
+      UserSubscription ..> ConfirmSubscriptionCommand : uses
+      UserSubscription ..> RequestDowngradeCommand : uses
+      UserSubscription ..> GenerateInvoiceCommand : uses
+      UserSubscription ..> AssignFeaturesCommand : uses
+      UserSubscription ..> PlanSelectedEvent : fires
+      UserSubscription ..> SubscriptionActivatedEvent : fires
+      UserSubscription ..> DowngradeRequestedEvent : fires
+      UserSubscription ..> FeaturesAssignedEvent : fires
+      UserSubscription ..> InvoiceGeneratedEvent : fires
+      UserSubscription ..> AccessGrantedEvent : fires
+      UserSubscription ..> SubscriptionsBillingError : uses
+    }
+  }
+}
+@enduml

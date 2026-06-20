@@ -1,0 +1,105 @@
+@startuml
+title GoldMetrics — Shared (Infrastructure)
+
+package "GoldMetrics" {
+  package "Shared" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Configuration" {
+        class AppDbContext {
+          +AppDbContext(options: DbContextOptions)
+          #OnConfiguring(builder: DbContextOptionsBuilder): void
+          #OnModelCreating(builder: ModelBuilder): void
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class BaseRepository<TEntity> {
+          #Context: AppDbContext
+          +AddAsync(entity: TEntity): void
+          +FindByIdAsync(id: int): TEntity?
+          +Update(entity: TEntity): void
+          +Remove(entity: TEntity): void
+          +ListAsync(): IEnumerable<TEntity>
+        }
+
+        class UnitOfWork {
+          -context: AppDbContext
+          +CompleteAsync(): int
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Interceptors" {
+        class AuditableEntityInterceptor {
+          +SavingChanges(eventData: DbContextEventData, result: InterceptionResult<int>): InterceptionResult<int>
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +UseSnakeCaseNamingConvention(builder: ModelBuilder): void
+        }
+        class StringExtensions <<static>> {
+          +ToSnakeCase(value: string): string
+          +ToPlural(value: string): string
+        }
+      }
+
+      package "Pipeline.Middleware" {
+        class GlobalExceptionHandlerMiddleware {
+          -next: RequestDelegate
+          +InvokeAsync(context: HttpContext): void
+        }
+        class MiddlewareExtensions <<static>> {
+          +UseGlobalExceptionHandler(app: IApplicationBuilder): IApplicationBuilder
+        }
+      }
+
+      package "Interfaces.AspNetCore.Configuration" {
+        class KebabCaseRouteNamingConvention {
+          +Apply(action: ActionModel): void
+        }
+        class StringExtensions <<static>> {
+          +ToKebabCase(value: string): string
+        }
+      }
+
+      package "Mediator.Cortex.Configuration" {
+        class LoggingCommandBehavior<TRequest, TResponse> {
+          -logger: ILogger
+          +Handle(request: TRequest, next: RequestHandlerDelegate<TResponse>): TResponse
+        }
+      }
+
+      BaseRepository ..|> IBaseRepository
+      UnitOfWork ..|> IUnitOfWork
+      AppDbContext ..> AuditableEntityInterceptor : uses
+    }
+
+    package "Domain [stubs]" {
+      interface IBaseRepository
+      interface IUnitOfWork
+    }
+
+    package "Interfaces" {
+      package "REST" {
+        class ProblemDetailsFactory {
+          +CreateProblemDetails(context: HttpContext, ...): ProblemDetails
+          +CreateValidationProblemDetails(context: HttpContext, ...): ValidationProblemDetails
+        }
+      }
+
+      package "Resources" {
+        class ErrorMessages {
+        }
+        class CommonMessages {
+        }
+      }
+    }
+  }
+}
+
+BaseRepository ..> AppDbContext : uses
+UnitOfWork ..> AppDbContext : uses
+
+@enduml

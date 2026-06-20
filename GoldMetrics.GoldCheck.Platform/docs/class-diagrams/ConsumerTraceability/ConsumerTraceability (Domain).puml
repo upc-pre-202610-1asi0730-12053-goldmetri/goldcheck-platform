@@ -1,0 +1,149 @@
+﻿@startuml
+title GoldMetrics — ConsumerTraceability (Domain)
+
+package "GoldMetrics" {
+  package "ConsumerTraceability" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class JewelryProduct {
+          +Id: int
+          +QRCode: ProductQRCode
+          +ConsumerId: ConsumerId
+          +CertificateIdRef: string?
+          +Status: string
+          +ScanCount: int
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +JewelryProduct(command: ScanProductQRCommand)
+          +JewelryProduct(command: DownloadCertificateCommand)
+          +RecordScan(command: ScanProductQRCommand): void
+          +DownloadCertificate(command: DownloadCertificateCommand): void
+        }
+
+        class TraceabilityJourney {
+          +Id: int
+          +ProductQRCode: ProductQRCode
+          +ConsumerId: ConsumerId
+          +JourneySummary: string
+          +Status: string
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +TraceabilityJourney(command: ScanProductQRCommand)
+          +TraceabilityJourney(command: RequestJourneyCommand)
+        }
+      }
+
+      package "ValueObjects" {
+        class ProductQRCode {
+          +Value: string
+        }
+        class ConsumerId {
+          +Value: string
+        }
+        class CertificateId {
+          +Value: string
+        }
+        class Language {
+          +Code: string
+        }
+      }
+
+      package "Commands" {
+        class ScanProductQRCommand <<record>> {
+          +QRCode: string
+          +ConsumerId: string
+        }
+        class RequestJourneyCommand <<record>> {
+          +QRCode: string
+          +ConsumerId: string
+        }
+        class DetectLanguageCommand <<record>> {
+          +ConsumerId: string
+          +LanguageCode: string
+        }
+        class DownloadCertificateCommand <<record>> {
+          +CertificateId: string
+          +ConsumerId: string
+        }
+      }
+
+      package "Queries" {
+        class GetProductByQRQuery <<record>> {
+          +QRCode: string
+        }
+        class GetTraceabilityJourneyQuery <<record>> {
+          +QRCode: string
+        }
+        class GetCertificateByIdQuery <<record>> {
+          +CertificateId: string
+        }
+      }
+
+      package "Events" {
+        class ProductQRScannedEvent <<record>> {
+          +QRCode: string
+          +ConsumerId: string
+        }
+        class TraceabilityDataRequestedEvent <<record>> {
+          +QRCode: string
+          +ConsumerId: string
+        }
+        class LanguageDetectedEvent <<record>> {
+          +ConsumerId: string
+          +LanguageCode: string
+        }
+        class ContentLocalizedEvent <<record>> {
+          +ConsumerId: string
+          +LanguageCode: string
+        }
+        class CertificateDownloadedEvent <<record>> {
+          +CertificateId: string
+          +ConsumerId: string
+        }
+        class CertificateViewedEvent <<record>> {
+          +CertificateId: string
+          +ConsumerId: string
+        }
+      }
+
+      package "Repositories" {
+        interface IJewelryProductRepository {
+          +FindByQRCodeAsync(qrCode: string): JewelryProduct?
+          +FindByCertificateIdAsync(certificateId: string): JewelryProduct?
+        }
+        interface ITraceabilityJourneyRepository {
+          +FindLatestByQRCodeAsync(qrCode: string): TraceabilityJourney?
+        }
+      }
+
+      package "Exceptions" {
+        enum ConsumerTraceabilityError {
+          None
+          ProductNotFound
+          InvalidQRCode
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+          LanguageNotSupported
+          CertificateNotFound
+          AccessDenied
+        }
+      }
+
+      JewelryProduct *-- ProductQRCode
+      JewelryProduct *-- ConsumerId
+      TraceabilityJourney *-- ProductQRCode
+      TraceabilityJourney *-- ConsumerId
+      JewelryProduct ..> ScanProductQRCommand : uses
+      JewelryProduct ..> DownloadCertificateCommand : uses
+      TraceabilityJourney ..> ScanProductQRCommand : uses
+      TraceabilityJourney ..> RequestJourneyCommand : uses
+      JewelryProduct ..> ProductQRScannedEvent : fires
+      JewelryProduct ..> CertificateDownloadedEvent : fires
+      TraceabilityJourney ..> TraceabilityDataRequestedEvent : fires
+      JewelryProduct ..> ConsumerTraceabilityError : uses
+    }
+  }
+}
+@enduml

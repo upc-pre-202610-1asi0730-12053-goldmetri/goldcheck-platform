@@ -1,0 +1,186 @@
+﻿@startuml
+title GoldMetrics — ReportingNotifications (Domain)
+
+package "GoldMetrics" {
+  package "ReportingNotifications" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class Report {
+          +Id: int
+          +SupervisorId: SupervisorId
+          +IncidentId: string
+          +ReportStatus: ReportStatus
+          +ReportFormat: ReportFormat
+          +DownloadedByUserId: string?
+          +Status: string
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +Report(command: RequestAccidentDataCommand)
+          +LoadAccidentData(command: LoadAccidentDataCommand): void
+          +GenerateReport(command: GenerateReportCommand): void
+          +RequestReportExportation(command: RequestReportExportationCommand): void
+          +ExportReport(command: ExportReportCommand): void
+          +DownloadReport(command: DownloadReportCommand): void
+        }
+
+        class Notification {
+          +Id: int
+          +RecipientId: RecipientId
+          +NotificationType: NotificationType
+          +NotificationStatus: NotificationStatus
+          +Message: string
+          +Status: string
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +Notification(command: RequestNotificationCommand)
+          +SendNotification(command: SendNotificationCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class SupervisorId <<record>> {
+          +Value: string
+        }
+        class ReportStatus <<record>> {
+          +Value: string
+        }
+        class ReportFormat <<record>> {
+          +Value: string
+        }
+        class RecipientId <<record>> {
+          +Value: string
+        }
+        class NotificationType <<record>> {
+          +Value: string
+        }
+        class NotificationStatus <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Commands" {
+        class RequestAccidentDataCommand <<record>> {
+          +IncidentId: string
+          +SupervisorId: string
+        }
+        class LoadAccidentDataCommand <<record>> {
+          +Id: int
+        }
+        class GenerateReportCommand <<record>> {
+          +Id: int
+        }
+        class RequestReportExportationCommand <<record>> {
+          +Id: int
+          +Format: string
+        }
+        class ExportReportCommand <<record>> {
+          +Id: int
+        }
+        class DownloadReportCommand <<record>> {
+          +Id: int
+          +UserId: string
+        }
+        class RequestNotificationCommand <<record>> {
+          +RecipientId: string
+          +Type: string
+          +Message: string
+        }
+        class SendNotificationCommand <<record>> {
+          +Id: int
+        }
+      }
+
+      package "Queries" {
+        class GetReportByIdQuery <<record>> {
+          +Id: int
+        }
+        class GetAllReportsQuery <<record>> {
+        }
+        class GetNotificationByIdQuery <<record>> {
+          +Id: int
+        }
+        class GetNotificationsByUserQuery <<record>> {
+          +UserId: string
+        }
+      }
+
+      package "Events" {
+        class AccidentDataRequestedEvent <<record>> {
+          +ReportId: string
+          +IncidentId: string
+          +SupervisorId: string
+        }
+        class AccidentDataLoadedEvent <<record>> {
+          +ReportId: string
+        }
+        class ReportGeneratedEvent <<record>> {
+          +ReportId: string
+        }
+        class ReportExportationRequestedEvent <<record>> {
+          +ReportId: string
+          +Format: string
+        }
+        class ReportExportedEvent <<record>> {
+          +ReportId: string
+        }
+        class ReportDownloadedEvent <<record>> {
+          +ReportId: string
+          +UserId: string
+        }
+        class NotificationRequestedEvent <<record>> {
+          +NotificationId: string
+          +RecipientId: string
+          +Type: string
+        }
+        class NotificationSentEvent <<record>> {
+          +NotificationId: string
+        }
+      }
+
+      package "Repositories" {
+        interface IReportRepository {
+        }
+        interface INotificationRepository {
+          +FindByRecipientIdAsync(recipientId: string): IEnumerable<Notification>
+        }
+      }
+
+      package "Errors" {
+        enum ReportingNotificationsError {
+          None
+          ReportNotFound
+          AccidentValidationFailed
+          InvalidReportFormat
+          ReportAlreadyExported
+          NotificationNotFound
+          NotificationValidationFailed
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      Report *-- SupervisorId
+      Report *-- ReportStatus
+      Report *-- ReportFormat
+      Notification *-- RecipientId
+      Notification *-- NotificationType
+      Notification *-- NotificationStatus
+      Report ..> RequestAccidentDataCommand : uses
+      Report ..> LoadAccidentDataCommand : uses
+      Report ..> GenerateReportCommand : uses
+      Report ..> RequestReportExportationCommand : uses
+      Report ..> ExportReportCommand : uses
+      Report ..> DownloadReportCommand : uses
+      Notification ..> RequestNotificationCommand : uses
+      Notification ..> SendNotificationCommand : uses
+      Report ..> AccidentDataRequestedEvent : fires
+      Report ..> ReportGeneratedEvent : fires
+      Report ..> ReportDownloadedEvent : fires
+      Notification ..> NotificationRequestedEvent : fires
+      Notification ..> NotificationSentEvent : fires
+    }
+  }
+}
+@enduml

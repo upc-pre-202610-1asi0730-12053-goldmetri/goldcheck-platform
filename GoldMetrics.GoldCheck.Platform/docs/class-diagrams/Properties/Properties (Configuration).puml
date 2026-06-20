@@ -1,0 +1,45 @@
+@startuml
+title GoldMetrics — Properties (Launch Configuration)
+
+package "GoldMetrics" {
+  package "Properties" {
+
+    package "LaunchSettings" {
+
+      class LaunchProfile {
+        +CommandName: string
+        +DotnetRunMessages: bool
+        +LaunchBrowser: bool
+        +ApplicationUrl: string
+        +EnvironmentVariables: Dictionary<string, string>
+      }
+
+      class HttpProfile {
+        +CommandName: string = "Project"
+        +DotnetRunMessages: bool = true
+        +LaunchBrowser: bool = false
+        +ApplicationUrl: string = "http://localhost:5215"
+        +ASPNETCORE_ENVIRONMENT: string = "Development"
+      }
+
+      class HttpsProfile {
+        +CommandName: string = "Project"
+        +DotnetRunMessages: bool = true
+        +LaunchBrowser: bool = false
+        +ApplicationUrl: string = "https://localhost:7178;http://localhost:5215"
+        +ASPNETCORE_ENVIRONMENT: string = "Development"
+      }
+
+      class LaunchSettings {
+        +Schema: string
+        +Profiles: Dictionary<string, LaunchProfile>
+      }
+
+      LaunchSettings o-- HttpProfile : "http"
+      LaunchSettings o-- HttpsProfile : "https"
+      HttpProfile --|> LaunchProfile
+      HttpsProfile --|> LaunchProfile
+    }
+  }
+}
+@enduml

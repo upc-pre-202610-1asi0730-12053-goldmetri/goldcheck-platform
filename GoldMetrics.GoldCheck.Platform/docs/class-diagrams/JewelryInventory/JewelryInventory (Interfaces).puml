@@ -1,0 +1,115 @@
+﻿@startuml
+title GoldMetrics — JewelryInventory (Interfaces)
+
+package "GoldMetrics" {
+  package "JewelryInventory" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class JewelryMaterialsController {
+          -materialCommandService: IJewelryMaterialCommandService
+          -materialQueryService: IJewelryMaterialQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +RegisterMaterial(resource: CreateMaterialResource): IActionResult
+          +GetMaterialById(materialId: string): IActionResult
+          +GetAllMaterials(): IActionResult
+          +ScanQR(materialId: string, resource: ScanQRResource): IActionResult
+        }
+
+        class CertificatesController {
+          -materialCommandService: IJewelryMaterialCommandService
+          -jewelryCommandService: IJewelryCommandService
+          -jewelryQueryService: IJewelryQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +GenerateCertificate(resource: GenerateCertificateResource): IActionResult
+          +SignCertificate(certificateId: string, resource: SignCertificateResource): IActionResult
+          +GetCertificateById(certificateId: string): IActionResult
+        }
+
+        package "Resources" {
+          class CreateMaterialResource <<record>> {
+            +MaterialId: string
+            +JewelerId: string
+          }
+          class ScanQRResource <<record>> {
+            +QRCode: string
+          }
+          class GenerateCertificateResource <<record>> {
+            +MaterialId: string
+          }
+          class SignCertificateResource <<record>> {
+            +JewelerId: string
+          }
+          class JewelryMaterialResource <<record>> {
+            +Id: int
+            +MaterialId: string
+            +JewelerId: string
+            +Status: string
+            +QRCode: string?
+            +CertificateId: string?
+          }
+          class CertificateResource <<record>> {
+            +Id: int
+            +CertificateId: string
+            +MaterialId: string
+            +JewelerId: string
+            +IsSigned: bool
+          }
+        }
+
+        package "Transform" {
+          class RegisterNonCertifiedMaterialCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(resource: CreateMaterialResource): RegisterNonCertifiedMaterialCommand
+          }
+          class ScanQRMaterialCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(materialId: string, resource: ScanQRResource): ScanQRMaterialCommand
+          }
+          class GenerateCertificateCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(resource: GenerateCertificateResource): GenerateCertificateCommand
+          }
+          class SignCertificateCommandFromResourceAssembler <<static>> {
+            +ToCommandFromResource(certificateId: string, resource: SignCertificateResource): SignCertificateCommand
+          }
+          class JewelryMaterialResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: JewelryMaterial): JewelryMaterialResource
+          }
+          class CertificateResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Jewelry): CertificateResource
+          }
+          class JewelryInventoryActionResultAssembler <<static>> {
+            +ToActionResultFromMaterialResult(...): IActionResult
+            +ToActionResultFromJewelryResult(...): IActionResult
+          }
+        }
+
+        JewelryMaterialsController ..> RegisterNonCertifiedMaterialCommandFromResourceAssembler : uses
+        JewelryMaterialsController ..> ScanQRMaterialCommandFromResourceAssembler : uses
+        JewelryMaterialsController ..> JewelryMaterialResourceFromEntityAssembler : uses
+        JewelryMaterialsController ..> JewelryInventoryActionResultAssembler : uses
+        CertificatesController ..> GenerateCertificateCommandFromResourceAssembler : uses
+        CertificatesController ..> SignCertificateCommandFromResourceAssembler : uses
+        CertificatesController ..> CertificateResourceFromEntityAssembler : uses
+        CertificatesController ..> JewelryMaterialResourceFromEntityAssembler : uses
+        CertificatesController ..> JewelryInventoryActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IJewelryMaterialCommandService
+      interface IJewelryCommandService
+      interface IJewelryMaterialQueryService
+      interface IJewelryQueryService
+    }
+  }
+}
+
+JewelryMaterialsController ..> IJewelryMaterialCommandService : uses
+JewelryMaterialsController ..> IJewelryMaterialQueryService : uses
+CertificatesController ..> IJewelryMaterialCommandService : uses
+CertificatesController ..> IJewelryCommandService : uses
+CertificatesController ..> IJewelryQueryService : uses
+
+@enduml

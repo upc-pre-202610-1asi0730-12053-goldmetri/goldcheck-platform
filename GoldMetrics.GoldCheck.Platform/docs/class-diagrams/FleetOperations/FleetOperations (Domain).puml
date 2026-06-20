@@ -1,0 +1,161 @@
+@startuml
+title GoldMetrics — FleetOperations (Domain)
+
+package "GoldMetrics" {
+  package "FleetOperations" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class Vehicle {
+          +Id: int
+          +VehicleId: VehicleId
+          +OperatorId: OperatorId
+          +IsEngineOn: bool
+          +Status: string
+          +Vehicle(command: AssignVehicleCommand)
+          +StartEngine(): void
+        }
+
+        class HaulingCycle {
+          +Id: int
+          +VehicleId: VehicleId
+          +LoadingPoint: LoadingPoint
+          +DumpingPointName: string?
+          +PayloadTons: decimal?
+          +RouteProgress: string
+          +Status: string
+          +HaulingCycle(command: StartHaulingCycleCommand)
+          +LoadMaterial(command: LoadMaterialCommand): void
+          +Complete(command: CompleteHaulingCycleCommand): void
+          +UpdateRouteProgress(command: UpdateRouteProgressCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class VehicleId <<record>> {
+          +Value: string
+        }
+        class OperatorId <<record>> {
+          +Value: string
+        }
+        class LoadingPoint <<record>> {
+          +Name: string
+        }
+        class DumpingPoint <<record>> {
+          +Name: string
+        }
+        class Payload <<record>> {
+          +Tons: decimal
+        }
+        class CycleId <<record>> {
+          +Value: string
+        }
+      }
+
+      package "Commands" {
+        class AssignVehicleCommand <<record>> {
+          +VehicleId: string
+          +OperatorId: string
+        }
+        class StartEngineCommand <<record>> {
+          +VehicleId: string
+        }
+        class StartHaulingCycleCommand <<record>> {
+          +VehicleId: string
+          +LoadingPoint: string
+        }
+        class LoadMaterialCommand <<record>> {
+          +CycleId: int
+          +PayloadTons: decimal
+        }
+        class CompleteHaulingCycleCommand <<record>> {
+          +CycleId: int
+          +DumpingPoint: string
+        }
+        class UpdateRouteProgressCommand <<record>> {
+          +CycleId: int
+          +RouteProgress: string
+        }
+      }
+
+      package "Queries" {
+        class GetVehicleByIdQuery <<record>> {
+          +VehicleId: string
+        }
+        class GetAllVehiclesQuery <<record>> {
+        }
+        class GetHaulingCycleByIdQuery <<record>> {
+          +CycleId: int
+        }
+        class GetAllHaulingCyclesQuery <<record>> {
+        }
+      }
+
+      package "Events" {
+        class VehicleAssignedEvent <<record>> {
+          +VehicleId: string
+          +OperatorId: string
+        }
+        class EngineIgnitionOnEvent <<record>> {
+          +VehicleId: string
+        }
+        class HaulingCycleStartedEvent <<record>> {
+          +CycleId: int
+          +VehicleId: string
+        }
+        class MaterialLoadedEvent <<record>> {
+          +CycleId: int
+          +PayloadTons: decimal
+        }
+        class HaulingCycleCompletedEvent <<record>> {
+          +CycleId: int
+          +DumpingPoint: string
+        }
+        class ChargingPointReachedEvent <<record>> {
+          +CycleId: int
+        }
+      }
+
+      package "Repositories" {
+        interface IVehicleRepository {
+          +FindByVehicleIdAsync(vehicleId: string): Vehicle?
+        }
+        interface IHaulingCycleRepository {
+        }
+      }
+
+      package "Errors" {
+        enum FleetOperationsError {
+          None
+          VehicleNotFound
+          VehicleAlreadyAssigned
+          CycleNotFound
+          InvalidPayload
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      Vehicle *-- VehicleId
+      Vehicle *-- OperatorId
+      HaulingCycle *-- VehicleId
+      HaulingCycle *-- LoadingPoint
+      Vehicle ..> AssignVehicleCommand : uses
+      Vehicle ..> StartEngineCommand : uses
+      HaulingCycle ..> StartHaulingCycleCommand : uses
+      HaulingCycle ..> LoadMaterialCommand : uses
+      HaulingCycle ..> CompleteHaulingCycleCommand : uses
+      HaulingCycle ..> UpdateRouteProgressCommand : uses
+      HaulingCycle ..> Payload : uses
+      HaulingCycle ..> DumpingPoint : uses
+      Vehicle ..> VehicleAssignedEvent : fires
+      Vehicle ..> EngineIgnitionOnEvent : fires
+      HaulingCycle ..> HaulingCycleStartedEvent : fires
+      HaulingCycle ..> MaterialLoadedEvent : fires
+      HaulingCycle ..> HaulingCycleCompletedEvent : fires
+      HaulingCycle ..> ChargingPointReachedEvent : fires
+    }
+  }
+}
+@enduml

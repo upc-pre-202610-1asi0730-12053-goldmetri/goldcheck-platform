@@ -1,0 +1,86 @@
+﻿@startuml
+title GoldMetrics — ReportingNotifications (Application)
+
+package "GoldMetrics" {
+  package "ReportingNotifications" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IReportCommandService {
+          +Handle(command: RequestAccidentDataCommand): Result<Report>
+          +Handle(command: LoadAccidentDataCommand): Result<Report>
+          +Handle(command: GenerateReportCommand): Result<Report>
+          +Handle(command: RequestReportExportationCommand): Result<Report>
+          +Handle(command: ExportReportCommand): Result<Report>
+          +Handle(command: DownloadReportCommand): Result<Report>
+        }
+        interface INotificationCommandService {
+          +Handle(command: RequestNotificationCommand): Result<Notification>
+          +Handle(command: SendNotificationCommand): Result<Notification>
+        }
+      }
+
+      package "QueryServices" {
+        interface IReportQueryService {
+          +Handle(query: GetReportByIdQuery): Report?
+          +Handle(query: GetAllReportsQuery): IEnumerable<Report>
+        }
+        interface INotificationQueryService {
+          +Handle(query: GetNotificationByIdQuery): Notification?
+          +Handle(query: GetNotificationsByUserQuery): IEnumerable<Notification>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class ReportCommandService {
+          -reportRepository: IReportRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: RequestAccidentDataCommand): Result<Report>
+          +Handle(command: LoadAccidentDataCommand): Result<Report>
+          +Handle(command: GenerateReportCommand): Result<Report>
+          +Handle(command: RequestReportExportationCommand): Result<Report>
+          +Handle(command: ExportReportCommand): Result<Report>
+          +Handle(command: DownloadReportCommand): Result<Report>
+        }
+        class NotificationCommandService {
+          -notificationRepository: INotificationRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: RequestNotificationCommand): Result<Notification>
+          +Handle(command: SendNotificationCommand): Result<Notification>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class ReportQueryService {
+          -reportRepository: IReportRepository
+          +Handle(query: GetReportByIdQuery): Report?
+          +Handle(query: GetAllReportsQuery): IEnumerable<Report>
+        }
+        class NotificationQueryService {
+          -notificationRepository: INotificationRepository
+          +Handle(query: GetNotificationByIdQuery): Notification?
+          +Handle(query: GetNotificationsByUserQuery): IEnumerable<Notification>
+        }
+      }
+
+      ReportCommandService ..|> IReportCommandService
+      NotificationCommandService ..|> INotificationCommandService
+      ReportQueryService ..|> IReportQueryService
+      NotificationQueryService ..|> INotificationQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IReportRepository
+      interface INotificationRepository
+    }
+  }
+}
+
+ReportCommandService ..> IReportRepository : uses
+ReportQueryService ..> IReportRepository : uses
+NotificationCommandService ..> INotificationRepository : uses
+NotificationQueryService ..> INotificationRepository : uses
+
+@enduml
