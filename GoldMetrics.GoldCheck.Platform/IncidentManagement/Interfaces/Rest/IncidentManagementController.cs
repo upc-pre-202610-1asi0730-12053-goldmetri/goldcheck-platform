@@ -1,6 +1,8 @@
 ﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Domain.Model.Commands;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Interfaces.Rest.ProblemDetails;
@@ -18,6 +20,7 @@ namespace GoldMetrics.GoldCheck.Platform.IncidentManagement.Interfaces.Rest;
 public class IncidentManagementController(
     IIncidentManagementCommandService commandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
+    IIncidentManagementQueryService queryService,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
@@ -31,6 +34,21 @@ public class IncidentManagementController(
         var result = await commandService.Handle(command, cancellationToken);
         return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
             this, result, errorLocalizer, problemDetailsFactory,
-            r => Created(string.Empty, SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+            r => CreatedAtAction(nameof(GetIncidentById),
+                new { incidentId = r.Id },
+                SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
+    
+    [HttpGet("{incidentId:int}")]
+    [SwaggerOperation("Get Incident By Id", "Get a safety record by incident identifier.", OperationId = "GetIncidentById")]
+    [SwaggerResponse(200, "Incident found.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(404, "Incident not found.")]
+    public async Task<IActionResult> GetIncidentById(int incidentId, CancellationToken cancellationToken)
+    {
+        var query = new GetIncidentByIdQuery(incidentId);
+        var record = await queryService.Handle(query, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromGetSafetyRecordResult(
+            this, record, errorLocalizer, problemDetailsFactory,
+            r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
 }
