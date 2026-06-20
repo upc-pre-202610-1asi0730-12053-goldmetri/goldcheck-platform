@@ -59,4 +59,9 @@ public partial class SafetyRecord
     {
         Status = "SmokeAlertTriggered";
     }
+    
+    public void CommitSmokeAlert(CommitSmokeAlertCommand command)
+    {
+        Status = "SmokeAlertCommitted";
+    }
 }
