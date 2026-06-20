@@ -17,3 +17,9 @@ public static class TelemetryDataResourceFromEntityAssembler
             entity.RawData, entity.Status, entity.IsValidated,
             entity.CreatedAt, entity.UpdatedAt);
 }
+
+public static class ValidateTelemetryCommandFromResourceAssembler
+{
+    public static ValidateTelemetryDataCommand ToCommandFromResource(ValidateTelemetryDataResource resource)
+        => new(resource.AssetId, resource.TelemetryDataId);
+}
