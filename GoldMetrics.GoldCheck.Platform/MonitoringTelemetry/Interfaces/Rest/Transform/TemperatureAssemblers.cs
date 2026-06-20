@@ -47,4 +47,10 @@ public static class TemperatureReadingResourceFromEntityAssembler
         public static AnalyseEngineFuelTemperatureCommand ToCommandFromResource(string assetId, AnalyseFuelTemperatureResource resource)
             => new(assetId, resource.FuelCelsius);
     }
+    
+    public static class DetectTemperatureAnomalyCommandFromResourceAssembler
+    {
+        public static DetectTemperatureAnomalyCommand ToCommandFromResource(string assetId, DetectTemperatureAnomalyResource resource)
+            => new(assetId, resource.AnomalyType, resource.AnomalyCelsius);
+    }
 }
