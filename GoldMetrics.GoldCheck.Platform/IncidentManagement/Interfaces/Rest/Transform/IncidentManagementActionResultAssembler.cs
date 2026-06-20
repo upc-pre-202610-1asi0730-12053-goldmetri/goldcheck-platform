@@ -34,4 +34,19 @@ public static class IncidentManagementActionResultAssembler
         var statusCode = ToStatusCode((IncidentManagementError)result.Error!);
         return problemDetailsFactory.CreateProblemDetails(controller, statusCode, result.Error, result.Message);
     }
+    public static IActionResult ToActionResultFromGetSafetyRecordResult(
+        ControllerBase controller,
+        SafetyRecord? record,
+        IStringLocalizer<ErrorMessages> localizer,
+        ProblemDetailsFactory problemDetailsFactory,
+        Func<SafetyRecord, IActionResult> onSuccess)
+    {
+        if (record is null)
+            return problemDetailsFactory.CreateProblemDetails(
+                controller,
+                ToStatusCode(IncidentManagementError.IncidentNotFound),
+                IncidentManagementError.IncidentNotFound,
+                localizer[nameof(IncidentManagementError.IncidentNotFound)]);
+        return onSuccess(record);
+    }
 }
