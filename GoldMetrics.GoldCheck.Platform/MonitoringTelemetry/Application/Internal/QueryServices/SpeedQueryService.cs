@@ -9,4 +9,9 @@ public class SpeedQueryService(ISpeedReadingRepository repository) : ISpeedQuery
 {
     public async Task<IEnumerable<SpeedReading>> Handle(GetSpeedReadingByAssetQuery query, CancellationToken cancellationToken = default)
         => await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+    public async Task<IEnumerable<SpeedReading>> Handle(GetSpeedViolationsByAssetQuery query, CancellationToken cancellationToken = default)
+    {
+        var readings = await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+        return readings.Where(r => r.IsViolation);
+    }
 }
