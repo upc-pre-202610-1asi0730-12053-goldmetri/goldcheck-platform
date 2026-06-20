@@ -35,4 +35,18 @@ public class TelemetryController(
             d => CreatedAtAction(nameof(GetByAsset), new { assetId = d.AssetId.Value },
                 TelemetryDataResourceFromEntityAssembler.ToResourceFromEntity(d)));
     }
+    
+    // POST api/v1/monitoring/telemetry/validate
+    [HttpPost("validate")]
+    [SwaggerOperation("ValidateTelemetryData", "Validates a telemetry data record.")]
+    [ProducesResponseType(typeof(TelemetryDataResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ValidateTelemetry(
+        [FromBody] ValidateTelemetryDataResource resource, CancellationToken cancellationToken)
+    {
+        var command = ValidateTelemetryCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await commandService.Handle(command, cancellationToken);
+        return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+            d => Ok(TelemetryDataResourceFromEntityAssembler.ToResourceFromEntity(d)));
+    }
 }
