@@ -19,3 +19,9 @@ public static class PressureReadingResourceFromEntityAssembler
             entity.AnomalyPressureType, entity.AnomalyDescription,
             entity.CreatedAt, entity.UpdatedAt);
 }
+
+public static class AnalysePressureCommandFromResourceAssembler
+{
+    public static AnalysePressureCommand ToCommandFromResource(string assetId, AnalysePressureResource resource)
+        => new(assetId, resource.PressureType, resource.PressureBar);
+}
