@@ -18,6 +18,7 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Con
 [SwaggerTag("Available Monitoring & Telemetry — GNSS Endpoints.")]
 public class GNSSController(
     IGNSSCommandService commandService,
+    IGNSSQueryService queryService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
@@ -62,5 +63,15 @@ public class GNSSController(
         var result = await commandService.Handle(command, cancellationToken);
         return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
             s => Ok(GNSSStatusResourceFromEntityAssembler.ToResourceFromEntity(s)));
+    }
+    
+    // GET api/v1/monitoring/gnss/{assetId}
+    [HttpGet("{assetId}")]
+    [SwaggerOperation("GetGNSSStatusesByAsset", "Returns GNSS status records for an asset.")]
+    [ProducesResponseType(typeof(IEnumerable<GNSSStatusResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByAsset(string assetId, CancellationToken cancellationToken)
+    {
+        var statuses = await queryService.Handle(new GetGNSSStatusByAssetQuery(assetId), cancellationToken);
+        return Ok(statuses.Select(GNSSStatusResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }
