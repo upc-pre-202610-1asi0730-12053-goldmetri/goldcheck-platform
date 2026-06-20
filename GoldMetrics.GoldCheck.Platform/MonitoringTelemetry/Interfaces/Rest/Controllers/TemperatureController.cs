@@ -130,4 +130,13 @@
             var readings = await queryService.Handle(new GetTemperatureReadingByAssetQuery(assetId), cancellationToken);
             return Ok(readings.Select(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity));
         }
+        
+        [HttpGet("{assetId}/anomalies")]
+        [SwaggerOperation("GetTemperatureAnomaliesByAsset", "Returns temperature anomalies for an asset.")]
+        [ProducesResponseType(typeof(IEnumerable<TemperatureReadingResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAnomalies(string assetId, CancellationToken cancellationToken)
+        {
+            var readings = await queryService.Handle(new GetTemperatureAnomaliesByAssetQuery(assetId), cancellationToken);
+            return Ok(readings.Select(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity));
+        }
     }
