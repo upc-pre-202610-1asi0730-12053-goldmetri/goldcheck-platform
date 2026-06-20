@@ -58,4 +58,19 @@ public partial class TemperatureReading
         FuelCelsius = new Temperature(command.FuelCelsius).Celsius;
         Status = "FuelTemperatureAnalysed";
     }
+    
+    public string? AnomalyType { get; private set; }
+    public decimal? AnomalyCelsius { get; private set; }
+    public string? AnomalyDescription { get; private set; }
+    public void DetectAnomaly(DetectTemperatureAnomalyCommand command)
+    {
+        AnomalyType = new AnomalyType(command.AnomalyType).Value;
+        AnomalyCelsius = new Temperature(command.AnomalyCelsius).Celsius;
+        Status = "AnomalyDetected";
+    }
+    public void LogAnomaly(LogTemperatureAnomalyCommand command)
+    {
+        AnomalyDescription = command.AnomalyDescription;
+        Status = "AnomalyLogged";
+    }
 }

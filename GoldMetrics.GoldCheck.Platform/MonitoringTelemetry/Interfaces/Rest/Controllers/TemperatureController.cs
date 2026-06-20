@@ -105,4 +105,18 @@
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
         }
+        
+        // POST api/v1/monitoring/temperature/{assetId}/anomalies/detect
+        [HttpPost("{assetId}/anomalies/detect")]
+        [SwaggerOperation("DetectTemperatureAnomaly", "Detects and logs a temperature anomaly.")]
+        [ProducesResponseType(typeof(TemperatureReadingResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DetectAnomaly(
+            string assetId, [FromBody] DetectTemperatureAnomalyResource resource, CancellationToken cancellationToken)
+        {
+            var command = TemperatureReadingResourceFromEntityAssembler.DetectTemperatureAnomalyCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
     }
