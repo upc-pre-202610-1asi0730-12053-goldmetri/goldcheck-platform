@@ -76,4 +76,14 @@
             var channels = await queryService.Handle(new GetCommunicationChannelByAssetQuery(assetId), cancellationToken);
             return Ok(channels.Select(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity));
         }
+        
+        // GET api/v1/monitoring/communication/{assetId}/anomalies
+        [HttpGet("{assetId}/anomalies")]
+        [SwaggerOperation("GetCommunicationAnomaliesByAsset", "Returns communication anomalies for an asset.")]
+        [ProducesResponseType(typeof(IEnumerable<CommunicationChannelResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAnomalies(string assetId, CancellationToken cancellationToken)
+        {
+            var channels = await queryService.Handle(new GetCommunicationAnomaliesByAssetQuery(assetId), cancellationToken);
+            return Ok(channels.Select(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity));
+        }
     }
