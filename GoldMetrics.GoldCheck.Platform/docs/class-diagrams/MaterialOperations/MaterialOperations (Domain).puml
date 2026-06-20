@@ -1,0 +1,127 @@
+﻿@startuml
+title GoldMetrics — MaterialOperations (Domain)
+
+package "GoldMetrics" {
+  package "MaterialOperations" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class Material {
+          +Id: int
+          +BatchId: MaterialBatchId
+          +MineralType: MineralType
+          +Payload: Payload
+          +Classification: string?
+          +DumpingPointName: string?
+          +CurrentLocation: string?
+          +Status: string
+          +CreatedAt: DateTimeOffset?
+          +UpdatedAt: DateTimeOffset?
+          +Material(command: IdentifyMineralTypeCommand)
+          +Classify(command: ClassifyMaterialCommand): void
+          +Download(command: DownloadMaterialCommand): void
+          +TrackMovement(command: TrackMaterialMovementCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class MaterialBatchId <<record>> {
+          +Value: string
+        }
+        class MineralType <<record>> {
+          +Value: string
+        }
+        class Payload <<record>> {
+          +Tons: decimal
+        }
+        class DumpingPoint <<record>> {
+          +Name: string
+        }
+      }
+
+      package "Commands" {
+        class IdentifyMineralTypeCommand <<record>> {
+          +BatchId: string
+          +MineralType: string
+          +PayloadTons: decimal
+        }
+        class ClassifyMaterialCommand <<record>> {
+          +BatchId: string
+          +Classification: string
+        }
+        class DownloadMaterialCommand <<record>> {
+          +BatchId: string
+          +DumpingPoint: string
+        }
+        class TrackMaterialMovementCommand <<record>> {
+          +BatchId: string
+          +CurrentLocation: string
+        }
+      }
+
+      package "Queries" {
+        class GetMaterialByIdQuery <<record>> {
+          +BatchId: string
+        }
+        class GetAllMaterialsQuery <<record>> {
+        }
+        class GetMaterialsByTypeQuery <<record>> {
+          +MineralType: string
+        }
+      }
+
+      package "Events" {
+        class MineralTypeIdentifiedEvent <<record>> {
+          +BatchId: string
+          +MineralType: string
+          +PayloadTons: decimal
+        }
+        class MaterialClassifiedEvent <<record>> {
+          +BatchId: string
+          +Classification: string
+        }
+        class MaterialDownloadedEvent <<record>> {
+          +BatchId: string
+          +DumpingPoint: string
+        }
+        class MaterialMovementTrackedEvent <<record>> {
+          +BatchId: string
+          +CurrentLocation: string
+        }
+      }
+
+      package "Repositories" {
+        interface IMaterialRepository {
+          +FindByBatchIdAsync(batchId: string): Material?
+          +FindByMineralTypeAsync(mineralType: string): IEnumerable<Material>
+        }
+      }
+
+      enum MaterialOperationsError {
+        None
+        MaterialNotFound
+        InvalidMineralType
+        InvalidPayload
+        MaterialAlreadyClassified
+        OperationCancelled
+        DatabaseError
+        InternalServerError
+      }
+
+      Material *-- MaterialBatchId
+      Material *-- MineralType
+      Material *-- Payload
+      Material ..> IdentifyMineralTypeCommand : uses
+      Material ..> ClassifyMaterialCommand : uses
+      Material ..> DownloadMaterialCommand : uses
+      Material ..> TrackMaterialMovementCommand : uses
+      Material ..> DumpingPoint : uses
+      Material ..> MineralTypeIdentifiedEvent : fires
+      Material ..> MaterialClassifiedEvent : fires
+      Material ..> MaterialDownloadedEvent : fires
+      Material ..> MaterialMovementTrackedEvent : fires
+      Material ..> MaterialOperationsError : uses
+    }
+  }
+}
+@enduml

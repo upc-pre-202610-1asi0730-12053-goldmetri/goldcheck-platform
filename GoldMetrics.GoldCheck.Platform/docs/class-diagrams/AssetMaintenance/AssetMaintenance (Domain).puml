@@ -1,0 +1,148 @@
+@startuml
+title GoldMetrics — AssetMaintenance (Domain)
+
+package "GoldMetrics" {
+  package "AssetMaintenance" {
+    package "Domain" {
+
+      package "Aggregates" {
+        class Machinery {
+          +Id: int
+          +MachineryId: MachineryId
+          +Model: string
+          +OEM: string
+          +EngineHours: EngineHours
+          +MaintenanceStatus: MaintenanceStatus
+          +MaintenanceScheduledAtHours: decimal?
+          +DischargeReason: string?
+          +DischargedComponentId: string?
+          +ComponentDischargeReason: string?
+          +Status: string
+          +Machinery(command: RegisterMachineryCommand)
+          +SchedulePreventiveMaintenance(command: SchedulePreventiveMaintenanceCommand): void
+          +UpdateMachineryData(command: UpdateMachineryDataCommand): void
+          +DischargeMachinery(command: DischargeMachineryCommand): void
+          +DischargeComponent(command: DischargeComponentCommand): void
+        }
+      }
+
+      package "ValueObjects" {
+        class MachineryId <<record>> {
+          +Value: string
+        }
+        class EngineHours <<record>> {
+          +Value: decimal
+        }
+        class MaintenanceStatus <<record>> {
+          +Value: string
+        }
+        class ComponentId <<record>> {
+          +Value: string
+        }
+        class PCRHours <<record>> {
+          +Value: decimal
+        }
+      }
+
+      package "Commands" {
+        class RegisterMachineryCommand <<record>> {
+          +MachineryId: string
+          +Model: string
+          +OEM: string
+        }
+        class SchedulePreventiveMaintenanceCommand <<record>> {
+          +MachineryId: string
+          +EngineHours: decimal
+        }
+        class UpdateMachineryDataCommand <<record>> {
+          +MachineryId: string
+          +CurrentEngineHours: decimal
+        }
+        class DischargeMachineryCommand <<record>> {
+          +MachineryId: string
+          +Reason: string
+        }
+        class DischargeComponentCommand <<record>> {
+          +MachineryId: string
+          +ComponentId: string
+          +Reason: string
+        }
+      }
+
+      package "Queries" {
+        class GetMachineryByIdQuery <<record>> {
+          +MachineryId: string
+        }
+        class GetAllMachineryQuery <<record>> {
+        }
+        class GetMachineryByStatusQuery <<record>> {
+          +Status: string
+        }
+        class GetMaintenanceScheduleQuery <<record>> {
+          +MachineryId: string
+        }
+      }
+
+      package "Events" {
+        class MachineryRegisteredEvent <<record>> {
+          +MachineryId: string
+          +Model: string
+        }
+        class PreventiveMaintenanceScheduledEvent <<record>> {
+          +MachineryId: string
+          +ScheduledAtHours: decimal
+        }
+        class MachineryDataUpdatedEvent <<record>> {
+          +MachineryId: string
+          +CurrentEngineHours: decimal
+        }
+        class MachineryDischargedEvent <<record>> {
+          +MachineryId: string
+          +Reason: string
+        }
+        class ComponentDischargedEvent <<record>> {
+          +MachineryId: string
+          +ComponentId: string
+          +Reason: string
+        }
+      }
+
+      package "Repositories" {
+        interface IMachineryRepository {
+          +FindByMachineryIdAsync(machineryId: string): Machinery?
+          +FindByStatusAsync(status: string): IEnumerable<Machinery>
+        }
+      }
+
+      package "Errors" {
+        enum AssetMaintenanceError {
+          None
+          MachineryNotFound
+          MachineryAlreadyDischarged
+          InvalidEngineHours
+          ComponentNotFound
+          OperationCancelled
+          DatabaseError
+          InternalServerError
+        }
+      }
+
+      Machinery *-- MachineryId
+      Machinery *-- EngineHours
+      Machinery *-- MaintenanceStatus
+      Machinery ..> RegisterMachineryCommand : uses
+      Machinery ..> SchedulePreventiveMaintenanceCommand : uses
+      Machinery ..> UpdateMachineryDataCommand : uses
+      Machinery ..> DischargeMachineryCommand : uses
+      Machinery ..> DischargeComponentCommand : uses
+      Machinery ..> ComponentId : uses
+      Machinery ..> MachineryRegisteredEvent : fires
+      Machinery ..> PreventiveMaintenanceScheduledEvent : fires
+      Machinery ..> MachineryDataUpdatedEvent : fires
+      Machinery ..> MachineryDischargedEvent : fires
+      Machinery ..> ComponentDischargedEvent : fires
+      Machinery ..> AssetMaintenanceError : uses
+    }
+  }
+}
+@enduml

@@ -1,0 +1,75 @@
+﻿@startuml
+title GoldMetrics — Analytics (Interfaces)
+
+package "GoldMetrics" {
+  package "Analytics" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class AnalyticsController {
+          -analyticsCommandService: IAnalyticsCommandService
+          -analyticsQueryService: IAnalyticsQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +ViewRouteProgress(resource: ViewRouteProgressResource): IActionResult
+          +GetRouteProgressById(routeId: string): IActionResult
+          +GetAllRoutes(): IActionResult
+          +ViewProductionDashboard(resource: ViewProductionDashboardResource): IActionResult
+          +RequestProductionData(resource: RequestProductionDataResource): IActionResult
+          +GetProductionDataByPeriod(start: DateTimeOffset, end: DateTimeOffset): IActionResult
+        }
+
+        package "Resources" {
+          class ViewRouteProgressResource <<record>> {
+            +RouteId: string
+            +UserId: string
+          }
+          class ViewProductionDashboardResource <<record>> {
+            +SupervisorId: string
+          }
+          class RequestProductionDataResource <<record>> {
+            +SupervisorId: string
+            +Start: DateTimeOffset
+            +End: DateTimeOffset
+          }
+          class MaterialResource <<record>> {
+            +Id: int
+            +MaterialId: string
+            +RouteId: string
+            +RouteStatus: string
+            +SupervisorId: string
+            +UserId: string
+            +ProductionStart: DateTimeOffset?
+            +ProductionEnd: DateTimeOffset?
+            +ProductionTons: decimal?
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class MaterialResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Material): MaterialResource
+          }
+          class AnalyticsActionResultAssembler <<static>> {
+            +ToActionResultFromMaterialResult(...): IActionResult
+            +ToActionResultFromGetMaterialResult(...): IActionResult
+          }
+        }
+
+        AnalyticsController ..> MaterialResourceFromEntityAssembler : uses
+        AnalyticsController ..> AnalyticsActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IAnalyticsCommandService
+      interface IAnalyticsQueryService
+    }
+  }
+}
+
+AnalyticsController ..> IAnalyticsCommandService : uses
+AnalyticsController ..> IAnalyticsQueryService : uses
+
+@enduml

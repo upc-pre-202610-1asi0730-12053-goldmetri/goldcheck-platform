@@ -1,0 +1,36 @@
+@startuml
+title GoldMetrics — FleetOperations (Infrastructure)
+
+package "GoldMetrics" {
+  package "FleetOperations" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class VehicleRepository {
+          -context: AppDbContext
+          +FindByVehicleIdAsync(vehicleId: string): Vehicle?
+        }
+        class HaulingCycleRepository {
+          -context: AppDbContext
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyFleetOperationsConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IVehicleRepository
+      interface IHaulingCycleRepository
+    }
+  }
+}
+
+VehicleRepository ..|> IVehicleRepository
+HaulingCycleRepository ..|> IHaulingCycleRepository
+
+@enduml

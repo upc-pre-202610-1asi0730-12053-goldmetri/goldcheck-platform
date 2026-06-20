@@ -1,0 +1,78 @@
+﻿@startuml
+title GoldMetrics — ConsumerTraceability (Application)
+
+package "GoldMetrics" {
+  package "ConsumerTraceability" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IJewelryProductCommandService {
+          +Handle(command: ScanProductQRCommand): Result<JewelryProduct>
+          +Handle(command: DownloadCertificateCommand): Result<JewelryProduct>
+        }
+        interface ITraceabilityJourneyCommandService {
+          +Handle(command: RequestJourneyCommand): Result<TraceabilityJourney>
+          +Handle(command: DetectLanguageCommand): Result<string>
+        }
+      }
+
+      package "QueryServices" {
+        interface IJewelryProductQueryService {
+          +Handle(query: GetProductByQRQuery): JewelryProduct?
+          +Handle(query: GetCertificateByIdQuery): JewelryProduct?
+        }
+        interface ITraceabilityJourneyQueryService {
+          +Handle(query: GetTraceabilityJourneyQuery): TraceabilityJourney?
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class JewelryProductCommandService {
+          -productRepository: IJewelryProductRepository
+          -journeyRepository: ITraceabilityJourneyRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: ScanProductQRCommand): Result<JewelryProduct>
+          +Handle(command: DownloadCertificateCommand): Result<JewelryProduct>
+        }
+        class TraceabilityJourneyCommandService {
+          -journeyRepository: ITraceabilityJourneyRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: RequestJourneyCommand): Result<TraceabilityJourney>
+          +Handle(command: DetectLanguageCommand): Result<string>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class JewelryProductQueryService {
+          -productRepository: IJewelryProductRepository
+          +Handle(query: GetProductByQRQuery): JewelryProduct?
+          +Handle(query: GetCertificateByIdQuery): JewelryProduct?
+        }
+        class TraceabilityJourneyQueryService {
+          -journeyRepository: ITraceabilityJourneyRepository
+          +Handle(query: GetTraceabilityJourneyQuery): TraceabilityJourney?
+        }
+      }
+
+      JewelryProductCommandService ..|> IJewelryProductCommandService
+      TraceabilityJourneyCommandService ..|> ITraceabilityJourneyCommandService
+      JewelryProductQueryService ..|> IJewelryProductQueryService
+      TraceabilityJourneyQueryService ..|> ITraceabilityJourneyQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IJewelryProductRepository
+      interface ITraceabilityJourneyRepository
+    }
+  }
+}
+
+JewelryProductCommandService ..> IJewelryProductRepository : uses
+JewelryProductCommandService ..> ITraceabilityJourneyRepository : uses
+TraceabilityJourneyCommandService ..> ITraceabilityJourneyRepository : uses
+JewelryProductQueryService ..> IJewelryProductRepository : uses
+TraceabilityJourneyQueryService ..> ITraceabilityJourneyRepository : uses
+
+@enduml

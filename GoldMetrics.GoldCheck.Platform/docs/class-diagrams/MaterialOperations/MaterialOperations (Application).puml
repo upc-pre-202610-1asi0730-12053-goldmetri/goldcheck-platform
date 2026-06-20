@@ -1,0 +1,59 @@
+﻿@startuml
+title GoldMetrics — MaterialOperations (Application)
+
+package "GoldMetrics" {
+  package "MaterialOperations" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface IMaterialCommandService {
+          +Handle(command: IdentifyMineralTypeCommand): Result<Material>
+          +Handle(command: ClassifyMaterialCommand): Result<Material>
+          +Handle(command: DownloadMaterialCommand): Result<Material>
+          +Handle(command: TrackMaterialMovementCommand): Result<Material>
+        }
+      }
+
+      package "QueryServices" {
+        interface IMaterialQueryService {
+          +Handle(query: GetMaterialByIdQuery): Material?
+          +Handle(query: GetAllMaterialsQuery): IEnumerable<Material>
+          +Handle(query: GetMaterialsByTypeQuery): IEnumerable<Material>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class MaterialCommandService {
+          -materialRepository: IMaterialRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +Handle(command: IdentifyMineralTypeCommand): Result<Material>
+          +Handle(command: ClassifyMaterialCommand): Result<Material>
+          +Handle(command: DownloadMaterialCommand): Result<Material>
+          +Handle(command: TrackMaterialMovementCommand): Result<Material>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class MaterialQueryService {
+          -materialRepository: IMaterialRepository
+          +Handle(query: GetMaterialByIdQuery): Material?
+          +Handle(query: GetAllMaterialsQuery): IEnumerable<Material>
+          +Handle(query: GetMaterialsByTypeQuery): IEnumerable<Material>
+        }
+      }
+
+      MaterialCommandService ..|> IMaterialCommandService
+      MaterialQueryService ..|> IMaterialQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IMaterialRepository
+    }
+  }
+}
+
+MaterialCommandService ..> IMaterialRepository : uses
+MaterialQueryService ..> IMaterialRepository : uses
+
+@enduml

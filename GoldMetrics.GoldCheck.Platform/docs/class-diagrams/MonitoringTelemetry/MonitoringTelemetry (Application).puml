@@ -1,0 +1,191 @@
+@startuml
+title GoldMetrics — MonitoringTelemetry (Application)
+
+package "GoldMetrics" {
+  package "MonitoringTelemetry" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface ITelemetryCommandService {
+          +Handle(command: ProcessTelemetryDataCommand): Result<TelemetryData>
+          +Handle(command: ValidateTelemetryDataCommand): Result<TelemetryData>
+        }
+        interface IGNSSCommandService {
+          +Handle(command: MonitorGNSSStatusCommand): Result<GNSSStatus>
+          +Handle(command: DetectGNSSAnomalyCommand): Result<GNSSStatus>
+          +Handle(command: RestartGNSSCommand): Result<GNSSStatus>
+          +Handle(command: LogGNSSRestartCommand): Result<GNSSStatus>
+        }
+        interface ISpeedCommandService {
+          +Handle(command: MonitorSpeedStatusCommand): Result<SpeedReading>
+          +Handle(command: DetectSpeedExcessCommand): Result<SpeedReading>
+          +Handle(command: LogSpeedExcessCommand): Result<SpeedReading>
+        }
+        interface IPressureCommandService {
+          +Handle(command: MonitorPressureCommand): Result<PressureReading>
+          +Handle(command: AnalysePressureCommand): Result<PressureReading>
+          +Handle(command: DetectPressureAnomalyCommand): Result<PressureReading>
+          +Handle(command: LogPressureAnomalyCommand): Result<PressureReading>
+        }
+        interface ITemperatureCommandService {
+          +Handle(command: MonitorEngineTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: AnalyseExhaustTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: AnalyseEngineRefrigerantTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: AnalyseEngineOilTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: AnalyseEngineFuelTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: DetectTemperatureAnomalyCommand): Result<TemperatureReading>
+          +Handle(command: LogTemperatureAnomalyCommand): Result<TemperatureReading>
+        }
+        interface ICommunicationCommandService {
+          +Handle(command: MonitorCommunicationChannelCommand): Result<CommunicationChannel>
+          +Handle(command: AnalyseCommunicationCommand): Result<CommunicationChannel>
+          +Handle(command: DetectCommunicationAnomalyCommand): Result<CommunicationChannel>
+          +Handle(command: LogCommunicationAnomalyCommand): Result<CommunicationChannel>
+        }
+      }
+
+      package "QueryServices" {
+        interface ITelemetryQueryService {
+          +Handle(query: GetTelemetryDataByAssetQuery): TelemetryData?
+        }
+        interface IGNSSQueryService {
+          +Handle(query: GetGNSSStatusByAssetQuery): GNSSStatus?
+        }
+        interface ISpeedQueryService {
+          +Handle(query: GetSpeedReadingByAssetQuery): SpeedReading?
+          +Handle(query: GetSpeedViolationsByAssetQuery): IEnumerable<SpeedReading>
+        }
+        interface IPressureQueryService {
+          +Handle(query: GetPressureReadingByAssetQuery): PressureReading?
+          +Handle(query: GetPressureAnomaliesByAssetQuery): IEnumerable<PressureReading>
+        }
+        interface ITemperatureQueryService {
+          +Handle(query: GetTemperatureReadingByAssetQuery): TemperatureReading?
+          +Handle(query: GetTemperatureAnomaliesByAssetQuery): IEnumerable<TemperatureReading>
+          +Handle(query: GetAllTemperatureReadingsQuery): IEnumerable<TemperatureReading>
+        }
+        interface ICommunicationQueryService {
+          +Handle(query: GetCommunicationChannelByAssetQuery): CommunicationChannel?
+          +Handle(query: GetCommunicationAnomaliesByAssetQuery): IEnumerable<CommunicationChannel>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class TelemetryCommandService {
+          -telemetryDataRepository: ITelemetryDataRepository
+          -unitOfWork: IUnitOfWork
+          +Handle(command: ProcessTelemetryDataCommand): Result<TelemetryData>
+          +Handle(command: ValidateTelemetryDataCommand): Result<TelemetryData>
+        }
+        class GNSSCommandService {
+          -gnssStatusRepository: IGNSSStatusRepository
+          -unitOfWork: IUnitOfWork
+          +Handle(command: MonitorGNSSStatusCommand): Result<GNSSStatus>
+          +Handle(command: DetectGNSSAnomalyCommand): Result<GNSSStatus>
+          +Handle(command: RestartGNSSCommand): Result<GNSSStatus>
+          +Handle(command: LogGNSSRestartCommand): Result<GNSSStatus>
+        }
+        class SpeedCommandService {
+          -speedReadingRepository: ISpeedReadingRepository
+          -unitOfWork: IUnitOfWork
+          +Handle(command: MonitorSpeedStatusCommand): Result<SpeedReading>
+          +Handle(command: DetectSpeedExcessCommand): Result<SpeedReading>
+          +Handle(command: LogSpeedExcessCommand): Result<SpeedReading>
+        }
+        class PressureCommandService {
+          -pressureReadingRepository: IPressureReadingRepository
+          -unitOfWork: IUnitOfWork
+          +Handle(command: MonitorPressureCommand): Result<PressureReading>
+          +Handle(command: AnalysePressureCommand): Result<PressureReading>
+          +Handle(command: DetectPressureAnomalyCommand): Result<PressureReading>
+          +Handle(command: LogPressureAnomalyCommand): Result<PressureReading>
+        }
+        class TemperatureCommandService {
+          -temperatureReadingRepository: ITemperatureReadingRepository
+          -unitOfWork: IUnitOfWork
+          +Handle(command: MonitorEngineTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: AnalyseExhaustTemperatureCommand): Result<TemperatureReading>
+          +Handle(command: DetectTemperatureAnomalyCommand): Result<TemperatureReading>
+          +Handle(command: LogTemperatureAnomalyCommand): Result<TemperatureReading>
+        }
+        class CommunicationCommandService {
+          -communicationChannelRepository: ICommunicationChannelRepository
+          -unitOfWork: IUnitOfWork
+          +Handle(command: MonitorCommunicationChannelCommand): Result<CommunicationChannel>
+          +Handle(command: AnalyseCommunicationCommand): Result<CommunicationChannel>
+          +Handle(command: DetectCommunicationAnomalyCommand): Result<CommunicationChannel>
+          +Handle(command: LogCommunicationAnomalyCommand): Result<CommunicationChannel>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class TelemetryQueryService {
+          -telemetryDataRepository: ITelemetryDataRepository
+          +Handle(query: GetTelemetryDataByAssetQuery): TelemetryData?
+        }
+        class GNSSQueryService {
+          -gnssStatusRepository: IGNSSStatusRepository
+          +Handle(query: GetGNSSStatusByAssetQuery): GNSSStatus?
+        }
+        class SpeedQueryService {
+          -speedReadingRepository: ISpeedReadingRepository
+          +Handle(query: GetSpeedReadingByAssetQuery): SpeedReading?
+          +Handle(query: GetSpeedViolationsByAssetQuery): IEnumerable<SpeedReading>
+        }
+        class PressureQueryService {
+          -pressureReadingRepository: IPressureReadingRepository
+          +Handle(query: GetPressureReadingByAssetQuery): PressureReading?
+          +Handle(query: GetPressureAnomaliesByAssetQuery): IEnumerable<PressureReading>
+        }
+        class TemperatureQueryService {
+          -temperatureReadingRepository: ITemperatureReadingRepository
+          +Handle(query: GetTemperatureReadingByAssetQuery): TemperatureReading?
+          +Handle(query: GetTemperatureAnomaliesByAssetQuery): IEnumerable<TemperatureReading>
+          +Handle(query: GetAllTemperatureReadingsQuery): IEnumerable<TemperatureReading>
+        }
+        class CommunicationQueryService {
+          -communicationChannelRepository: ICommunicationChannelRepository
+          +Handle(query: GetCommunicationChannelByAssetQuery): CommunicationChannel?
+          +Handle(query: GetCommunicationAnomaliesByAssetQuery): IEnumerable<CommunicationChannel>
+        }
+      }
+
+      TelemetryCommandService ..|> ITelemetryCommandService
+      GNSSCommandService ..|> IGNSSCommandService
+      SpeedCommandService ..|> ISpeedCommandService
+      PressureCommandService ..|> IPressureCommandService
+      TemperatureCommandService ..|> ITemperatureCommandService
+      CommunicationCommandService ..|> ICommunicationCommandService
+      TelemetryQueryService ..|> ITelemetryQueryService
+      GNSSQueryService ..|> IGNSSQueryService
+      SpeedQueryService ..|> ISpeedQueryService
+      PressureQueryService ..|> IPressureQueryService
+      TemperatureQueryService ..|> ITemperatureQueryService
+      CommunicationQueryService ..|> ICommunicationQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface ITelemetryDataRepository
+      interface IGNSSStatusRepository
+      interface ISpeedReadingRepository
+      interface IPressureReadingRepository
+      interface ITemperatureReadingRepository
+      interface ICommunicationChannelRepository
+    }
+  }
+}
+
+TelemetryCommandService ..> ITelemetryDataRepository : uses
+GNSSCommandService ..> IGNSSStatusRepository : uses
+SpeedCommandService ..> ISpeedReadingRepository : uses
+PressureCommandService ..> IPressureReadingRepository : uses
+TemperatureCommandService ..> ITemperatureReadingRepository : uses
+CommunicationCommandService ..> ICommunicationChannelRepository : uses
+TelemetryQueryService ..> ITelemetryDataRepository : uses
+GNSSQueryService ..> IGNSSStatusRepository : uses
+SpeedQueryService ..> ISpeedReadingRepository : uses
+PressureQueryService ..> IPressureReadingRepository : uses
+TemperatureQueryService ..> ITemperatureReadingRepository : uses
+CommunicationQueryService ..> ICommunicationChannelRepository : uses
+
+@enduml

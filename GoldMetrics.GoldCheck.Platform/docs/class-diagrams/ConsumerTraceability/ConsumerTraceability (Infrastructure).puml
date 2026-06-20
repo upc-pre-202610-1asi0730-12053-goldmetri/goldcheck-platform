@@ -1,0 +1,38 @@
+﻿@startuml
+title GoldMetrics — ConsumerTraceability (Infrastructure)
+
+package "GoldMetrics" {
+  package "ConsumerTraceability" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class JewelryProductRepository {
+          -context: AppDbContext
+          +FindByQRCodeAsync(qrCode: string): JewelryProduct?
+          +FindByCertificateIdAsync(certificateId: string): JewelryProduct?
+        }
+        class TraceabilityJourneyRepository {
+          -context: AppDbContext
+          +FindLatestByQRCodeAsync(qrCode: string): TraceabilityJourney?
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyConsumerTraceabilityConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IJewelryProductRepository
+      interface ITraceabilityJourneyRepository
+    }
+  }
+}
+
+JewelryProductRepository ..|> IJewelryProductRepository
+TraceabilityJourneyRepository ..|> ITraceabilityJourneyRepository
+
+@enduml

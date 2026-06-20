@@ -1,0 +1,133 @@
+@startuml
+title GoldMetrics — MonitoringTelemetry (Interfaces)
+
+package "GoldMetrics" {
+  package "MonitoringTelemetry" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class TelemetryController {
+          -commandService: ITelemetryCommandService
+          -queryService: ITelemetryQueryService
+          +ProcessTelemetryData(resource: ProcessTelemetryDataResource): IActionResult
+          +ValidateTelemetryData(assetId: string): IActionResult
+          +GetTelemetryDataByAsset(assetId: string): IActionResult
+        }
+
+        class GNSSController {
+          -commandService: IGNSSCommandService
+          -queryService: IGNSSQueryService
+          +MonitorGNSSStatus(resource: MonitorGNSSResource): IActionResult
+          +DetectGNSSAnomaly(assetId: string): IActionResult
+          +RestartGNSS(assetId: string, resource: RestartGNSSResource): IActionResult
+          +LogGNSSRestart(assetId: string): IActionResult
+          +GetGNSSStatusByAsset(assetId: string): IActionResult
+        }
+
+        class SpeedController {
+          -commandService: ISpeedCommandService
+          -queryService: ISpeedQueryService
+          +MonitorSpeedStatus(resource: MonitorSpeedResource): IActionResult
+          +DetectSpeedExcess(assetId: string, resource: DetectSpeedExcessResource): IActionResult
+          +LogSpeedExcess(assetId: string, resource: LogSpeedExcessResource): IActionResult
+          +GetSpeedReadingByAsset(assetId: string): IActionResult
+          +GetSpeedViolationsByAsset(assetId: string): IActionResult
+        }
+
+        class PressureController {
+          -commandService: IPressureCommandService
+          -queryService: IPressureQueryService
+          +MonitorPressure(resource: MonitorPressureResource): IActionResult
+          +AnalysePressure(assetId: string, resource: AnalysePressureResource): IActionResult
+          +DetectPressureAnomaly(assetId: string, resource: DetectPressureAnomalyResource): IActionResult
+          +LogPressureAnomaly(assetId: string, resource: LogPressureAnomalyResource): IActionResult
+          +GetPressureReadingByAsset(assetId: string): IActionResult
+          +GetPressureAnomaliesByAsset(assetId: string): IActionResult
+        }
+
+        class TemperatureController {
+          -commandService: ITemperatureCommandService
+          -queryService: ITemperatureQueryService
+          +MonitorEngineTemperature(resource: MonitorTemperatureResource): IActionResult
+          +AnalyseExhaustTemperature(assetId: string, resource: AnalyseTemperatureResource): IActionResult
+          +DetectTemperatureAnomaly(assetId: string, resource: DetectTemperatureAnomalyResource): IActionResult
+          +LogTemperatureAnomaly(assetId: string, resource: LogTemperatureAnomalyResource): IActionResult
+          +GetTemperatureReadingByAsset(assetId: string): IActionResult
+          +GetTemperatureAnomaliesByAsset(assetId: string): IActionResult
+          +GetAllTemperatureReadings(): IActionResult
+        }
+
+        class CommunicationController {
+          -commandService: ICommunicationCommandService
+          -queryService: ICommunicationQueryService
+          +MonitorCommunicationChannel(resource: MonitorCommunicationResource): IActionResult
+          +AnalyseCommunication(assetId: string, resource: AnalyseCommunicationResource): IActionResult
+          +DetectCommunicationAnomaly(assetId: string, resource: DetectCommunicationAnomalyResource): IActionResult
+          +LogCommunicationAnomaly(assetId: string, resource: LogCommunicationAnomalyResource): IActionResult
+          +GetCommunicationChannelByAsset(assetId: string): IActionResult
+          +GetCommunicationAnomaliesByAsset(assetId: string): IActionResult
+        }
+
+        package "Transform" {
+          class MonitoringTelemetryActionResultAssembler <<static>> {
+            +ToActionResultFromTelemetryResult(...): IActionResult
+            +ToActionResultFromGNSSResult(...): IActionResult
+            +ToActionResultFromSpeedResult(...): IActionResult
+            +ToActionResultFromPressureResult(...): IActionResult
+            +ToActionResultFromTemperatureResult(...): IActionResult
+            +ToActionResultFromCommunicationResult(...): IActionResult
+          }
+          class TelemetryAssemblers <<static>> {
+            +ToResourceFromEntity(entity: TelemetryData): TelemetryDataResource
+          }
+          class GNSSAssemblers <<static>> {
+            +ToResourceFromEntity(entity: GNSSStatus): GNSSStatusResource
+          }
+          class SpeedAssemblers <<static>> {
+            +ToResourceFromEntity(entity: SpeedReading): SpeedReadingResource
+          }
+          class PressureAssemblers <<static>> {
+            +ToResourceFromEntity(entity: PressureReading): PressureReadingResource
+          }
+          class TemperatureAssemblers <<static>> {
+            +ToResourceFromEntity(entity: TemperatureReading): TemperatureReadingResource
+          }
+          class CommunicationAssemblers <<static>> {
+            +ToResourceFromEntity(entity: CommunicationChannel): CommunicationChannelResource
+          }
+        }
+      }
+    }
+
+    package "Application [stubs]" {
+      interface ITelemetryCommandService
+      interface ITelemetryQueryService
+      interface IGNSSCommandService
+      interface IGNSSQueryService
+      interface ISpeedCommandService
+      interface ISpeedQueryService
+      interface IPressureCommandService
+      interface IPressureQueryService
+      interface ITemperatureCommandService
+      interface ITemperatureQueryService
+      interface ICommunicationCommandService
+      interface ICommunicationQueryService
+    }
+  }
+}
+
+TelemetryController ..> ITelemetryCommandService : uses
+TelemetryController ..> ITelemetryQueryService : uses
+GNSSController ..> IGNSSCommandService : uses
+GNSSController ..> IGNSSQueryService : uses
+SpeedController ..> ISpeedCommandService : uses
+SpeedController ..> ISpeedQueryService : uses
+PressureController ..> IPressureCommandService : uses
+PressureController ..> IPressureQueryService : uses
+TemperatureController ..> ITemperatureCommandService : uses
+TemperatureController ..> ITemperatureQueryService : uses
+CommunicationController ..> ICommunicationCommandService : uses
+CommunicationController ..> ICommunicationQueryService : uses
+
+@enduml

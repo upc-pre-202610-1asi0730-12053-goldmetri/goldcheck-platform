@@ -1,0 +1,79 @@
+@startuml
+title GoldMetrics — AssetMaintenance (Interfaces)
+
+package "GoldMetrics" {
+  package "AssetMaintenance" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class MachineryController {
+          -commandService: IAssetMaintenanceCommandService
+          -queryService: IAssetMaintenanceQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +RegisterMachinery(resource: RegisterMachineryResource): IActionResult
+          +GetMachineryById(machineryId: string): IActionResult
+          +GetAllMachinery(): IActionResult
+          +UpdateMachineryData(machineryId: string, resource: UpdateMachineryDataResource): IActionResult
+          +ScheduleMaintenance(machineryId: string, resource: ScheduleMaintenanceResource): IActionResult
+          +DischargeMachinery(machineryId: string, resource: DischargeMachineryResource): IActionResult
+          +DischargeComponent(machineryId: string, componentId: string, resource: DischargeComponentResource): IActionResult
+        }
+
+        package "Resources" {
+          class RegisterMachineryResource <<record>> {
+            +MachineryId: string
+            +Model: string
+            +OEM: string
+          }
+          class UpdateMachineryDataResource <<record>> {
+            +CurrentEngineHours: decimal
+          }
+          class ScheduleMaintenanceResource <<record>> {
+            +EngineHours: decimal
+          }
+          class DischargeMachineryResource <<record>> {
+            +Reason: string
+          }
+          class DischargeComponentResource <<record>> {
+            +Reason: string
+          }
+          class MachineryResource <<record>> {
+            +Id: int
+            +MachineryId: string
+            +Model: string
+            +OEM: string
+            +EngineHours: decimal
+            +MaintenanceStatus: string
+            +MaintenanceScheduledAtHours: decimal?
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class MachineryResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Machinery): MachineryResource
+          }
+          class AssetMaintenanceActionResultAssembler <<static>> {
+            +ToActionResultFromMachineryResult(...): IActionResult
+            +ToActionResultFromGetMachineryResult(...): IActionResult
+          }
+        }
+
+        MachineryController ..> MachineryResourceFromEntityAssembler : uses
+        MachineryController ..> AssetMaintenanceActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IAssetMaintenanceCommandService
+      interface IAssetMaintenanceQueryService
+    }
+  }
+}
+
+MachineryController ..> IAssetMaintenanceCommandService : uses
+MachineryController ..> IAssetMaintenanceQueryService : uses
+
+@enduml

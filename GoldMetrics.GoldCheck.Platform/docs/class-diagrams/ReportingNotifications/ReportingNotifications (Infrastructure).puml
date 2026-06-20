@@ -1,0 +1,36 @@
+﻿@startuml
+title GoldMetrics — ReportingNotifications (Infrastructure)
+
+package "GoldMetrics" {
+  package "ReportingNotifications" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class ReportRepository {
+          -context: AppDbContext
+        }
+        class NotificationRepository {
+          -context: AppDbContext
+          +FindByRecipientIdAsync(recipientId: string): IEnumerable<Notification>
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplyReportingNotificationsConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IReportRepository
+      interface INotificationRepository
+    }
+  }
+}
+
+ReportRepository ..|> IReportRepository
+NotificationRepository ..|> INotificationRepository
+
+@enduml

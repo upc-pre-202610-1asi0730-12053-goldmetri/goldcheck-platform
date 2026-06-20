@@ -1,0 +1,104 @@
+﻿@startuml
+title GoldMetrics — ReportingNotifications (Interfaces)
+
+package "GoldMetrics" {
+  package "ReportingNotifications" {
+    package "Interfaces" {
+
+      package "REST" {
+
+        class ReportsController {
+          -reportCommandService: IReportCommandService
+          -reportQueryService: IReportQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +RequestAccidentData(resource: RequestAccidentDataResource): IActionResult
+          +LoadAccidentData(reportId: int): IActionResult
+          +GenerateReport(reportId: int): IActionResult
+          +RequestReportExportation(reportId: int, resource: RequestReportExportationResource): IActionResult
+          +ExportReport(reportId: int): IActionResult
+          +DownloadReport(reportId: int, userId: string): IActionResult
+          +GetReportById(reportId: int): IActionResult
+          +GetAllReports(): IActionResult
+        }
+
+        class NotificationsController {
+          -notificationCommandService: INotificationCommandService
+          -notificationQueryService: INotificationQueryService
+          -errorLocalizer: IStringLocalizer<ErrorMessages>
+          -problemDetailsFactory: ProblemDetailsFactory
+          +RequestNotification(resource: RequestNotificationResource): IActionResult
+          +SendNotification(notificationId: int): IActionResult
+          +GetNotificationById(notificationId: int): IActionResult
+          +GetNotificationsByUser(userId: string): IActionResult
+        }
+
+        package "Resources" {
+          class RequestAccidentDataResource <<record>> {
+            +IncidentId: string
+            +SupervisorId: string
+          }
+          class RequestReportExportationResource <<record>> {
+            +Format: string
+          }
+          class ReportResource <<record>> {
+            +Id: int
+            +SupervisorId: string
+            +IncidentId: string
+            +ReportStatus: string
+            +ReportFormat: string
+            +DownloadedByUserId: string?
+            +Status: string
+          }
+          class RequestNotificationResource <<record>> {
+            +RecipientId: string
+            +Type: string
+            +Message: string
+          }
+          class NotificationResource <<record>> {
+            +Id: int
+            +RecipientId: string
+            +NotificationType: string
+            +NotificationStatus: string
+            +Message: string
+            +Status: string
+          }
+        }
+
+        package "Transform" {
+          class ReportResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Report): ReportResource
+          }
+          class NotificationResourceFromEntityAssembler <<static>> {
+            +ToResourceFromEntity(entity: Notification): NotificationResource
+          }
+          class ReportingNotificationsActionResultAssembler <<static>> {
+            +ToActionResultFromReportResult(...): IActionResult
+            +ToActionResultFromGetReportResult(...): IActionResult
+            +ToActionResultFromNotificationResult(...): IActionResult
+            +ToActionResultFromGetNotificationResult(...): IActionResult
+          }
+        }
+
+        ReportsController ..> ReportResourceFromEntityAssembler : uses
+        ReportsController ..> ReportingNotificationsActionResultAssembler : uses
+        NotificationsController ..> NotificationResourceFromEntityAssembler : uses
+        NotificationsController ..> ReportingNotificationsActionResultAssembler : uses
+      }
+    }
+
+    package "Application [stubs]" {
+      interface IReportCommandService
+      interface IReportQueryService
+      interface INotificationCommandService
+      interface INotificationQueryService
+    }
+  }
+}
+
+ReportsController ..> IReportCommandService : uses
+ReportsController ..> IReportQueryService : uses
+NotificationsController ..> INotificationCommandService : uses
+NotificationsController ..> INotificationQueryService : uses
+
+@enduml

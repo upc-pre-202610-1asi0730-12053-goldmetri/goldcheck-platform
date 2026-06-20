@@ -1,0 +1,31 @@
+@startuml
+title GoldMetrics — SubscriptionsAndBilling (Infrastructure)
+
+package "GoldMetrics" {
+  package "SubscriptionsAndBilling" {
+    package "Infrastructure" {
+
+      package "Persistence.EntityFrameworkCore.Repositories" {
+        class UserSubscriptionRepository {
+          -context: AppDbContext
+          +FindByUserIdAsync(userId: string): UserSubscription?
+        }
+      }
+
+      package "Persistence.EntityFrameworkCore.Configuration.Extensions" {
+        class ModelBuilderExtensions <<static>> {
+          +ApplySubscriptionsBillingConfiguration(builder: ModelBuilder): void
+        }
+      }
+
+    }
+
+    package "Domain [stubs]" {
+      interface IUserSubscriptionRepository
+    }
+  }
+}
+
+UserSubscriptionRepository ..|> IUserSubscriptionRepository
+
+@enduml

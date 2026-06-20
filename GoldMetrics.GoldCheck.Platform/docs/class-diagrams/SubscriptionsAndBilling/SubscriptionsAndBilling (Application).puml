@@ -1,0 +1,77 @@
+@startuml
+title GoldMetrics — SubscriptionsAndBilling (Application)
+
+package "GoldMetrics" {
+  package "SubscriptionsAndBilling" {
+    package "Application" {
+
+      package "CommandServices" {
+        interface ISubscriptionsBillingCommandService {
+          +SelectPlanAsync(command: SelectPlanCommand): Result<UserSubscription>
+          +ConfirmSubscriptionAsync(command: ConfirmSubscriptionCommand): Result<UserSubscription>
+          +RequestDowngradeAsync(command: RequestDowngradeCommand): Result<UserSubscription>
+          +ExecuteDowngradeAsync(command: ExecuteDowngradeCommand): Result<UserSubscription>
+          +RestrictFeaturesAsync(command: RestrictFeaturesCommand): Result<UserSubscription>
+          +CheckFeatureAccessAsync(command: CheckFeatureAccessCommand): Result<UserSubscription>
+          +RequestAccessAsync(command: RequestAccessCommand): Result<UserSubscription>
+          +DecideAccessAsync(command: DecideAccessCommand): Result<UserSubscription>
+          +RequestPaymentHistoryAsync(command: RequestPaymentHistoryCommand): Result<UserSubscription>
+          +ViewPaymentHistoryAsync(command: ViewPaymentHistoryCommand): Result<UserSubscription>
+          +RequestInvoiceAsync(command: RequestInvoiceCommand): Result<UserSubscription>
+          +GenerateInvoiceAsync(command: GenerateInvoiceCommand): Result<Invoice>
+          +DownloadInvoiceAsync(command: DownloadInvoiceCommand): Result<Invoice>
+          +CheckUserPlanAsync(command: CheckUserPlanCommand): Result<UserSubscription>
+          +AssignFeaturesAsync(command: AssignFeaturesCommand): Result<UserSubscription>
+        }
+      }
+
+      package "QueryServices" {
+        interface ISubscriptionsBillingQueryService {
+          +GetUserSubscriptionByUserIdAsync(query: GetUserSubscriptionByUserIdQuery): UserSubscription?
+          +GetAllUserSubscriptionsAsync(query: GetAllUserSubscriptionsQuery): IEnumerable<UserSubscription>
+          +GetPaymentHistoryByUserAsync(query: GetPaymentHistoryByUserQuery): IEnumerable<Invoice>
+          +GetInvoiceByIdAsync(query: GetInvoiceByIdQuery): Invoice?
+          +GetPlanFeaturesAsync(query: GetPlanFeaturesQuery): IEnumerable<string>
+        }
+      }
+
+      package "Internal.CommandServices" {
+        class SubscriptionsBillingCommandService {
+          -subscriptionRepository: IUserSubscriptionRepository
+          -unitOfWork: IUnitOfWork
+          -localizer: IStringLocalizer<ErrorMessages>
+          +SelectPlanAsync(command: SelectPlanCommand): Result<UserSubscription>
+          +ConfirmSubscriptionAsync(command: ConfirmSubscriptionCommand): Result<UserSubscription>
+          +RequestDowngradeAsync(command: RequestDowngradeCommand): Result<UserSubscription>
+          +ExecuteDowngradeAsync(command: ExecuteDowngradeCommand): Result<UserSubscription>
+          +GenerateInvoiceAsync(command: GenerateInvoiceCommand): Result<Invoice>
+          +DownloadInvoiceAsync(command: DownloadInvoiceCommand): Result<Invoice>
+          +AssignFeaturesAsync(command: AssignFeaturesCommand): Result<UserSubscription>
+        }
+      }
+
+      package "Internal.QueryServices" {
+        class SubscriptionsBillingQueryService {
+          -subscriptionRepository: IUserSubscriptionRepository
+          +GetUserSubscriptionByUserIdAsync(query: GetUserSubscriptionByUserIdQuery): UserSubscription?
+          +GetAllUserSubscriptionsAsync(query: GetAllUserSubscriptionsQuery): IEnumerable<UserSubscription>
+          +GetPaymentHistoryByUserAsync(query: GetPaymentHistoryByUserQuery): IEnumerable<Invoice>
+          +GetInvoiceByIdAsync(query: GetInvoiceByIdQuery): Invoice?
+          +GetPlanFeaturesAsync(query: GetPlanFeaturesQuery): IEnumerable<string>
+        }
+      }
+
+      SubscriptionsBillingCommandService ..|> ISubscriptionsBillingCommandService
+      SubscriptionsBillingQueryService ..|> ISubscriptionsBillingQueryService
+    }
+
+    package "Domain [stubs]" {
+      interface IUserSubscriptionRepository
+    }
+  }
+}
+
+SubscriptionsBillingCommandService ..> IUserSubscriptionRepository : uses
+SubscriptionsBillingQueryService ..> IUserSubscriptionRepository : uses
+
+@enduml
