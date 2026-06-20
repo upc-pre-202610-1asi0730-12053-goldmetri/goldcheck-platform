@@ -35,4 +35,9 @@ public partial class SafetyRecord
         RiskLevel = new RiskLevel(command.NewRiskLevel);
         Status = "RiskLevelEscalated";
     }
+    
+    public void EvaluateSafetyRisk(EvaluateSafetyRiskCommand command)
+    {
+        Status = "RiskLevelUpdated";
+    }
 }

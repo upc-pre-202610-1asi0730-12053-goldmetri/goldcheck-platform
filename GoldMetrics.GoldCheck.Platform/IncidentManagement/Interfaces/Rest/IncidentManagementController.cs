@@ -75,4 +75,17 @@ public class IncidentManagementController(
             this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPut("{incidentId:int}/evaluate")]
+    [SwaggerOperation("Evaluate Safety Risk", "Evaluate and update the safety risk level.", OperationId = "EvaluateSafetyRisk")]
+    [SwaggerResponse(200, "Risk level updated.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(404, "Incident not found.")]
+    public async Task<IActionResult> EvaluateSafetyRisk(int incidentId, CancellationToken cancellationToken)
+    {
+        var command = new EvaluateSafetyRiskCommand(incidentId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
