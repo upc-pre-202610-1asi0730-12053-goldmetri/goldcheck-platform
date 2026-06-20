@@ -1,5 +1,6 @@
 ﻿ using System.Net.Mime;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+    using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Queries;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Resources;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Transform;
     using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -118,5 +119,15 @@
             var result = await commandService.Handle(command, cancellationToken);
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
+        
+        // GET api/v1/monitoring/temperature/{assetId}
+        [HttpGet("{assetId}")]
+        [SwaggerOperation("GetTemperatureReadingsByAsset", "Returns all temperature readings for an asset.")]
+        [ProducesResponseType(typeof(IEnumerable<TemperatureReadingResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByAsset(string assetId, CancellationToken cancellationToken)
+        {
+            var readings = await queryService.Handle(new GetTemperatureReadingByAssetQuery(assetId), cancellationToken);
+            return Ok(readings.Select(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity));
         }
     }
