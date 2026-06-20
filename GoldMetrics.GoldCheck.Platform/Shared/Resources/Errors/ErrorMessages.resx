@@ -420,4 +420,8 @@
   <data name="SmokeDetected" xml:space="preserve">
     <value>Smoke detected and recorded successfully.</value>
   </data>
+
+  <data name="SmokeAlertCommitted" xml:space="preserve">
+    <value>Smoke alert committed successfully.</value>
+  </data>
 </root>
