@@ -20,5 +20,18 @@ public static class ModelBuilderExtensions
         builder.Entity<TelemetryData>().Property(d => d.TelemetryDataId).IsRequired().HasMaxLength(36);
         builder.Entity<TelemetryData>().Property(d => d.RawData).IsRequired();
         builder.Entity<TelemetryData>().Property(d => d.Status).IsRequired().HasMaxLength(50);
+        
+        // ── GNSSStatus ────────────────────────────────────────────────────────
+
+        builder.Entity<GNSSStatus>().HasKey(s => s.Id);
+        builder.Entity<GNSSStatus>().Property(s => s.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<GNSSStatus>().ToTable("gnss_statuses");
+        builder.Entity<GNSSStatus>().OwnsOne(s => s.AssetId, aid =>
+        {
+            aid.WithOwner().HasForeignKey("Id");
+            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<GNSSStatus>().Property(s => s.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<GNSSStatus>().Property(s => s.RestartReason).HasMaxLength(500);
     }
 }
