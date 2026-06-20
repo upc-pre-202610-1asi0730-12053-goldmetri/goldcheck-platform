@@ -154,4 +154,14 @@ public class IncidentManagementController(
         var records = await queryService.Handle(query, cancellationToken);
         return Ok(records.Select(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity));
     }
+    
+    [HttpGet("risk-level/{riskLevel}")]
+    [SwaggerOperation("Get Incidents By Risk Level", "Get all incidents at a specific risk level.", OperationId = "GetIncidentsByRiskLevel")]
+    [SwaggerResponse(200, "Incidents found.", typeof(IEnumerable<SafetyRecordResource>))]
+    public async Task<IActionResult> GetIncidentsByRiskLevel(string riskLevel, CancellationToken cancellationToken)
+    {
+        var query = new GetIncidentsByRiskLevelQuery(riskLevel);
+        var records = await queryService.Handle(query, cancellationToken);
+        return Ok(records.Select(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity));
+    }
 }
