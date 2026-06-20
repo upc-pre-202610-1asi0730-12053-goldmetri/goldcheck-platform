@@ -24,6 +24,8 @@ public partial class PressureReading
     public decimal? OilPanBar { get; private set; }
     public decimal? AbsoluteEngineOilBar { get; private set; }
     public decimal? OilFilterBar { get; private set; }
+    public string? AnomalyPressureType { get; private set; }
+    public string? AnomalyDescription { get; private set; }
 
     public void ResetMonitoring() => Status = "Monitoring";
     public void AnalysePressure(AnalysePressureCommand command)
@@ -46,6 +48,17 @@ public partial class PressureReading
                 break;
         }
         Status = $"{pressureType.Value}Analysed";
+    }
+    public void DetectAnomaly(DetectPressureAnomalyCommand command)
+    {
+        AnomalyPressureType = new PressureType(command.PressureType).Value;
+        Status = "AnomalyDetected";
+    }
+
+    public void LogAnomaly(LogPressureAnomalyCommand command)
+    {
+        AnomalyDescription = command.AnomalyDescription;
+        Status = "AnomalyLogged";
     }
 
 }
