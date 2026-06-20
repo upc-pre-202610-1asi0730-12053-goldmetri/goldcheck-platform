@@ -18,6 +18,7 @@ using System.Net.Mime;
     public class PressureController(
         IPressureCommandService commandService,
         IStringLocalizer<ErrorMessages> errorLocalizer,
+        IPressureQueryService queryService,
         ProblemDetailsFactory problemDetailsFactory)
         : ControllerBase
     {
@@ -62,5 +63,15 @@ using System.Net.Mime;
             var result = await commandService.Handle(command, cancellationToken);
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 r => Ok(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
+        
+        // GET api/v1/monitoring/pressure/{assetId}
+        [HttpGet("{assetId}")]
+        [SwaggerOperation("GetPressureReadingsByAsset", "Returns pressure readings for an asset.")]
+        [ProducesResponseType(typeof(IEnumerable<PressureReadingResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByAsset(string assetId, CancellationToken cancellationToken)
+        {
+            var readings = await queryService.Handle(new GetPressureReadingByAssetQuery(assetId), cancellationToken);
+            return Ok(readings.Select(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity));
         }
     }
