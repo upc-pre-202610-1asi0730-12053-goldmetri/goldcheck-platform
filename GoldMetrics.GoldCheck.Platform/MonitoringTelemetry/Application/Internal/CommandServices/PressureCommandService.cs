@@ -39,4 +39,34 @@ using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServ
                return Result<PressureReading>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
            }
        }
+       
+       public async Task<Result<PressureReading>> Handle(AnalysePressureCommand command, CancellationToken cancellationToken = default)
+       {
+           var readings = await repository.FindByAssetIdAsync(command.AssetId, cancellationToken);
+           var reading = readings.MaxBy(r => r.CreatedAt);
+           if (reading is null)
+               return Result<PressureReading>.Failure(MonitoringTelemetryError.PressureReadingNotFound, localizer[nameof(MonitoringTelemetryError.PressureReadingNotFound)]);
+           try
+           {
+               reading.AnalysePressure(command);
+               await unitOfWork.CompleteAsync(cancellationToken);
+               return Result<PressureReading>.Success(reading);
+           }
+           catch (ArgumentException)
+           {
+               return Result<PressureReading>.Failure(MonitoringTelemetryError.InvalidPressure, localizer[nameof(MonitoringTelemetryError.InvalidPressure)]);
+           }
+           catch (OperationCanceledException)
+           {
+               return Result<PressureReading>.Failure(MonitoringTelemetryError.OperationCancelled, localizer[nameof(MonitoringTelemetryError.OperationCancelled)]);
+           }
+           catch (DbUpdateException)
+           {
+               return Result<PressureReading>.Failure(MonitoringTelemetryError.DatabaseError, localizer[nameof(MonitoringTelemetryError.DatabaseError)]);
+           }
+           catch (Exception)
+           {
+               return Result<PressureReading>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
+           }
+       }
    }

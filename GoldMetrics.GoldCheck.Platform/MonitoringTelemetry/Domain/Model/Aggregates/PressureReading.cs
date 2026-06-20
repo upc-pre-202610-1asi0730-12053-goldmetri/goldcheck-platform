@@ -5,7 +5,11 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggreg
 
 public partial class PressureReading
 {
-    public PressureReading() { AssetId = new AssetId(); Status = string.Empty; }
+    public PressureReading()
+    {
+        AssetId = new AssetId();
+        Status = string.Empty;
+    }
 
     public PressureReading(MonitorPressureCommand command)
     {
@@ -16,6 +20,32 @@ public partial class PressureReading
     public int Id { get; }
     public AssetId AssetId { get; private set; }
     public string Status { get; private set; }
+    public decimal? OilFilterDifferenceBar { get; private set; }
+    public decimal? OilPanBar { get; private set; }
+    public decimal? AbsoluteEngineOilBar { get; private set; }
+    public decimal? OilFilterBar { get; private set; }
 
     public void ResetMonitoring() => Status = "Monitoring";
+    public void AnalysePressure(AnalysePressureCommand command)
+    {
+        var pressure = new Pressure(command.PressureBar);
+        var pressureType = new PressureType(command.PressureType);
+        switch (pressureType.Value)
+        {
+            case "OilFilterDifference":
+                OilFilterDifferenceBar = pressure.Bar;
+                break;
+            case "OilPan":
+                OilPanBar = pressure.Bar;
+                break;
+            case "AbsoluteEngineOil":
+                AbsoluteEngineOilBar = pressure.Bar;
+                break;
+            case "OilFilter":
+                OilFilterBar = pressure.Bar;
+                break;
+        }
+        Status = $"{pressureType.Value}Analysed";
+    }
+
 }

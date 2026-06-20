@@ -35,4 +35,18 @@ using System.Net.Mime;
                 r => CreatedAtAction(nameof(GetByAsset), new { assetId = r.AssetId.Value },
                     PressureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
         }
+        
+        // POST api/v1/monitoring/pressure/{assetId}/analyse
+        [HttpPost("{assetId}/analyse")]
+        [SwaggerOperation("AnalysePressure", "Analyses engine pressure readings.")]
+        [ProducesResponseType(typeof(PressureReadingResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Analyse(
+            string assetId, [FromBody] AnalysePressureResource resource, CancellationToken cancellationToken)
+        {
+            var command = AnalysePressureCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                r => Ok(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
     }
