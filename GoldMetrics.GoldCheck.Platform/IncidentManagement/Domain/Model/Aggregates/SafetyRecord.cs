@@ -40,4 +40,9 @@ public partial class SafetyRecord
     {
         Status = "RiskLevelUpdated";
     }
+    
+    public void SendRiskLevelAlert(SendRiskLevelAlertCommand command)
+    {
+        Status = "RiskLevelAlertCommitted";
+    }
 }
