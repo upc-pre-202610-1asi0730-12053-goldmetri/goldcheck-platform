@@ -412,4 +412,9 @@
   <data name="RiskLevelUpdated" xml:space="preserve">
     <value>Risk level evaluated and updated successfully.</value>
   </data>
+
+  <data name="RiskLevelAlertCommitted" xml:space="preserve">
+    <value>Risk level alert sent and committed successfully.</value>
+  </data>
+  
 </root>
