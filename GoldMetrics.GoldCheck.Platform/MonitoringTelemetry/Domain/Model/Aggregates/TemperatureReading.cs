@@ -26,5 +26,14 @@ public partial class TemperatureReading
         ExhaustCelsius = new Temperature(command.ExhaustCelsius).Celsius;
         Status = "ExhaustAnalysed";
     }
-
+    
+    public decimal? ExhaustLimitCelsius { get; private set; }
+    public int? CylinderNumber { get; private set; }
+    
+    public void AnalyseExhaustLimitPerCylinder(AnalyseExhaustTemperatureLimitPerCylinderCommand command)
+    {
+        ExhaustLimitCelsius = new Temperature(command.LimitCelsius).Celsius;
+        CylinderNumber = command.CylinderNumber;
+        Status = "ExhaustLimitAnalysed";
+    }
 }
