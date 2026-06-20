@@ -61,4 +61,18 @@ public class IncidentManagementController(
         var records = await queryService.Handle(query, cancellationToken);
         return Ok(records.Select(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity));
     }
+    
+    [HttpPut("{incidentId:int}/escalate")]
+    [SwaggerOperation("Escalate Risk Level", "Escalate the risk level of an incident.", OperationId = "EscalateRiskLevel")]
+    [SwaggerResponse(200, "Risk level escalated.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(400, "Invalid risk level.")]
+    [SwaggerResponse(404, "Incident not found.")]
+    public async Task<IActionResult> EscalateRiskLevel(int incidentId, [FromBody] EscalateRiskLevelResource resource, CancellationToken cancellationToken)
+    {
+        var command = new EscalateRiskLevelCommand(incidentId, resource.NewRiskLevel);
+        var result = await commandService.Handle(command, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
