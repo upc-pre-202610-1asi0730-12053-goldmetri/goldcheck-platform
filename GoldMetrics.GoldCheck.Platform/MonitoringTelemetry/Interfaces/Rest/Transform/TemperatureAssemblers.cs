@@ -18,4 +18,10 @@ public static class TemperatureReadingResourceFromEntityAssembler
             entity.RefrigerantCelsius, entity.OilCelsius, entity.FuelCelsius,
             entity.AnomalyType, entity.AnomalyCelsius, entity.AnomalyDescription,
             entity.CreatedAt, entity.UpdatedAt);
+    
+    public static class AnalyseExhaustCommandFromResourceAssembler
+    {
+        public static AnalyseExhaustTemperatureCommand ToCommandFromResource(string assetId, AnalyseExhaustTemperatureResource resource)
+            => new(assetId, resource.ExhaustCelsius);
+    }
 }

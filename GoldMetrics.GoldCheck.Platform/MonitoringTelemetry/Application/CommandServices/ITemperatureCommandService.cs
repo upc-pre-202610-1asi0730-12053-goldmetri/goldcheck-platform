@@ -7,4 +7,5 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Command
 public interface ITemperatureCommandService
 {
     Task<Result<TemperatureReading>> Handle(MonitorEngineTemperatureCommand command, CancellationToken cancellationToken = default);
+    Task<Result<TemperatureReading>> Handle(AnalyseExhaustTemperatureCommand command, CancellationToken cancellationToken = default);
 }
