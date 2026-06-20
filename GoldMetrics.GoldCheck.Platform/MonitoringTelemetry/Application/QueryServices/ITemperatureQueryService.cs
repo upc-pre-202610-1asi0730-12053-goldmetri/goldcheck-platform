@@ -6,4 +6,5 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QuerySe
 public interface ITemperatureQueryService
 {
     Task<IEnumerable<TemperatureReading>> Handle(GetTemperatureReadingByAssetQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TemperatureReading>> Handle(GetAllTemperatureReadingsQuery query, CancellationToken cancellationToken = default);
 }
