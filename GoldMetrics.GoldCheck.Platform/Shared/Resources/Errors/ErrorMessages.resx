@@ -405,4 +405,7 @@
     <data name="IncidentManagementError.InternalServerError" xml:space="preserve">
     <value>An unexpected internal error occurred in Incident Management.</value>
   </data>
+  <data name="RiskLevelEscalated" xml:space="preserve">
+    <value>Risk level escalated successfully.</value>
+  </data>
 </root>

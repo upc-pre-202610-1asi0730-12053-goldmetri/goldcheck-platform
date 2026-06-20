@@ -400,4 +400,8 @@
     <data name="IncidentManagementError.InternalServerError" xml:space="preserve">
     <value>Ocurrió un error interno inesperado en Gestión de Incidentes.</value>
   </data>
+  <data name="RiskLevelEscalated" xml:space="preserve">
+    <value>Nivel de riesgo escalado exitosamente.</value>
+  </data>
+
 </root>
