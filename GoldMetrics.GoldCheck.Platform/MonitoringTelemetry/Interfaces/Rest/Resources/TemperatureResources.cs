@@ -23,5 +23,6 @@ public record AnalyseExhaustLimitPerCylinderResource(decimal LimitCelsius, int C
 public record AnalyseRefrigerantTemperatureResource(decimal RefrigerantCelsius);
 public record AnalyseOilTemperatureResource(decimal OilCelsius);
 public record AnalyseFuelTemperatureResource(decimal FuelCelsius);
+public record DetectTemperatureAnomalyResource(string AnomalyType, decimal AnomalyCelsius);
 
 
