@@ -7,4 +7,6 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Command
 public interface ISpeedCommandService
 {
     Task<Result<SpeedReading>> Handle(MonitorSpeedStatusCommand command, CancellationToken cancellationToken = default);
+    Task<Result<SpeedReading>> Handle(DetectSpeedExcessCommand command, CancellationToken cancellationToken = default);
+
 }
