@@ -19,3 +19,4 @@ public record TemperatureReadingResource(
     DateTimeOffset? UpdatedAt);
     
 public record AnalyseExhaustTemperatureResource(decimal ExhaustCelsius);
+public record AnalyseExhaustLimitPerCylinderResource(decimal LimitCelsius, int CylinderNumber);
