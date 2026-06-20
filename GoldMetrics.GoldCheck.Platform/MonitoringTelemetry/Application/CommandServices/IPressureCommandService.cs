@@ -8,5 +8,6 @@ public interface IPressureCommandService
 {
     Task<Result<PressureReading>> Handle(MonitorPressureCommand command, CancellationToken cancellationToken = default);
     Task<Result<PressureReading>> Handle(AnalysePressureCommand command, CancellationToken cancellationToken = default);
+    Task<Result<PressureReading>> Handle(DetectPressureAnomalyCommand command, CancellationToken cancellationToken = default);
 
 }

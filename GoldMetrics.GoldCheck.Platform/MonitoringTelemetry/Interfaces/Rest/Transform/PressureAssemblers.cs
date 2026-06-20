@@ -25,3 +25,8 @@ public static class AnalysePressureCommandFromResourceAssembler
     public static AnalysePressureCommand ToCommandFromResource(string assetId, AnalysePressureResource resource)
         => new(assetId, resource.PressureType, resource.PressureBar);
 }
+public static class DetectPressureAnomalyCommandFromResourceAssembler
+{
+    public static DetectPressureAnomalyCommand ToCommandFromResource(string assetId, DetectPressureAnomalyResource resource)
+        => new(assetId, resource.PressureType, resource.PressureBar);
+}

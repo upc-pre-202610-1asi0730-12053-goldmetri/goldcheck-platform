@@ -2,6 +2,7 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Res
 
 public record MonitorPressureResource(string AssetId);
 public record AnalysePressureResource(string PressureType, decimal PressureBar);
+public record DetectPressureAnomalyResource(string PressureType, decimal PressureBar);
 
 public record PressureReadingResource(
     int Id,

@@ -49,4 +49,18 @@ using System.Net.Mime;
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 r => Ok(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
         }
+        
+        // POST api/v1/monitoring/pressure/{assetId}/anomalies/detect
+        [HttpPost("{assetId}/anomalies/detect")]
+        [SwaggerOperation("DetectPressureAnomaly", "Detects and logs a pressure anomaly.")]
+        [ProducesResponseType(typeof(PressureReadingResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DetectAnomaly(
+            string assetId, [FromBody] DetectPressureAnomalyResource resource, CancellationToken cancellationToken)
+        {
+            var command = DetectPressureAnomalyCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                r => Ok(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
     }
