@@ -45,4 +45,32 @@
             var readings = await repository.FindByAssetIdAsync(assetId, ct);
             return readings.MaxBy(r => r.CreatedAt);
         }
+        public async Task<Result<TemperatureReading>> Handle(AnalyseExhaustTemperatureCommand command, CancellationToken cancellationToken = default)
+        {
+            var reading = await FindLatestByAsset(command.AssetId, cancellationToken);
+            if (reading is null)
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.TemperatureReadingNotFound, localizer[nameof(MonitoringTelemetryError.TemperatureReadingNotFound)]);
+            try
+            {
+                reading.AnalyseExhaust(command);
+                await unitOfWork.CompleteAsync(cancellationToken);
+                return Result<TemperatureReading>.Success(reading);
+            }
+            catch (ArgumentException)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.InvalidTemperature, localizer[nameof(MonitoringTelemetryError.InvalidTemperature)]);
+            }
+            catch (OperationCanceledException)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.OperationCancelled, localizer[nameof(MonitoringTelemetryError.OperationCancelled)]);
+            }
+            catch (DbUpdateException)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.DatabaseError, localizer[nameof(MonitoringTelemetryError.DatabaseError)]);
+            }
+            catch (Exception)
+            {
+                return Result<TemperatureReading>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
+            }
+        }
     }
