@@ -18,4 +18,13 @@ public partial class TemperatureReading
     public string Status { get; private set; }
 
     public void ResetMonitoring() => Status = "Monitoring";
+    
+    public decimal? ExhaustCelsius { get; private set; }
+    
+    public void AnalyseExhaust(AnalyseExhaustTemperatureCommand command)
+    {
+        ExhaustCelsius = new Temperature(command.ExhaustCelsius).Celsius;
+        Status = "ExhaustAnalysed";
+    }
+
 }
