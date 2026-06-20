@@ -9,4 +9,9 @@ public class PressureQueryService(IPressureReadingRepository repository) : IPres
 {
     public async Task<IEnumerable<PressureReading>> Handle(GetPressureReadingByAssetQuery query, CancellationToken cancellationToken = default)
         => await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+    public async Task<IEnumerable<PressureReading>> Handle(GetPressureAnomaliesByAssetQuery query, CancellationToken cancellationToken = default)
+    {
+        var readings = await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+        return readings.Where(r => r.AnomalyPressureType is not null);
+    }
 }
