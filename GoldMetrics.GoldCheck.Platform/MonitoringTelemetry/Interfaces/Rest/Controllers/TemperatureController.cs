@@ -49,4 +49,18 @@
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
         }
+        
+        // POST api/v1/monitoring/temperature/{assetId}/analyse/exhaust-limit
+        [HttpPost("{assetId}/analyse/exhaust-limit")]
+        [SwaggerOperation("AnalyseExhaustLimitPerCylinder", "Analyses exhaust temperature limit per cylinder.")]
+        [ProducesResponseType(typeof(TemperatureReadingResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AnalyseExhaustLimit(
+            string assetId, [FromBody] AnalyseExhaustLimitPerCylinderResource resource, CancellationToken cancellationToken)
+        {
+            var command = TemperatureReadingResourceFromEntityAssembler.AnalyseExhaustLimitCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                r => Ok(TemperatureReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+        }
     }
