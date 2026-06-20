@@ -88,4 +88,17 @@ public class IncidentManagementController(
             this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPut("{incidentId:int}/alert")]
+    [SwaggerOperation("Send Risk Level Alert", "Send a risk level alert for an incident.", OperationId = "SendRiskLevelAlert")]
+    [SwaggerResponse(200, "Risk level alert committed.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(404, "Incident not found.")]
+    public async Task<IActionResult> SendRiskLevelAlert(int incidentId, CancellationToken cancellationToken)
+    {
+        var command = new SendRiskLevelAlertCommand(incidentId);
+        var result = await commandService.Handle(command, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
