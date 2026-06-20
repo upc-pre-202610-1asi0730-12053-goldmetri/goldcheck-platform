@@ -17,3 +17,9 @@ public static class SpeedReadingResourceFromEntityAssembler
             entity.CurrentSpeedKmPerHour, entity.SpeedLimitKmPerHour, entity.IsViolation,
             entity.ViolationDescription, entity.CreatedAt, entity.UpdatedAt);
 }
+
+public static class DetectSpeedExcessCommandFromResourceAssembler
+{
+    public static DetectSpeedExcessCommand ToCommandFromResource(string assetId, DetectSpeedExcessResource resource)
+        => new(assetId, resource.SpeedKmPerHour, resource.SpeedLimitKmPerHour);
+}
