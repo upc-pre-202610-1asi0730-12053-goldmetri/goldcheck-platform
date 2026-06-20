@@ -1,5 +1,7 @@
 ﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -18,7 +20,8 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Con
 public class TelemetryController(
     ITelemetryCommandService commandService,
     IStringLocalizer<ErrorMessages> errorLocalizer,
-    ProblemDetailsFactory problemDetailsFactory)
+    ProblemDetailsFactory problemDetailsFactory,
+    ITelemetryQueryService queryService)
     : ControllerBase
 {
     // POST api/v1/monitoring/telemetry/process
@@ -48,5 +51,15 @@ public class TelemetryController(
         var result = await commandService.Handle(command, cancellationToken);
         return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
             d => Ok(TelemetryDataResourceFromEntityAssembler.ToResourceFromEntity(d)));
+    }
+    
+    // GET api/v1/monitoring/telemetry/{assetId}
+    [HttpGet("{assetId}")]
+    [SwaggerOperation("GetTelemetryDataByAsset", "Returns all telemetry data for an asset.")]
+    [ProducesResponseType(typeof(IEnumerable<TelemetryDataResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetByAsset(string assetId, CancellationToken cancellationToken)
+    {
+        var data = await queryService.Handle(new GetTelemetryDataByAssetQuery(assetId), cancellationToken);
+        return Ok(data.Select(TelemetryDataResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }

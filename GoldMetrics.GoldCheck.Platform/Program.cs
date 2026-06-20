@@ -83,6 +83,8 @@ using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Infrastructure.Persist
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Resources;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -264,6 +266,7 @@ builder.Services.AddScoped<IIncidentManagementQueryService, IncidentManagementQu
 builder.Services.AddSingleton<IStringLocalizer<MonitoringTelemetryMessages>, StringLocalizer<MonitoringTelemetryMessages>>();
 builder.Services.AddScoped<ITelemetryDataRepository, TelemetryDataRepository>();
 builder.Services.AddScoped<ITelemetryCommandService, TelemetryCommandService>();
+builder.Services.AddScoped<ITelemetryQueryService, TelemetryQueryService>();
 
 
 var app = builder.Build();
