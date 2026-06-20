@@ -1,5 +1,7 @@
 using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Queries;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
