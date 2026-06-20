@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Resources;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Rest.Transform;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -34,5 +35,17 @@ public class GNSSController(
         return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
             s => CreatedAtAction(nameof(GetByAsset), new { assetId = s.AssetId.Value },
                 GNSSStatusResourceFromEntityAssembler.ToResourceFromEntity(s)));
+    }
+    
+    // POST api/v1/monitoring/gnss/{assetId}/anomalies/detect
+    [HttpPost("{assetId}/anomalies/detect")]
+    [SwaggerOperation("DetectGNSSAnomaly", "Detects a GNSS anomaly (chip off).")]
+    [ProducesResponseType(typeof(GNSSStatusResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DetectAnomaly(string assetId, CancellationToken cancellationToken)
+    {
+        var result = await commandService.Handle(new DetectGNSSAnomalyCommand(assetId), cancellationToken);
+        return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+            s => Ok(GNSSStatusResourceFromEntityAssembler.ToResourceFromEntity(s)));
     }
 }
