@@ -22,4 +22,6 @@ public record AnalyseExhaustTemperatureResource(decimal ExhaustCelsius);
 public record AnalyseExhaustLimitPerCylinderResource(decimal LimitCelsius, int CylinderNumber);
 public record AnalyseRefrigerantTemperatureResource(decimal RefrigerantCelsius);
 public record AnalyseOilTemperatureResource(decimal OilCelsius);
+public record AnalyseFuelTemperatureResource(decimal FuelCelsius);
+
 
