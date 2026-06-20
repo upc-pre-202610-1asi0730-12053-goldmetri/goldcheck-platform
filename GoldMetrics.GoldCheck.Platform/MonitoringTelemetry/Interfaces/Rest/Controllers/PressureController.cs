@@ -74,4 +74,14 @@ using System.Net.Mime;
             var readings = await queryService.Handle(new GetPressureReadingByAssetQuery(assetId), cancellationToken);
             return Ok(readings.Select(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity));
         }
+        
+        // GET api/v1/monitoring/pressure/{assetId}/anomalies
+        [HttpGet("{assetId}/anomalies")]
+        [SwaggerOperation("GetPressureAnomaliesByAsset", "Returns pressure anomalies for an asset.")]
+        [ProducesResponseType(typeof(IEnumerable<PressureReadingResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAnomalies(string assetId, CancellationToken cancellationToken)
+        {
+            var readings = await queryService.Handle(new GetPressureAnomaliesByAssetQuery(assetId), cancellationToken);
+            return Ok(readings.Select(PressureReadingResourceFromEntityAssembler.ToResourceFromEntity));
+        }
     }
