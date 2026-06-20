@@ -267,7 +267,8 @@ builder.Services.AddSingleton<IStringLocalizer<MonitoringTelemetryMessages>, Str
 builder.Services.AddScoped<ITelemetryDataRepository, TelemetryDataRepository>();
 builder.Services.AddScoped<ITelemetryCommandService, TelemetryCommandService>();
 builder.Services.AddScoped<ITelemetryQueryService, TelemetryQueryService>();
-
+builder.Services.AddScoped<IGNSSStatusRepository, GNSSStatusRepository>();
+builder.Services.AddScoped<IGNSSCommandService, GNSSCommandService>();
 
 var app = builder.Build();
 
