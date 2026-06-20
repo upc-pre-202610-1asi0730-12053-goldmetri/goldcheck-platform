@@ -48,4 +48,19 @@ public class GNSSController(
         return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
             s => Ok(GNSSStatusResourceFromEntityAssembler.ToResourceFromEntity(s)));
     }
+    
+    
+    // POST api/v1/monitoring/gnss/{assetId}/restart
+    [HttpPost("{assetId}/restart")]
+    [SwaggerOperation("RestartGNSS", "Restarts GNSS and logs the event.")]
+    [ProducesResponseType(typeof(GNSSStatusResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RestartGNSS(
+        string assetId, [FromBody] RestartGNSSResource resource, CancellationToken cancellationToken)
+    {
+        var command = RestartGNSSCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+        var result = await commandService.Handle(command, cancellationToken);
+        return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+            s => Ok(GNSSStatusResourceFromEntityAssembler.ToResourceFromEntity(s)));
+    }
 }

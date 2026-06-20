@@ -10,3 +10,5 @@ public record GNSSStatusResource(
     int RestartCount,
     DateTimeOffset? CreatedAt,
     DateTimeOffset? UpdatedAt);
+    
+public record RestartGNSSResource(string RestartReason);
