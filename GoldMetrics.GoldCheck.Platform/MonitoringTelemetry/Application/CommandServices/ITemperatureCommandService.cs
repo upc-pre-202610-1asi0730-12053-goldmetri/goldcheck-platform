@@ -9,4 +9,5 @@ public interface ITemperatureCommandService
     Task<Result<TemperatureReading>> Handle(MonitorEngineTemperatureCommand command, CancellationToken cancellationToken = default);
     Task<Result<TemperatureReading>> Handle(AnalyseExhaustTemperatureCommand command, CancellationToken cancellationToken = default);
     Task<Result<TemperatureReading>> Handle(AnalyseExhaustTemperatureLimitPerCylinderCommand command, CancellationToken cancellationToken = default);
+    Task<Result<TemperatureReading>> Handle(AnalyseEngineRefrigerantTemperatureCommand command, CancellationToken cancellationToken = default);
 }

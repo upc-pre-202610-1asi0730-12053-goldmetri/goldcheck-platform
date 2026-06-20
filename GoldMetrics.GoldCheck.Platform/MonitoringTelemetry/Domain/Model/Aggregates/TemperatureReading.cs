@@ -36,4 +36,12 @@ public partial class TemperatureReading
         CylinderNumber = command.CylinderNumber;
         Status = "ExhaustLimitAnalysed";
     }
+    
+    public decimal? RefrigerantCelsius { get; private set; }
+    
+    public void AnalyseRefrigerant(AnalyseEngineRefrigerantTemperatureCommand command)
+    {
+        RefrigerantCelsius = new Temperature(command.RefrigerantCelsius).Celsius;
+        Status = "RefrigerantAnalysed";
+    }
 }
