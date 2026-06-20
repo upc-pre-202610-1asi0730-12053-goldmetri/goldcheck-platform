@@ -412,4 +412,7 @@
   <data name="SmokeDetected" xml:space="preserve">
     <value>Humo detectado y registrado exitosamente.</value>
   </data>
+  <data name="SmokeAlertCommitted" xml:space="preserve">
+    <value>Alerta de humo registrada exitosamente.</value>
+  </data>
 </root>
