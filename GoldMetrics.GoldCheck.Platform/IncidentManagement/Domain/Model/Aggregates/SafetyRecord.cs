@@ -29,4 +29,10 @@ public partial class SafetyRecord
     public AssetId AssetId { get; private set; }
     public RiskLevel RiskLevel { get; private set; }
     public string Status { get; private set; }
+    
+    public void EscalateRiskLevel(EscalateRiskLevelCommand command)
+    {
+        RiskLevel = new RiskLevel(command.NewRiskLevel);
+        Status = "RiskLevelEscalated";
+    }
 }
