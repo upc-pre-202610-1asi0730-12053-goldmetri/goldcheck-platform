@@ -381,4 +381,28 @@
     <data name="SubscriptionsBillingError.InternalServerError" xml:space="preserve">
     <value>An unexpected internal error occurred in Subscriptions and Billing.</value>
   </data>
+  <data name="IncidentManagementError.IncidentNotFound" xml:space="preserve">
+  <value>The incident record was not found.</value>
+  </data>
+    <data name="IncidentManagementError.InvalidRiskLevel" xml:space="preserve">
+    <value>Invalid risk level. Allowed values: Low, Medium, High, Critical.</value>
+  </data>
+    <data name="IncidentManagementError.InvalidIncidentType" xml:space="preserve">
+    <value>Invalid incident type. Allowed values: Fatigue, Smoke, Accident.</value>
+  </data>
+    <data name="IncidentManagementError.IncidentAlreadyCommitted" xml:space="preserve">
+    <value>The incident has already been committed.</value>
+  </data>
+    <data name="IncidentManagementError.RiskLevelValidationFailed" xml:space="preserve">
+    <value>Risk level validation failed for this incident.</value>
+  </data>
+    <data name="IncidentManagementError.OperationCancelled" xml:space="preserve">
+    <value>Incident management operation was cancelled.</value>
+  </data>
+    <data name="IncidentManagementError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred during the incident management operation.</value>
+  </data>
+    <data name="IncidentManagementError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred in Incident Management.</value>
+  </data>
 </root>
