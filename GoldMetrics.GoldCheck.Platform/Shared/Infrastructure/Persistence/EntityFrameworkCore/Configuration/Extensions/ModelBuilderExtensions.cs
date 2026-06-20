@@ -1,4 +1,3 @@
-using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -33,12 +32,5 @@ public static class ModelBuilderExtensions
                 if (!string.IsNullOrEmpty(indexDatabaseName)) index.SetDatabaseName(indexDatabaseName.ToSnakeCase());
             }
         }
-        builder.Entity<TemperatureReading>().HasKey(r => r.Id);
-        builder.Entity<TemperatureReading>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<TemperatureReading>().OwnsOne(r => r.AssetId, aid =>
-        {
-            aid.WithOwner().HasForeignKey("Id");
-            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
-        });
     }
 }

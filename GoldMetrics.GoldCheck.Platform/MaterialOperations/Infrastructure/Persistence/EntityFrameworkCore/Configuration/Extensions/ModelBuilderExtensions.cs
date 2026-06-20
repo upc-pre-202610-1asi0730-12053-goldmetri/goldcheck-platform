@@ -9,6 +9,7 @@ public static class ModelBuilderExtensions
     {
         builder.Entity<Material>().HasKey(m => m.Id);
         builder.Entity<Material>().Property(m => m.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Material>().ToTable("material_operations_materials");
 
         builder.Entity<Material>().OwnsOne(m => m.BatchId, b =>
         {

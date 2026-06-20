@@ -9,6 +9,7 @@ public static class ModelBuilderExtensions
     {
         builder.Entity<Material>().HasKey(m => m.Id);
         builder.Entity<Material>().Property(m => m.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Material>().ToTable("analytics_materials");
         builder.Entity<Material>().Property(m => m.ProductionStart).HasColumnName("ProductionStart");
         builder.Entity<Material>().Property(m => m.ProductionEnd).HasColumnName("ProductionEnd");
         builder.Entity<Material>().Property(m => m.ProductionTons).HasColumnName("ProductionTons");
