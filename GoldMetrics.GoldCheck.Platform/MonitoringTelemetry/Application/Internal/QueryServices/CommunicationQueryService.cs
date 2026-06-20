@@ -9,4 +9,10 @@ public class CommunicationQueryService(ICommunicationChannelRepository repositor
 {
     public async Task<IEnumerable<CommunicationChannel>> Handle(GetCommunicationChannelByAssetQuery query, CancellationToken cancellationToken = default)
         => await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+    
+    public async Task<IEnumerable<CommunicationChannel>> Handle(GetCommunicationAnomaliesByAssetQuery query, CancellationToken cancellationToken = default)
+    {
+        var channels = await repository.FindByAssetIdAsync(query.AssetId, cancellationToken);
+        return channels.Where(c => c.AnomalyProtocol is not null);
+    }
 }
