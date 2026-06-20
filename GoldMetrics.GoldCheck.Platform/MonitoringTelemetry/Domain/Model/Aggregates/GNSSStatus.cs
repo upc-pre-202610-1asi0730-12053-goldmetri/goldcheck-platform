@@ -18,6 +18,8 @@ public partial class GNSSStatus
     public AssetId AssetId { get; private set; }
     public string Status { get; private set; }
     public int RestartCount { get; private set; }
-
     public void ResetMonitoring() => Status = "Active";
+    
+    public void DetectAnomaly(DetectGNSSAnomalyCommand command) =>
+        Status = "ChipOff";
 }

@@ -7,4 +7,6 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Command
 public interface IGNSSCommandService
 {
     Task<Result<GNSSStatus>> Handle(MonitorGNSSStatusCommand command, CancellationToken cancellationToken = default);
+    Task<Result<GNSSStatus>> Handle(DetectGNSSAnomalyCommand command, CancellationToken cancellationToken = default);
+
 }

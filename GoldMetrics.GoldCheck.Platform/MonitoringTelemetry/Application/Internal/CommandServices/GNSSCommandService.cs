@@ -39,4 +39,30 @@ public class GNSSCommandService(
             return Result<GNSSStatus>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
         }
     }
+    
+    public async Task<Result<GNSSStatus>> Handle(DetectGNSSAnomalyCommand command, CancellationToken cancellationToken = default)
+    {
+        var statuses = await repository.FindByAssetIdAsync(command.AssetId, cancellationToken);
+        var status = statuses.MaxBy(s => s.CreatedAt);
+        if (status is null)
+            return Result<GNSSStatus>.Failure(MonitoringTelemetryError.GNSSStatusNotFound, localizer[nameof(MonitoringTelemetryError.GNSSStatusNotFound)]);
+        try
+        {
+            status.DetectAnomaly(command);
+            await unitOfWork.CompleteAsync(cancellationToken);
+            return Result<GNSSStatus>.Success(status);
+        }
+        catch (OperationCanceledException)
+        {
+            return Result<GNSSStatus>.Failure(MonitoringTelemetryError.OperationCancelled, localizer[nameof(MonitoringTelemetryError.OperationCancelled)]);
+        }
+        catch (DbUpdateException)
+        {
+            return Result<GNSSStatus>.Failure(MonitoringTelemetryError.DatabaseError, localizer[nameof(MonitoringTelemetryError.DatabaseError)]);
+        }
+        catch (Exception)
+        {
+            return Result<GNSSStatus>.Failure(MonitoringTelemetryError.InternalServerError, localizer[nameof(MonitoringTelemetryError.InternalServerError)]);
+        }
+    }
 }
