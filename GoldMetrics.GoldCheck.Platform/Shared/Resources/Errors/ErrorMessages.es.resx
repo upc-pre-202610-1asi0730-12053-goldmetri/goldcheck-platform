@@ -409,4 +409,7 @@
   <data name="RiskLevelAlertCommitted" xml:space="preserve">
     <value>Alerta de nivel de riesgo enviada y registrada exitosamente.</value>
   </data>
+  <data name="SmokeDetected" xml:space="preserve">
+    <value>Humo detectado y registrado exitosamente.</value>
+  </data>
 </root>
