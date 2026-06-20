@@ -33,5 +33,22 @@ public static class ModelBuilderExtensions
         });
         builder.Entity<GNSSStatus>().Property(s => s.Status).IsRequired().HasMaxLength(50);
         builder.Entity<GNSSStatus>().Property(s => s.RestartReason).HasMaxLength(500);
+        
+        // ── PressureReading ───────────────────────────────────────────────────
+
+        builder.Entity<PressureReading>().HasKey(r => r.Id);
+        builder.Entity<PressureReading>().Property(r => r.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<PressureReading>().OwnsOne(r => r.AssetId, aid =>
+        {
+            aid.WithOwner().HasForeignKey("Id");
+            aid.Property(v => v.Value).HasColumnName("AssetId").IsRequired().HasMaxLength(100);
+        });
+        builder.Entity<PressureReading>().Property(r => r.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<PressureReading>().Property(r => r.OilFilterDifferenceBar).HasColumnType("decimal(8,4)");
+        builder.Entity<PressureReading>().Property(r => r.OilPanBar).HasColumnType("decimal(8,4)");
+        builder.Entity<PressureReading>().Property(r => r.AbsoluteEngineOilBar).HasColumnType("decimal(8,4)");
+        builder.Entity<PressureReading>().Property(r => r.OilFilterBar).HasColumnType("decimal(8,4)");
+        builder.Entity<PressureReading>().Property(r => r.AnomalyPressureType).HasMaxLength(50);
+        builder.Entity<PressureReading>().Property(r => r.AnomalyDescription).HasMaxLength(500);
     }
 }
