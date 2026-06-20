@@ -129,4 +129,19 @@ public class IncidentManagementController(
             this, result, errorLocalizer, problemDetailsFactory,
             r => Ok(SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    [HttpPost("accidents")]
+    [SwaggerOperation("Commit Accident", "Record a new accident incident.", OperationId = "CommitAccident")]
+    [SwaggerResponse(201, "Accident committed.", typeof(SafetyRecordResource))]
+    [SwaggerResponse(400, "Invalid request data.")]
+    public async Task<IActionResult> CommitAccident([FromBody] CommitAccidentResource resource, CancellationToken cancellationToken)
+    {
+        var command = new CommitAccidentCommand(resource.OperatorId, resource.Description);
+        var result = await commandService.Handle(command, cancellationToken);
+        return IncidentManagementActionResultAssembler.ToActionResultFromSafetyRecordResult(
+            this, result, errorLocalizer, problemDetailsFactory,
+            r => CreatedAtAction(nameof(GetIncidentById),
+                new { incidentId = r.Id },
+                SafetyRecordResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
