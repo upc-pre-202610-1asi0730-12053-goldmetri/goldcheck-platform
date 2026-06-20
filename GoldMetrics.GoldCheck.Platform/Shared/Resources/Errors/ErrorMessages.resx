@@ -424,4 +424,8 @@
   <data name="SmokeAlertCommitted" xml:space="preserve">
     <value>Smoke alert committed successfully.</value>
   </data>
+
+  <data name="AccidentCommitted" xml:space="preserve">
+    <value>Accident recorded and committed successfully.</value>
+  </data>
 </root>
