@@ -25,4 +25,20 @@ public partial class CommunicationChannel
         LastAnalysedProtocol = new CommunicationProtocol(command.Protocol).Value;
         Status = $"{LastAnalysedProtocol}Analysed";
     }
+    
+    public string? AnomalyProtocol { get; private set; }
+    public string? AnomalyDescription { get; private set; }
+
+    public void DetectAnomaly(DetectCommunicationAnomalyCommand command)
+    {
+        AnomalyProtocol = new CommunicationProtocol(command.Protocol).Value;
+        AnomalyDescription = command.AnomalyDescription;
+        Status = "AnomalyDetected";
+    }
+
+    public void LogAnomaly(LogCommunicationAnomalyCommand command)
+    {
+        AnomalyDescription = command.AnomalyDescription;
+        Status = "AnomalyLogged";
+    }
 }
