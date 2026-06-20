@@ -35,4 +35,18 @@ public class SpeedController(
             r => CreatedAtAction(nameof(GetByAsset), new { assetId = r.AssetId.Value },
                 SpeedReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
     }
+    
+    // POST api/v1/monitoring/speed/{assetId}/detect-excess
+    [HttpPost("{assetId}/detect-excess")]
+    [SwaggerOperation("DetectSpeedExcess", "Detects and logs speed excess for an asset.")]
+    [ProducesResponseType(typeof(SpeedReadingResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DetectExcess(
+        string assetId, [FromBody] DetectSpeedExcessResource resource, CancellationToken cancellationToken)
+    {
+        var command = DetectSpeedExcessCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+        var result = await commandService.Handle(command, cancellationToken);
+        return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+            r => Ok(SpeedReadingResourceFromEntityAssembler.ToResourceFromEntity(r)));
+    }
 }
