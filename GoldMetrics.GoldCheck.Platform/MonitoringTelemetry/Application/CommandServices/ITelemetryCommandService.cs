@@ -7,4 +7,6 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Command
 public interface ITelemetryCommandService
 {
     Task<Result<TelemetryData>> Handle(ProcessTelemetryDataCommand command, CancellationToken cancellationToken = default);
+    Task<Result<TelemetryData>> Handle(ValidateTelemetryDataCommand command, CancellationToken cancellationToken = default);
+
 }
