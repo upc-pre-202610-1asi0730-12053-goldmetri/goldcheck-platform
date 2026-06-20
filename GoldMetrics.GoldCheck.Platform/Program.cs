@@ -85,6 +85,8 @@ using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.Internal.Q
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Internal.QueryServices;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.QueryServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -269,6 +271,8 @@ builder.Services.AddScoped<ITelemetryCommandService, TelemetryCommandService>();
 builder.Services.AddScoped<ITelemetryQueryService, TelemetryQueryService>();
 builder.Services.AddScoped<IGNSSStatusRepository, GNSSStatusRepository>();
 builder.Services.AddScoped<IGNSSCommandService, GNSSCommandService>();
+builder.Services.AddScoped<IGNSSQueryService, GNSSQueryService>();
+
 
 var app = builder.Build();
 
