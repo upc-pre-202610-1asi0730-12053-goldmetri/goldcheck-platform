@@ -11,3 +11,5 @@ public record TelemetryDataResource(
     bool IsValidated,
     DateTimeOffset? CreatedAt,
     DateTimeOffset? UpdatedAt);
+    
+public record ValidateTelemetryDataResource(string AssetId, string TelemetryDataId);
