@@ -7,4 +7,5 @@ public interface ITemperatureQueryService
 {
     Task<IEnumerable<TemperatureReading>> Handle(GetTemperatureReadingByAssetQuery query, CancellationToken cancellationToken = default);
     Task<IEnumerable<TemperatureReading>> Handle(GetAllTemperatureReadingsQuery query, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TemperatureReading>> Handle(GetTemperatureAnomaliesByAssetQuery query, CancellationToken cancellationToken = default);
 }
