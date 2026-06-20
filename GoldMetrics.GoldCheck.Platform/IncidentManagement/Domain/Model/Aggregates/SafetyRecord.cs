@@ -54,4 +54,9 @@ public partial class SafetyRecord
         RiskLevel = new RiskLevel("High");
         Status = "SmokeDetected";
     }
+    
+    public void TriggerSmokeAlert(TriggerSmokeAlertCommand command)
+    {
+        Status = "SmokeAlertTriggered";
+    }
 }
