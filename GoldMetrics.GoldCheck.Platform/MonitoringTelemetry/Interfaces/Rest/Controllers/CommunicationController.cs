@@ -49,4 +49,18 @@
             return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
                 c => Ok(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity(c)));
         }
+        
+        // POST api/v1/monitoring/communication/{assetId}/anomalies/detect
+        [HttpPost("{assetId}/anomalies/detect")]
+        [SwaggerOperation("DetectCommunicationAnomaly", "Detects and logs a communication anomaly.")]
+        [ProducesResponseType(typeof(CommunicationChannelResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DetectAnomaly(
+            string assetId, [FromBody] DetectCommunicationAnomalyResource resource, CancellationToken cancellationToken)
+        {
+            var command = CommunicationChannelResourceFromEntityAssembler.DetectCommunicationAnomalyCommandFromResourceAssembler.ToCommandFromResource(assetId, resource);
+            var result = await commandService.Handle(command, cancellationToken);
+            return MonitoringTelemetryActionResultAssembler.ToActionResult(this, result, errorLocalizer, problemDetailsFactory,
+                c => Ok(CommunicationChannelResourceFromEntityAssembler.ToResourceFromEntity(c)));
+        }
     }
