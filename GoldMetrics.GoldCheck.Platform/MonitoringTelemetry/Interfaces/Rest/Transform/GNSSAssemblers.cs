@@ -17,3 +17,10 @@ public static class GNSSStatusResourceFromEntityAssembler
             entity.RestartReason, entity.RestartCount,
             entity.CreatedAt, entity.UpdatedAt);
 }
+
+
+public static class RestartGNSSCommandFromResourceAssembler
+{
+    public static RestartGNSSCommand ToCommandFromResource(string assetId, RestartGNSSResource resource)
+        => new(assetId, resource.RestartReason);
+}
