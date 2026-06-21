@@ -8,6 +8,8 @@ public enum IncidentManagementError
     InvalidIncidentType,
     IncidentAlreadyCommitted,
     RiskLevelValidationFailed,
+    MachineryNotFound,
+    OperatorNotFound,
     OperationCancelled,
     DatabaseError,
     InternalServerError

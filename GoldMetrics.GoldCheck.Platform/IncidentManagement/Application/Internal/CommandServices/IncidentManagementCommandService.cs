@@ -1,4 +1,6 @@
-﻿using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.CommandServices;
+﻿using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Domain.Model.Aggregates;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.IncidentManagement.Domain.Model.Errors;
@@ -14,7 +16,9 @@ namespace GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.Internal
 public class IncidentManagementCommandService(
     ISafetyRecordRepository safetyRecordRepository,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer)
+    IStringLocalizer<ErrorMessages> localizer,
+    IAssetMaintenanceContextFacade assetMaintenanceContextFacade,
+    IIamContextFacade iamContextFacade)
     : IIncidentManagementCommandService
 {
     private async Task<SafetyRecord?> FindByIncidentId(int id, CancellationToken ct)
@@ -31,6 +35,20 @@ public class IncidentManagementCommandService(
 
     public async Task<Result<SafetyRecord>> Handle(DetectDriverFatigueCommand command, CancellationToken cancellationToken)
     {
+        var machineryExists = await assetMaintenanceContextFacade
+            .ValidateMachineryExists(command.AssetId, cancellationToken);
+        if (!machineryExists)
+            return Result<SafetyRecord>.Failure(
+                IncidentManagementError.MachineryNotFound,
+                localizer[nameof(IncidentManagementError.MachineryNotFound)]);
+
+        var operatorExists = await iamContextFacade
+            .ValidateUserExists(command.OperatorId, cancellationToken);
+        if (!operatorExists)
+            return Result<SafetyRecord>.Failure(
+                IncidentManagementError.OperatorNotFound,
+                localizer[nameof(IncidentManagementError.OperatorNotFound)]);
+
         var record = new SafetyRecord(command);
         try
         {
@@ -101,6 +119,13 @@ public class IncidentManagementCommandService(
     
     public async Task<Result<SafetyRecord>> Handle(DetectSmokeCommand command, CancellationToken cancellationToken)
     {
+        var machineryExists = await assetMaintenanceContextFacade
+            .ValidateMachineryExists(command.AssetId, cancellationToken);
+        if (!machineryExists)
+            return Result<SafetyRecord>.Failure(
+                IncidentManagementError.MachineryNotFound,
+                localizer[nameof(IncidentManagementError.MachineryNotFound)]);
+
         var record = new SafetyRecord(command);
         try
         {
@@ -147,6 +172,13 @@ public class IncidentManagementCommandService(
     
     public async Task<Result<SafetyRecord>> Handle(CommitAccidentCommand command, CancellationToken cancellationToken)
     {
+        var operatorExists = await iamContextFacade
+            .ValidateUserExists(command.OperatorId, cancellationToken);
+        if (!operatorExists)
+            return Result<SafetyRecord>.Failure(
+                IncidentManagementError.OperatorNotFound,
+                localizer[nameof(IncidentManagementError.OperatorNotFound)]);
+
         var record = new SafetyRecord(command);
         try
         {
