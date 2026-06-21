@@ -14,27 +14,27 @@ public static class ModelBuilderExtensions
         builder.Entity<Material>().OwnsOne(m => m.BatchId, b =>
         {
             b.WithOwner().HasForeignKey("Id");
-            b.Property(x => x.Value).HasColumnName("BatchId").IsRequired().HasMaxLength(100);
+            b.Property(x => x.Value).HasColumnName("batch_id").IsRequired().HasMaxLength(100);
         });
 
         builder.Entity<Material>().OwnsOne(m => m.MineralType, mt =>
         {
             mt.WithOwner().HasForeignKey("Id");
-            mt.Property(x => x.Value).HasColumnName("MineralType").IsRequired().HasMaxLength(50);
+            mt.Property(x => x.Value).HasColumnName("mineral_type").IsRequired().HasMaxLength(50);
         });
 
         builder.Entity<Material>().OwnsOne(m => m.Payload, p =>
         {
             p.WithOwner().HasForeignKey("Id");
-            p.Property(x => x.Tons).HasColumnName("PayloadTons").IsRequired();
+            p.Property(x => x.Tons).HasColumnName("payload_tons").IsRequired();
         });
 
         builder.Entity<Material>().Property(m => m.Status).IsRequired().HasMaxLength(50);
 
-        builder.Entity<Material>().Property(m => m.Classification).HasColumnName("Classification").HasMaxLength(200);
+        builder.Entity<Material>().Property(m => m.Classification).HasColumnName("classification").HasMaxLength(200);
 
-        builder.Entity<Material>().Property(m => m.DumpingPointName).HasColumnName("DumpingPointName").HasMaxLength(200);
+        builder.Entity<Material>().Property(m => m.DumpingPointName).HasColumnName("dumping_point_name").HasMaxLength(200);
 
-        builder.Entity<Material>().Property(m => m.CurrentLocation).HasColumnName("CurrentLocation").HasMaxLength(300);
+        builder.Entity<Material>().Property(m => m.CurrentLocation).HasColumnName("current_location").HasMaxLength(300);
     }
 }
