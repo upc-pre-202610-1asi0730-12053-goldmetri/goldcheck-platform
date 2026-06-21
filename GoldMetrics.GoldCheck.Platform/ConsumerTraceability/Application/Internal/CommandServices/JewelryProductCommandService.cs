@@ -3,6 +3,7 @@ using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Exceptions;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.Aggregates;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.ConsumerTraceability.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.Shared.Application.Model;
 using GoldMetrics.GoldCheck.Platform.Shared.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -15,7 +16,8 @@ public class JewelryProductCommandService(
     IJewelryProductRepository productRepository,
     ITraceabilityJourneyRepository journeyRepository,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer)
+    IStringLocalizer<ErrorMessages> localizer,
+    IJewelryInventoryContextFacade jewelryInventoryContextFacade)
     : IJewelryProductCommandService
 {
     // ── ScanProductQR ─────────────────────────────────────────────────────────
@@ -81,6 +83,13 @@ public class JewelryProductCommandService(
         DownloadCertificateCommand command,
         CancellationToken cancellationToken = default)
     {
+        var certificateExists = await jewelryInventoryContextFacade
+            .ValidateCertificateExists(command.CertificateId, cancellationToken);
+        if (!certificateExists)
+            return Result<JewelryProduct>.Failure(
+                ConsumerTraceabilityError.CertificateNotFound,
+                localizer[nameof(ConsumerTraceabilityError.CertificateNotFound)]);
+
         try
         {
             var existing = await productRepository.FindByCertificateIdAsync(
