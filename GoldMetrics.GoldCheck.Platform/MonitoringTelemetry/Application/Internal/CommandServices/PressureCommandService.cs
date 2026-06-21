@@ -1,3 +1,4 @@
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
    using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Exceptions;
    using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
@@ -14,11 +15,19 @@ using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServ
    public class PressureCommandService(
        IPressureReadingRepository repository,
        IUnitOfWork unitOfWork,
-       IStringLocalizer<ErrorMessages> localizer)
+       IStringLocalizer<ErrorMessages> localizer,
+       IAssetMaintenanceContextFacade assetMaintenanceContextFacade)
        : IPressureCommandService
    {
        public async Task<Result<PressureReading>> Handle(MonitorPressureCommand command, CancellationToken cancellationToken = default)
        {
+           var assetExists = await assetMaintenanceContextFacade
+               .ValidateMachineryExists(command.AssetId, cancellationToken);
+           if (!assetExists)
+               return Result<PressureReading>.Failure(
+                   MonitoringTelemetryError.AssetNotFound,
+                   localizer[nameof(MonitoringTelemetryError.AssetNotFound)]);
+
            var reading = new PressureReading(command);
            try
            {

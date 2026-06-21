@@ -1,4 +1,5 @@
-﻿using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+﻿using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Exceptions;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Commands;
@@ -14,11 +15,19 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Interna
 public class TelemetryCommandService(
     ITelemetryDataRepository repository,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer)
+    IStringLocalizer<ErrorMessages> localizer,
+    IAssetMaintenanceContextFacade assetMaintenanceContextFacade)
     : ITelemetryCommandService
 {
     public async Task<Result<TelemetryData>> Handle(ProcessTelemetryDataCommand command, CancellationToken cancellationToken = default)
     {
+        var assetExists = await assetMaintenanceContextFacade
+            .ValidateMachineryExists(command.AssetId, cancellationToken);
+        if (!assetExists)
+            return Result<TelemetryData>.Failure(
+                MonitoringTelemetryError.AssetNotFound,
+                localizer[nameof(MonitoringTelemetryError.AssetNotFound)]);
+
         var data = new TelemetryData(command);
         try
         {

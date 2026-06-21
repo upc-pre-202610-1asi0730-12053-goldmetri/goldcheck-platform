@@ -1,4 +1,5 @@
-﻿using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+﻿using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Exceptions;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Commands;
@@ -14,11 +15,19 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Interna
 public class GNSSCommandService(
     IGNSSStatusRepository repository,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer)
+    IStringLocalizer<ErrorMessages> localizer,
+    IAssetMaintenanceContextFacade assetMaintenanceContextFacade)
     : IGNSSCommandService
 {
     public async Task<Result<GNSSStatus>> Handle(MonitorGNSSStatusCommand command, CancellationToken cancellationToken = default)
     {
+        var assetExists = await assetMaintenanceContextFacade
+            .ValidateMachineryExists(command.AssetId, cancellationToken);
+        if (!assetExists)
+            return Result<GNSSStatus>.Failure(
+                MonitoringTelemetryError.AssetNotFound,
+                localizer[nameof(MonitoringTelemetryError.AssetNotFound)]);
+
         var status = new GNSSStatus(command);
         try
         {

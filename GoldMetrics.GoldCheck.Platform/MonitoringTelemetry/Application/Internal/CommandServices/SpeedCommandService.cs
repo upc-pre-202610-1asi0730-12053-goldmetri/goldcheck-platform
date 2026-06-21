@@ -1,3 +1,4 @@
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Exceptions;
 using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
@@ -14,11 +15,19 @@ namespace GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Interna
 public class SpeedCommandService(
    ISpeedReadingRepository repository,
    IUnitOfWork unitOfWork,
-   IStringLocalizer<ErrorMessages> localizer)
+   IStringLocalizer<ErrorMessages> localizer,
+   IAssetMaintenanceContextFacade assetMaintenanceContextFacade)
    : ISpeedCommandService
 {
    public async Task<Result<SpeedReading>> Handle(MonitorSpeedStatusCommand command, CancellationToken cancellationToken = default)
    {
+       var assetExists = await assetMaintenanceContextFacade
+           .ValidateMachineryExists(command.AssetId, cancellationToken);
+       if (!assetExists)
+           return Result<SpeedReading>.Failure(
+               MonitoringTelemetryError.AssetNotFound,
+               localizer[nameof(MonitoringTelemetryError.AssetNotFound)]);
+
        var reading = new SpeedReading(command);
        try
        {

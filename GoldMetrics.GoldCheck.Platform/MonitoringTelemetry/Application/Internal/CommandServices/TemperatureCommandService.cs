@@ -1,4 +1,5 @@
-﻿using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
+﻿using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.CommandServices;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Exceptions;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Aggregates;
     using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Domain.Model.Commands;
@@ -14,11 +15,19 @@
     public class TemperatureCommandService(
         ITemperatureReadingRepository repository,
         IUnitOfWork unitOfWork,
-        IStringLocalizer<ErrorMessages> localizer)
+        IStringLocalizer<ErrorMessages> localizer,
+        IAssetMaintenanceContextFacade assetMaintenanceContextFacade)
         : ITemperatureCommandService
     {
         public async Task<Result<TemperatureReading>> Handle(MonitorEngineTemperatureCommand command, CancellationToken cancellationToken = default)
         {
+            var assetExists = await assetMaintenanceContextFacade
+                .ValidateMachineryExists(command.AssetId, cancellationToken);
+            if (!assetExists)
+                return Result<TemperatureReading>.Failure(
+                    MonitoringTelemetryError.AssetNotFound,
+                    localizer[nameof(MonitoringTelemetryError.AssetNotFound)]);
+
             var reading = new TemperatureReading(command);
             try
             {
