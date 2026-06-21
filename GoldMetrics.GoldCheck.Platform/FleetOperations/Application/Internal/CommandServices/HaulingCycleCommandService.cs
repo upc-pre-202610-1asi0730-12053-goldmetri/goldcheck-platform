@@ -1,3 +1,4 @@
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Model;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Model.Aggregates;
@@ -14,11 +15,19 @@ namespace GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Internal.Co
 public class HaulingCycleCommandService(
     IHaulingCycleRepository haulingCycleRepository,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer)
+    IStringLocalizer<ErrorMessages> localizer,
+    IAssetMaintenanceContextFacade assetMaintenanceContextFacade)
     : IHaulingCycleCommandService
 {
     public async Task<Result<HaulingCycle>> Handle(StartHaulingCycleCommand command, CancellationToken cancellationToken)
     {
+        var machineryExists = await assetMaintenanceContextFacade
+            .ValidateMachineryExists(command.VehicleId, cancellationToken);
+        if (!machineryExists)
+            return Result<HaulingCycle>.Failure(
+                FleetOperationsError.MachineryNotFound,
+                localizer[nameof(FleetOperationsError.MachineryNotFound)]);
+
         var cycle = new HaulingCycle(command);
         try
         {
