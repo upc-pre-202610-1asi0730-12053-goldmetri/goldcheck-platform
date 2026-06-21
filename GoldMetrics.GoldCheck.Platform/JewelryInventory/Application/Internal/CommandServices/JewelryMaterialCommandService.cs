@@ -1,8 +1,10 @@
+using GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.CommandServices;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Exceptions;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Model.Aggregates;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Model.Commands;
 using GoldMetrics.GoldCheck.Platform.JewelryInventory.Domain.Repositories;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.Shared.Application.Model;
 using GoldMetrics.GoldCheck.Platform.Shared.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.Shared.Resources.Errors;
@@ -14,7 +16,9 @@ namespace GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Internal.C
 public class JewelryMaterialCommandService(
     IJewelryMaterialRepository materialRepository,
     IUnitOfWork unitOfWork,
-    IStringLocalizer<ErrorMessages> localizer)
+    IStringLocalizer<ErrorMessages> localizer,
+    IMaterialOperationsContextFacade materialOperationsContextFacade,
+    IIamContextFacade iamContextFacade)
     : IJewelryMaterialCommandService
 {
     // ── RegisterNonCertifiedMaterial ──────────────────────────────────────────
@@ -23,6 +27,20 @@ public class JewelryMaterialCommandService(
         RegisterNonCertifiedMaterialCommand command,
         CancellationToken cancellationToken = default)
     {
+        var materialExists = await materialOperationsContextFacade
+            .ValidateMaterialExists(command.MaterialId, cancellationToken);
+        if (!materialExists)
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.MaterialBatchNotFound,
+                localizer[nameof(JewelryInventoryError.MaterialBatchNotFound)]);
+
+        var jewelerExists = await iamContextFacade
+            .ValidateUserExists(command.JewelerId, cancellationToken);
+        if (!jewelerExists)
+            return Result<JewelryMaterial>.Failure(
+                JewelryInventoryError.JewelerNotFound,
+                localizer[nameof(JewelryInventoryError.JewelerNotFound)]);
+
         var existing = await materialRepository.FindByMaterialIdAsync(
             command.MaterialId, cancellationToken);
 

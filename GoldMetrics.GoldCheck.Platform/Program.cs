@@ -57,12 +57,30 @@ using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Resources;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Acl;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Internal.CommandServices;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.Internal.QueryServices;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Application.QueryServices;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using GoldMetrics.GoldCheck.Platform.FleetOperations.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.FleetOperations.Resources;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.MaterialOperations.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.JewelryInventory.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.MonitoringTelemetry.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.Analytics.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.Analytics.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.IncidentManagement.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.AssetMaintenance.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.Iam.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Acl;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Acl;
+using GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Acl;
 using GoldMetrics.GoldCheck.Platform.Shared.Domain.Repositories;
 using GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Interfaces.AspNetCore.Configuration;
 using GoldMetrics.GoldCheck.Platform.Shared.Infrastructure.Mediator.Cortex.Configuration;
@@ -181,10 +199,12 @@ builder.Services.AddScoped<IVehicleCommandService, VehicleCommandService>();
 builder.Services.AddScoped<IVehicleQueryService, VehicleQueryService>();
 builder.Services.AddScoped<IHaulingCycleCommandService, HaulingCycleCommandService>();
 builder.Services.AddScoped<IHaulingCycleQueryService, HaulingCycleQueryService>();
+builder.Services.AddScoped<IFleetOperationsContextFacade, FleetOperationsContextFacade>();
 // BC2 — Material Operations
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.MaterialOperations.Domain.Repositories.IMaterialRepository, GoldMetrics.GoldCheck.Platform.MaterialOperations.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository>();
 builder.Services.AddScoped<IMaterialCommandService, MaterialCommandService>();
 builder.Services.AddScoped<IMaterialQueryService, MaterialQueryService>();
+builder.Services.AddScoped<IMaterialOperationsContextFacade, MaterialOperationsContextFacade>();
 // BC3 — Jewelry Inventory & Certification
 builder.Services.AddScoped<IJewelryMaterialRepository, JewelryMaterialRepository>();
 builder.Services.AddScoped<IJewelryRepository, JewelryRepository>();
@@ -192,6 +212,7 @@ builder.Services.AddScoped<IJewelryMaterialCommandService, JewelryMaterialComman
 builder.Services.AddScoped<IJewelryCommandService, JewelryCommandService>();
 builder.Services.AddScoped<IJewelryMaterialQueryService, JewelryMaterialQueryService>();
 builder.Services.AddScoped<IJewelryQueryService, JewelryQueryService>();
+builder.Services.AddScoped<IJewelryInventoryContextFacade, JewelryInventoryContextFacade>();
 // BC4 — Consumer Traceability
 builder.Services.AddScoped<IJewelryProductRepository, JewelryProductRepository>();
 builder.Services.AddScoped<ITraceabilityJourneyRepository, TraceabilityJourneyRepository>();
@@ -218,16 +239,19 @@ builder.Services.AddScoped<IGNSSQueryService, GNSSQueryService>();
 builder.Services.AddScoped<ISpeedQueryService, SpeedQueryService>();
 builder.Services.AddScoped<IPressureQueryService, PressureQueryService>();
 builder.Services.AddScoped<ITelemetryQueryService, TelemetryQueryService>();
+builder.Services.AddScoped<IMonitoringTelemetryContextFacade, MonitoringTelemetryContextFacade>();
 // BC6 — Analytics
 builder.Services.AddSingleton<IStringLocalizer<AnalyticsMessages>, StringLocalizer<AnalyticsMessages>>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Analytics.Domain.Repositories.IMaterialRepository, GoldMetrics.GoldCheck.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories.MaterialRepository>();
 builder.Services.AddScoped<IAnalyticsCommandService, AnalyticsCommandService>();
 builder.Services.AddScoped<IAnalyticsQueryService, AnalyticsQueryService>();
+builder.Services.AddScoped<IAnalyticsContextFacade, AnalyticsContextFacade>();
 // BC7 — Incident Management
 builder.Services.AddSingleton<IStringLocalizer<IncidentManagementMessages>, StringLocalizer<IncidentManagementMessages>>();
 builder.Services.AddScoped<ISafetyRecordRepository, SafetyRecordRepository>();
 builder.Services.AddScoped<IIncidentManagementCommandService, IncidentManagementCommandService>();
 builder.Services.AddScoped<IIncidentManagementQueryService, IncidentManagementQueryService>();
+builder.Services.AddScoped<IIncidentManagementContextFacade, IncidentManagementContextFacade>();
 // BC8 — Reporting & Notifications
 builder.Services.AddSingleton<IStringLocalizer<ReportingNotificationsMessages>, StringLocalizer<ReportingNotificationsMessages>>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
@@ -241,18 +265,21 @@ builder.Services.AddSingleton<IStringLocalizer<AssetMaintenanceMessages>, String
 builder.Services.AddScoped<IMachineryRepository, MachineryRepository>();
 builder.Services.AddScoped<IAssetMaintenanceCommandService, AssetMaintenanceCommandService>();
 builder.Services.AddScoped<IAssetMaintenanceQueryService, AssetMaintenanceQueryService>();
+builder.Services.AddScoped<IAssetMaintenanceContextFacade, AssetMaintenanceContextFacade>();
 // BC10 — IAM
 builder.Services.AddSingleton<IStringLocalizer<GoldMetrics.GoldCheck.Platform.Iam.Resources.IamMessages>, StringLocalizer<GoldMetrics.GoldCheck.Platform.Iam.Resources.IamMessages>>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Domain.Repositories.IUserRepository, GoldMetrics.GoldCheck.Platform.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories.UserRepository>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.CommandServices.IIamCommandService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.CommandServices.IamCommandService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Application.QueryServices.IIamQueryService, GoldMetrics.GoldCheck.Platform.Iam.Application.Internal.QueryServices.IamQueryService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.Iam.Interfaces.Rest.Transform.IamActionResultAssembler>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 // BC11 — Subscriptions & Billing
 builder.Services.AddSingleton<IStringLocalizer<GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources.SubscriptionsBillingMessages>, StringLocalizer<GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Resources.SubscriptionsBillingMessages>>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Domain.Repositories.IUserSubscriptionRepository, GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Infrastructure.Persistence.EntityFrameworkCore.Repositories.UserSubscriptionRepository>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.CommandServices.ISubscriptionsBillingCommandService, GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.CommandServices.SubscriptionsBillingCommandService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.QueryServices.ISubscriptionsBillingQueryService, GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Application.Internal.QueryServices.SubscriptionsBillingQueryService>();
 builder.Services.AddScoped<GoldMetrics.GoldCheck.Platform.SubscriptionsAndBilling.Interfaces.Rest.Transform.SubscriptionsBillingActionResultAssembler>();
+builder.Services.AddScoped<ISubscriptionsBillingContextFacade, SubscriptionsBillingContextFacade>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));

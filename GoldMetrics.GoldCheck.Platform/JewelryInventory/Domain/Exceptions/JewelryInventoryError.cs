@@ -8,6 +8,8 @@ public enum JewelryInventoryError
     MaterialAlreadyCertified,
     InvalidQRCode,
     InvalidStatus,
+    MaterialBatchNotFound,
+    JewelerNotFound,
     OperationCancelled,
     DatabaseError,
     InternalServerError
